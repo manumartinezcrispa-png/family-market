@@ -1,0 +1,133 @@
+{
+ "actualizado": "2026-11-21T19:00:00-03:00",
+ "resumen": "Semana dura para la tecnología y las cripto: la renuncia del CEO de Nvidia y las dudas sobre el negocio de la IA arrastraron a todo el sector, Bitcoin acumula seis semanas seguidas de baja y el mercado da casi por hecha una suba de tasas de la Fed en diciembre.",
+ "items": [
+  {
+   "fecha": "2026-11-17",
+   "tipo": "cartera",
+   "tickers": [
+    "NVDA"
+   ],
+   "titulo": "Nvidia superó lo esperado en su primer balance sin Jensen Huang",
+   "texto": "Facturó US$ 115.800 millones en el trimestre (más del doble que hace un año) y proyecta unos US$ 130.000 millones para el próximo. Es el primer reporte desde la renuncia de Huang el 11/11; Colette Kress quedó como CEO interina. La acción había caído de ~US$ 187 a ~US$ 155 antes del balance.",
+   "fuente": "Fox Business / IBTimes",
+   "url": "https://www.foxbusiness.com/markets/nvidia-releases-quarterly-earnings-after-jensen-huangs-resignation-ceo.amp"
+  },
+  {
+   "fecha": "2026-11-16",
+   "tipo": "cartera",
+   "tickers": [
+    "IBIT"
+   ],
+   "titulo": "Bitcoin: seis semanas seguidas de baja",
+   "texto": "Llegó a perforar los US$ 62.000 y acumula una caída cercana al 17% en noviembre. Los ETF de Bitcoin al contado (como IBIT) vienen con salidas de más de US$ 1.000 millones por semana y el índice de miedo y codicia está en miedo extremo.",
+   "fuente": "RootData / CoinDesk",
+   "url": "https://www.rootdata.com/news/831632"
+  },
+  {
+   "fecha": "2026-11-20",
+   "tipo": "cartera",
+   "tickers": [
+    "SNDK"
+   ],
+   "titulo": "Sandisk hizo un split de 8 a 1",
+   "texto": "Desde el 20/11 cada acción pasó a ser 8, con un precio 8 veces menor; el valor de la posición no cambia. La acción está unos 60% abajo de su máximo de junio, aunque la empresa sigue reportando ingresos récord.",
+   "fuente": "Finimize / TIKR",
+   "url": "https://www.tikr.com/blog/sandisk-is-up-273-in-2026-but-down-62-from-its-june-high-take-profits-or-buy-more"
+  },
+  {
+   "fecha": "2026-11-11",
+   "tipo": "cartera",
+   "tickers": [
+    "ORCL"
+   ],
+   "titulo": "Oracle: montaña rusa por el financiamiento de sus data centers",
+   "texto": "Tuvo una de sus mejores ruedas del año el 11/11 tras presentar su plan de largo plazo (volver a flujo de caja positivo hacia 2028), después de haber emitido US$ 10.000 millones en acciones y otros US$ 10.000 millones en bonos. Cotiza cerca de la mitad de su máximo de junio.",
+   "fuente": "FinChannel / FourWeekMBA",
+   "url": "https://fourweekmba.com/oracle-stock/"
+  },
+  {
+   "fecha": "2026-11-09",
+   "tipo": "cartera",
+   "tickers": [
+    "META"
+   ],
+   "titulo": "Meta rebotó con JPMorgan y prepara una nueva clase de acciones",
+   "texto": "Subió 5% el 9/11 cuando JPMorgan la sumó a su lista de preferidas. Además anunció acciones clase C sin voto desde enero de 2027.",
+   "fuente": "Admiral Markets / Quiver",
+   "url": "https://admiralmarkets.com/analytics/traders-blog/meta-stock-winning-streak-muse-ember"
+  },
+  {
+   "fecha": "2026-11-18",
+   "tipo": "mercado",
+   "tickers": [],
+   "titulo": "Wall Street en racha negativa por las dudas sobre la IA",
+   "texto": "El S&P 500 llegó a su nivel más bajo desde julio. El 19/11 debutó Anthropic en bolsa con buena recepción, pero no alcanzó para frenar la caída de las tecnológicas.",
+   "fuente": "StockAnalysis / AP",
+   "url": "https://www.nbcnewyork.com/news/national-international/wall-street-longest-losing-streak-since-2024/6574493/"
+  },
+  {
+   "fecha": "2026-11-17",
+   "tipo": "mercado",
+   "tickers": [],
+   "titulo": "La Fed se encamina a subir la tasa en diciembre",
+   "texto": "Los futuros de tasas descuentan más del 90% de chances de una suba de 0,25 puntos en la reunión de diciembre. La inflación mayorista de octubre fue 6,5% anual, la más alta desde 2022. Tasas más altas suelen pesar sobre tecnológicas y cripto.",
+   "fuente": "Trading Economics",
+   "url": "https://tradingeconomics.com/united-states/implied-rates/news/602003"
+  },
+  {
+   "fecha": "2026-11-16",
+   "tipo": "mercado",
+   "tickers": [],
+   "titulo": "Argentina: el Merval sigue cayendo",
+   "texto": "Cayó 4,8% el 16/11 hasta unos 81.000 puntos y los ADR argentinos llegaron a perder hasta 7,7%. El riesgo país ronda los 850-925 puntos.",
+   "fuente": "Rankia",
+   "url": "https://www.rankia.com.ar/noticias/bolsa/7554891-por-que-cayo-merval-4-8-lunes-adr-argentinos-perdieron-7"
+  },
+  {
+   "fecha": "2026-10-26",
+   "tipo": "mercado",
+   "tickers": [],
+   "titulo": "Brasil: el mercado castigó la reelección de Lula",
+   "texto": "El Ibovespa cayó casi 14% el día después del balotaje y cerró octubre con su peor mes desde 2022. El real se debilitó y las tasas de interés subieron, algo a tener en cuenta para cualquier inversión ligada a Brasil.",
+   "fuente": "Revista Oeste / Money Times",
+   "url": "https://www.moneytimes.com.br/ibovespa-outubro-26-lils/"
+  }
+ ],
+ "agenda": [
+  {
+   "fecha": "2026-11-26",
+   "evento": "Acción de Gracias: Wall Street cerrado"
+  },
+  {
+   "fecha": "2026-11-27",
+   "evento": "Black Friday: Wall Street cierra temprano"
+  },
+  {
+   "fecha": "2026-12-09",
+   "evento": "Decisión de tasas de la Fed"
+  },
+  {
+   "fecha": "2026-12-09",
+   "evento": "Balance de Broadcom (AVGO), después del cierre"
+  },
+  {
+   "fecha": "2026-12-14",
+   "evento": "Balance de Oracle (ORCL), fecha a confirmar"
+  }
+ ],
+ "ideas": [
+  {
+   "titulo": "Bitcoin cerca de un nivel técnico clave",
+   "texto": "Está alrededor de su promedio de 200 semanas (~US$ 67.800), un nivel que el mercado mira como soporte. Si lo pierde, el próximo de referencia es el mínimo de julio (~US$ 58.600)."
+  },
+  {
+   "titulo": "Chips de memoria: ventas récord, acciones en baja",
+   "texto": "Sandisk y Micron cayeron fuerte en noviembre a pesar de que siguen creciendo. Los analistas están divididos sobre si es una oportunidad o el fin del ciclo alcista de la memoria."
+  },
+  {
+   "titulo": "Diciembre cargado para la tecnología",
+   "texto": "La suba de tasas de la Fed y los balances de Broadcom y Oracle caen en la misma semana: es esperable volatilidad en la parte tecnológica de la cartera."
+  }
+ ]
+}
