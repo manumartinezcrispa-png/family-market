@@ -3,6 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/favicon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#f4f4f2">
+<link rel="apple-touch-startup-image" media="(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="icons/splash-1320x2868.png">
+<link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="icons/splash-1290x2796.png">
+<link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="icons/splash-1284x2778.png">
+<link rel="apple-touch-startup-image" media="(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="icons/splash-1206x2622.png">
+<link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="icons/splash-1179x2556.png">
+<link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="icons/splash-1170x2532.png">
+<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="icons/splash-1125x2436.png">
+<link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="icons/splash-828x1792.png">
+<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="icons/splash-750x1334.png">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -167,6 +180,8 @@ nav.tabs button.on{color:var(--accent)}
 .lock{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 20px calc(24px + env(safe-area-inset-bottom))}
 .lock[hidden],#appRoot[hidden]{display:none!important}
 .lock-card{width:100%;max-width:360px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px 22px;text-align:center;box-shadow:var(--shadow)}
+.big-logo-img{width:64px;height:64px;border-radius:15px;display:block;margin:0 auto 14px;box-shadow:0 4px 14px rgba(13,44,87,.25)}
+.logo-img{width:34px;height:34px;border-radius:10px;display:block}
 .lock-card .big-logo{width:56px;height:56px;border-radius:16px;font-size:22px;margin:0 auto 14px}
 .lock-card h1{margin:0 0 6px;font-size:22px;letter-spacing:-.3px}
 .lock-card p{margin:0 0 18px;color:var(--text2);font-size:14px}
@@ -179,7 +194,7 @@ nav.tabs button.on{color:var(--accent)}
 <body>
 <div id="lock" class="lock">
   <form id="lockForm" class="lock-card" autocomplete="off">
-    <div class="logo big-logo">FM</div>
+    <img class="big-logo-img" src="icons/icon-192.png" alt="">
     <h1>Family Market</h1>
     <p>Ingresá la clave para ver las inversiones.</p>
     <input id="pass" type="password" placeholder="Clave" autocomplete="current-password" autocapitalize="none" spellcheck="false">
@@ -193,7 +208,7 @@ nav.tabs button.on{color:var(--accent)}
 <div class="app">
   <header class="top">
     <div class="brand">
-      <div class="logo">FM</div>
+      <img class="logo-img" src="icons/icon-192.png" alt="">
       <div><h1>Family Market</h1><small>Inversiones de los hermanos</small></div>
     </div>
     <button class="link" id="logout" type="button">Salir</button>
