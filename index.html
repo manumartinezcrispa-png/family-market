@@ -189,6 +189,14 @@ nav.tabs button.on{color:var(--accent)}
 .remember{display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:var(--text2);margin-bottom:16px}
 .lock-err{color:var(--bad);font-size:13px;min-height:18px;margin-top:10px}
 .btn:disabled{opacity:.6}
+.hdr-r{display:flex;align-items:center;gap:12px;flex:none}
+.brand{min-width:0}.brand small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.livepill{white-space:nowrap}
+.livepill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text2);background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:5px 10px}
+.livepill[hidden]{display:none}
+.ldot{width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.livepill.on .ldot{background:var(--good);animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(10,122,50,.5)}70%{box-shadow:0 0 0 7px rgba(10,122,50,0)}100%{box-shadow:0 0 0 0 rgba(10,122,50,0)}}
 </style>
 </head>
 <body>
@@ -211,7 +219,7 @@ nav.tabs button.on{color:var(--accent)}
       <img class="logo-img" src="icons/icon-192.png" alt="">
       <div><h1>Family Market</h1><small>Inversiones de los hermanos</small></div>
     </div>
-    <button class="link" id="logout" type="button">Salir</button>
+    <div class="hdr-r"><span class="livepill" id="livePill" hidden><span class="ldot"></span><span id="liveTxt"></span></span><button class="link" id="logout" type="button">Salir</button></div>
   </header>
   <main id="view"></main>
 </div>
@@ -228,7 +236,7 @@ nav.tabs button.on{color:var(--accent)}
 <script>
 (function(){
 "use strict";
-const S = { d:null, precios:null, noticias:null, nf:'todas', tab:'inicio' };
+const S = { d:null, precios:null, noticias:null, nf:'todas', tab:'inicio', live:{}, liveAt:0, liveOk:false };
 const KEY_STORE='fm_key_v1';
 
 /* ---------- helpers ---------- */
@@ -264,9 +272,11 @@ function calc(){
   const usePr = prFecha && String(prFecha).slice(0,10) >= String(c.fecha||'');
   const pos = (c.posiciones||[]).map(p=>{
     const cant=num(p.cant), costo=num(p.costo);
-    const precio = (usePr && pr[p.ticker]!=null) ? num(pr[p.ticker]) : num(p.precio);
+    const L = S.live[p.ticker];
+    const precio = (L && L.c>0) ? L.c : (usePr && pr[p.ticker]!=null) ? num(pr[p.ticker]) : num(p.precio);
     const valor=cant*precio, inv=cant*costo, pl=valor-inv;
-    return {...p, cant, costo, precio, valor, inv, pl, plp: inv? pl/inv*100 : 0};
+    const dHoy = (L && L.c>0 && L.pc>0) ? cant*(L.c-L.pc) : null;
+    return {...p, cant, costo, precio, valor, inv, pl, plp: inv? pl/inv*100 : 0, dHoy, dpHoy: (L&&L.pc>0)? (L.c-L.pc)/L.pc*100 : null};
   });
   const liq = (c.liquidez||[]).map(l=>({...l, valor:num(l.valor)}));
   const acciones = pos.reduce((a,p)=>a+p.valor,0), invAcc = pos.reduce((a,p)=>a+p.inv,0);
@@ -275,8 +285,11 @@ function calc(){
   liq.forEach(l=>l.peso = total? l.valor/total*100 : 0);
   pos.sort((a,b)=>b.valor-a.valor);
   const aporte = num(c.aporte);
+  const conHoy = pos.filter(p=>p.dHoy!=null);
+  const dHoy = conHoy.length? conHoy.reduce((a,p)=>a+p.dHoy,0) : null;
+  const baseAyer = total - (dHoy||0);
   return {c, pos, liq, acciones, invAcc, liquidez, total, plAcc: acciones-invAcc, aporte, gan: total-aporte, ganp: aporte? (total-aporte)/aporte*100 : null,
-          fechaPrecios: usePr? prFecha : c.fecha};
+          fechaPrecios: usePr? prFecha : c.fecha, live: conHoy.length>0, dHoy, dpHoy: (dHoy!=null && baseAyer)? dHoy/baseAyer*100 : null};
 }
 
 /* ---------- views ---------- */
@@ -292,13 +305,14 @@ function vInicio(){
     <div class="label">Cuenta de los 4 · StoneX</div>
     <div class="big">${usd(k.total)}</div>
     <div class="sub">${k.ganp!=null?`<span class="pill ${signCls(k.gan)}">${pct(k.ganp)} · ${usd(k.gan)}</span><span>sobre el aporte de ${usd(k.aporte)}</span>`:''}</div>
+    ${k.dHoy!=null?`<div class="sub"><span class="pill ${signCls(k.dHoy)}">${marketOpen()?'Hoy':'Última rueda'} ${usd(k.dHoy)} (${pct(k.dpHoy,2)})</span></div>`:''}
     <div class="grid2">
       <div class="stat"><div class="k">Invertido en activos</div><div class="v">${usd(k.acciones)}</div></div>
       <div class="stat"><div class="k">Liquidez</div><div class="v">${usd(k.liquidez)}</div></div>
       <div class="stat"><div class="k">Resultado activos abiertos</div><div class="v ${signCls(k.plAcc)}">${usd(k.plAcc)}</div></div>
       <div class="stat"><div class="k">Por hermano (¼)</div><div class="v">${usd(k.total/4)}</div></div>
     </div>
-    <div class="note">Composición al ${fdate(k.c.fecha)} · precios al ${fdate(k.fechaPrecios)}. "Por hermano" supone partes iguales.</div>
+    <div class="note">Composición al ${fdate(k.c.fecha)} · ${k.live? 'precios en vivo ('+liveLabel()+')' : 'precios al '+fdate(k.fechaPrecios)}. "Por hermano" supone partes iguales.</div>
   </div>
   <div class="card">
     <h2>Evolución</h2>
@@ -318,13 +332,13 @@ function vCartera(){
   const k=calc(); if(!k) return `<div class="card empty">Todavía no hay datos de la cartera.</div>`;
   return `
   <div class="card">
-    <div class="head-row"><h2>Activos</h2><span class="tag">Precios al ${fdate(k.fechaPrecios)}</span></div>
+    <div class="head-row"><h2>Activos</h2><span class="tag">${k.live? (marketOpen()?'En vivo · ':'Último precio · ')+liveLabel() : 'Precios al '+fdate(k.fechaPrecios)}</span></div>
     <div class="list">
       ${k.pos.map(p=>`
         <div class="row">
           <div class="tk">${esc(String(p.ticker).slice(0,5))}</div>
           <div class="mid"><div class="name">${esc(p.nombre||p.ticker)}</div>
-            <div class="meta">${p.cant.toLocaleString('es-AR')} × ${usd(p.precio,2)}</div>
+            <div class="meta">${p.cant.toLocaleString('es-AR')} × ${usd(p.precio,2)}${p.dpHoy!=null?` · <span class="${signCls(p.dpHoy)}">${pct(p.dpHoy,2)}</span>`:''}</div>
             <div class="meta">Costo prom. ${usd(p.costo,2)} · ${pctAbs(p.peso)} de la cuenta</div></div>
           <div class="right"><div class="val">${usd(p.valor)}</div>
             <div class="chg ${signCls(p.pl)}">${usd(p.pl)}</div><div class="chg ${signCls(p.pl)}">${pct(p.plp)}</div></div>
@@ -463,7 +477,49 @@ const lockEl=document.getElementById('lock'), appEl=document.getElementById('app
 let ENC=null;
 async function loadEnc(){ if(!ENC) ENC = await getJSON('data.enc.json'); return ENC; }
 async function loadPrecios(){ try{ S.precios = await getJSON('precios.json'); }catch(_){ S.precios=null; } try{ S.noticias = await getJSON('noticias.json'); }catch(_){ S.noticias=null; } }
-function show(data){ S.d=data; lockEl.hidden=true; appEl.hidden=false; render(); }
+function show(data){ S.d=data; lockEl.hidden=true; appEl.hidden=false; render(); startLive(); }
+
+/* ---------- precios en vivo (Finnhub) ---------- */
+let liveTimer=null, keyIdx=0;
+function liveLabel(){ return S.liveAt? new Date(S.liveAt).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}) : ''; }
+function marketOpen(){ // NYSE lun-vie 9:30-16:00 hora de Nueva York (sin feriados)
+  try{ const ny=new Date(new Date().toLocaleString('en-US',{timeZone:'America/New_York'})); const d=ny.getDay(), m=ny.getHours()*60+ny.getMinutes(); return d>0&&d<6&&m>=570&&m<960; }catch(_){ return true; }
+}
+function setPill(){
+  const pill=document.getElementById('livePill'), txt=document.getElementById('liveTxt'); if(!pill) return;
+  if(!S.liveOk){ pill.hidden=true; return; }
+  pill.hidden=false; const open=marketOpen(); pill.classList.toggle('on',open);
+  txt.textContent = open? 'En vivo' : 'Cerrado';
+}
+async function fetchQuote(sym){
+  const keys=(S.d && S.d.finnhub)||[]; if(!keys.length) throw new Error('sin clave');
+  for(let i=0;i<keys.length;i++){
+    const k=keys[(keyIdx+i)%keys.length];
+    const r=await fetch('https://finnhub.io/api/v1/quote?symbol='+encodeURIComponent(sym)+'&token='+encodeURIComponent(k));
+    if(r.status===401||r.status===403){ continue; }
+    if(!r.ok) throw new Error('http '+r.status);
+    keyIdx=(keyIdx+i)%keys.length;
+    const q=await r.json(); if(!q || !(q.c>0)) throw new Error('sin dato');
+    return q;
+  }
+  throw new Error('clave rechazada');
+}
+async function refreshLive(){
+  if(!S.d || document.hidden) return;
+  const syms=[...new Set(((S.d.cartera&&S.d.cartera.posiciones)||[]).map(p=>p.ticker).concat((S.d.extraTickers)||[]))];
+  let ok=0;
+  for(const s of syms){
+    try{ const q=await fetchQuote(s); S.live[s]={c:q.c, pc:q.pc, d:q.d, dp:q.dp, t:q.t}; ok++; }catch(_){}
+  }
+  if(ok){ S.liveOk=true; S.liveAt=Date.now(); }
+  setPill(); if(ok && !document.querySelector('.scrim.open')) render();
+}
+function startLive(){
+  if(liveTimer) return;
+  refreshLive();
+  liveTimer=setInterval(()=>{ if(marketOpen() || Date.now()-S.liveAt>300000) refreshLive(); }, 20000);
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden) refreshLive(); });
+}
 function store(get, val){ try{ if(get) return localStorage.getItem(KEY_STORE); if(val===null) localStorage.removeItem(KEY_STORE); else localStorage.setItem(KEY_STORE,val); }catch(_){ return null; } }
 
 document.getElementById('lockForm').addEventListener('submit', async e=>{
