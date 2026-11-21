@@ -205,6 +205,21 @@ nav.tabs button.on{color:var(--blue)}
 .av.sm{width:30px;height:30px;font-size:13px}
 .who-sel{display:flex;align-items:center;justify-content:center;gap:12px;font-size:18px;margin-bottom:18px}
 .who-sel .av{width:44px;height:44px;font-size:19px}
+
+/* hoja de perfil */
+.avbtn{border:0;cursor:pointer;padding:0}
+.scrim{position:fixed;inset:0;background:rgba(13,19,33,.45);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.scrim.open{display:flex}
+.sheet{background:var(--card);width:100%;max-width:560px;border-radius:24px 24px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
+.sheet h3{margin:0 0 16px;font-size:19px;font-weight:800}
+.sh-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.sh-head b{font-size:18px}.sh-head .sub{font-size:13px;color:var(--mute)}
+.sh-opt{display:flex;justify-content:space-between;align-items:center;width:100%;border:0;background:var(--soft);border-radius:14px;padding:15px 16px;font-size:15px;font-weight:700;margin-bottom:8px;cursor:pointer;text-align:left;color:var(--ink)}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.field label{font-size:12.5px;font-weight:700;color:var(--ink2)}
+.field input{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-size:17px}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 15px;border-radius:12px;font-size:13.5px;font-weight:600;opacity:0;transition:opacity .2s;z-index:30;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{opacity:1}
 </style>
 </head>
 <body>
@@ -228,7 +243,7 @@ nav.tabs button.on{color:var(--blue)}
 <div class="app">
   <header class="top">
     <div class="brand"><img src="icons/icon-192.png?v=2" alt=""><b>Family Market</b></div>
-    <div class="top-r"><span class="live" id="livePill" hidden><i></i><span id="liveTxt"></span></span><span class="av sm" id="meAv"></span><button class="link" id="logout" type="button">Salir</button></div>
+    <div class="top-r"><span class="live" id="livePill" hidden><i></i><span id="liveTxt"></span></span><button type="button" class="av sm avbtn" id="meAv" aria-label="Mi perfil"></button><button class="link" id="logout" type="button">Salir</button></div>
   </header>
   <div class="tape" id="tape" hidden><div class="tape-in num" id="tapeIn"></div></div>
   <main id="view"></main>
@@ -243,6 +258,8 @@ nav.tabs button.on{color:var(--blue)}
   <button data-tab="cuentas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg>Cuentas</button>
 </div></nav>
 </div>
+<div class="scrim" id="scrim"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
 
 <script>
 (function(){
@@ -414,6 +431,7 @@ function vInicio(){
   const k=calc(); if(!k) return `<div class="card empty">Todavía no hay datos de la cartera.</div>`;
   const stale=daysSince(k.c.fecha)>21;
   return `
+  ${S.askPass?`<div class="banner" style="background:var(--blue-soft);color:var(--navy)">¿Querés usar tu propia clave en este celular? <button class="link" data-act="pass">Crear mi clave</button> · <button class="link" data-act="nopass" style="color:var(--ink2)">Ahora no</button></div>`:''}
   ${stale?`<div class="banner">Las cantidades de cada acción son del <b>${fdate(k.c.fecha)}</b>; los precios sí son actuales. Se corrige con una captura nueva de StoneX.</div>`:''}
   <div class="card hero">
     <div class="k">Cuenta de los 4 · valor actual</div>
@@ -714,6 +732,7 @@ document.getElementById('view').addEventListener('click',e=>{
   const tf=e.target.closest('[data-tf]'); if(tf){ S.tf=tf.dataset.tf; document.querySelectorAll('#tfBar button').forEach(b=>b.classList.toggle('on',b.dataset.tf===S.tf)); const k=calc(); if(k) drawTotalChart(k); return; }
   const dtf=e.target.closest('[data-dtf]'); if(dtf){ S.dtf=dtf.dataset.dtf; document.querySelectorAll('#dtfBar button').forEach(b=>b.classList.toggle('on',b.dataset.dtf===S.dtf)); mountTV(); return; }
   const ctf=e.target.closest('[data-ctf]'); if(ctf){ S.ctf=ctf.dataset.ctf; document.querySelectorAll('#ctfBar button').forEach(b=>b.classList.toggle('on',b.dataset.ctf===S.ctf)); drawCrChart(); loadCrSeries(S.ctf).then(()=>{ if(S.tab==='cripto'&&!S.det) drawCrChart(); }); return; }
+  const act=e.target.closest('[data-act]'); if(act){ if(act.dataset.act==='pass') openPassSheet(); else { lsSet('fm_nopass_'+S.me.id,'1'); S.askPass=false; render(); } return; }
   const sb=e.target.closest('[data-sub]'); if(sb){ S.sub=sb.dataset.sub; render(); return; }
   const nf=e.target.closest('[data-nf]'); if(nf){ S.nf=nf.dataset.nf; render(); return; }
 });
@@ -808,16 +827,22 @@ async function loadPublic(){
   const [p,n,c]=await Promise.allSettled([getJSON('precios.json'),getJSON('noticias.json'),getJSON('cierres.json')]);
   S.precios=p.status==='fulfilled'?p.value:null; S.noticias=n.status==='fulfilled'?n.value:null; S.cierres=c.status==='fulfilled'?c.value:null;
 }
-async function unlock(prof, bits){
-  const g=await openSealed(bits, prof); // si la clave es incorrecta, falla acá
+function localGet(id){ try{ return JSON.parse(lsGet('fm_local_'+id)||'null'); }catch(_){ return null; } }
+async function openProfile(prof, pass){
+  const loc=localGet(prof.id);
+  if(loc){ try{ const bits=await deriveBits(pass, loc); return {g:await openSealed(bits, loc), bits, src:'local', salt:loc.salt}; }catch(_){} }
+  const bits=await deriveBits(pass, prof);
+  return {g:await openSealed(bits, prof), bits, src:'pub', salt:prof.salt}; // si la clave es incorrecta, falla acá
+}
+async function loadVaults(g, prof){
   const [vf, vc]=await Promise.all([getJSON('vault-familia.enc.json'), g.keys.cripto? getJSON('vault-cripto.enc.json') : Promise.resolve(null), loadPublic()]);
   const d=await openSealed(b64(g.keys.familia), vf);
   const cr= vc? await openSealed(b64(g.keys.cripto), vc) : null;
-  return {d, cr, me:{id:prof.id, nombre:g.nombre}};
+  return {d, cr, me:{id:prof.id, nombre:g.nombre}, grant:g};
 }
 function avatar(el, id, nombre){ el.textContent=(nombre||'?').slice(0,1).toUpperCase(); el.style.background=AVC[id]||'#4a5366'; }
 function show(r){
-  S.d=r.d; S.cr=r.cr; S.me=r.me;
+  S.d=r.d; S.cr=r.cr; S.me=r.me; S.grant=r.grant; S.askPass= !localGet(r.me.id) && !lsGet('fm_nopass_'+r.me.id);
   const cb=document.querySelector('nav.tabs button[data-tab=cripto]'); cb.hidden=!S.cr;
   document.querySelector('nav.tabs .in').style.gridTemplateColumns=`repeat(${S.cr?6:5},1fr)`;
   if(S.tab==='cripto'&&!S.cr) S.tab='inicio';
@@ -837,14 +862,59 @@ formEl.addEventListener('submit', async e=>{
   if(!window.crypto||!crypto.subtle){ errEl.textContent='Este navegador no permite abrir la app. Probá con Safari o Chrome actualizados.'; return; }
   btn.disabled=true; btn.textContent='Abriendo…';
   try{
-    const bits=await deriveBits(pass, SEL);
-    let r; try{ r=await unlock(SEL, bits); }catch(err){ errEl.textContent= String(err&&err.message||'').startsWith('http')? 'No se pudieron cargar los datos. Revisá la conexión.' : 'Clave incorrecta.'; return; }
-    if(document.getElementById('remember').checked) lsSet(KEY_STORE, JSON.stringify({perfil:SEL.id, salt:SEL.salt, k:toB64(bits)}));
+    let o; try{ o=await openProfile(SEL, pass); }catch(_){ errEl.textContent='Clave incorrecta.'; return; }
+    const r=await loadVaults(o.g, SEL);
+    if(document.getElementById('remember').checked) lsSet(KEY_STORE, JSON.stringify({perfil:SEL.id, src:o.src, salt:o.salt, k:toB64(o.bits)}));
     show(r);
   }catch(_){ errEl.textContent='No se pudieron cargar los datos. Revisá la conexión.'; }
   finally{ btn.disabled=false; btn.textContent='Entrar'; }
 });
 document.getElementById('logout').addEventListener('click',()=>{ lsSet(KEY_STORE,null); location.reload(); });
+const scrim=document.getElementById('scrim'), sheet=document.getElementById('sheet');
+function closeSheet(){ scrim.classList.remove('open'); sheet.innerHTML=''; }
+scrim.addEventListener('click',e=>{ if(e.target===scrim) closeSheet(); });
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2800); }
+document.getElementById('meAv').addEventListener('click',()=>{
+  const has=!!localGet(S.me.id);
+  sheet.innerHTML=`<div class="sh-head"><span class="av" style="background:${AVC[S.me.id]||'#4a5366'}">${esc(S.me.nombre.slice(0,1))}</span><div><b>${esc(S.me.nombre)}</b><div class="sub">${S.cr?'Familia + Cripto':'Familia'}</div></div></div>
+    <button class="sh-opt" id="shPass">${has?'Cambiar mi clave':'Crear mi propia clave'}<span>›</span></button>
+    ${has?'<button class="sh-opt" id="shReset">Volver a la clave original en este celular<span>›</span></button>':''}
+    <button class="sh-opt" id="shOut" style="color:var(--dn)">Cerrar sesión<span>›</span></button>
+    <div class="note" style="margin:12px 2px 0">${has?'En este celular entrás con tu clave propia. La clave original que te pasó Manu sigue funcionando por si te la olvidás o cambiás de teléfono.':'Tu clave propia queda guardada solo en este celular. La original sigue funcionando por si te la olvidás o cambiás de teléfono.'}</div>`;
+  scrim.classList.add('open');
+  document.getElementById('shPass').onclick=openPassSheet;
+  document.getElementById('shOut').onclick=()=>{ lsSet(KEY_STORE,null); location.reload(); };
+  const rs=document.getElementById('shReset'); if(rs) rs.onclick=()=>{ lsSet('fm_local_'+S.me.id,null); lsSet(KEY_STORE,null); toast('Listo, volvés a entrar con la clave original.'); setTimeout(()=>location.reload(),1200); };
+});
+function openPassSheet(){
+  sheet.innerHTML=`<h3>Tu propia clave</h3>
+    <div class="field"><label>Nueva clave</label><input id="np1" type="password" autocomplete="new-password" autocapitalize="none"></div>
+    <div class="field"><label>Repetila</label><input id="np2" type="password" autocomplete="new-password" autocapitalize="none"></div>
+    <div class="note" style="margin:0 2px 14px">Mínimo 6 caracteres. Queda guardada en este celular; la clave original sigue sirviendo si te la olvidás.</div>
+    <div class="lock-err" id="npErr" style="margin:0 0 10px"></div>
+    <button class="btn" id="npOk">Guardar mi clave</button>
+    <button class="link" id="npCancel" style="display:block;margin:14px auto 0">Cancelar</button>`;
+  scrim.classList.add('open');
+  document.getElementById('npCancel').onclick=closeSheet;
+  document.getElementById('npOk').onclick=async()=>{
+    const a=document.getElementById('np1').value, c=document.getElementById('np2').value, err=document.getElementById('npErr');
+    if(a.length<6){ err.textContent='Tiene que tener al menos 6 caracteres.'; return; }
+    if(a!==c){ err.textContent='Las dos claves no coinciden.'; return; }
+    const okb=document.getElementById('npOk'); okb.disabled=true; okb.textContent='Guardando…';
+    try{
+      const salt=toB64(crypto.getRandomValues(new Uint8Array(16))), iter=600000;
+      const bits=await deriveBits(a,{salt, iter});
+      const key=await crypto.subtle.importKey('raw',bits,{name:'AES-GCM'},false,['encrypt']);
+      const iv=crypto.getRandomValues(new Uint8Array(12));
+      const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(JSON.stringify(S.grant)));
+      lsSet('fm_local_'+S.me.id, JSON.stringify({salt, iter, iv:toB64(iv), ct:toB64(ct)}));
+      if(!localGet(S.me.id)){ err.textContent='Este navegador no deja guardar datos. Probá desde la app agregada al inicio.'; return; }
+      lsSet(KEY_STORE, JSON.stringify({perfil:S.me.id, src:'local', salt, k:toB64(bits)}));
+      S.askPass=false; closeSheet(); render(); toast('Listo. Desde ahora entrás con tu clave.');
+    }catch(_){ err.textContent='No se pudo guardar. Probá de nuevo.'; }
+    finally{ okb.disabled=false; okb.textContent='Guardar mi clave'; }
+  };
+}
 (async function start(){
   try{ S.perfiles=(await getJSON('perfiles.json')).perfiles; }
   catch(_){ document.getElementById('profiles').innerHTML='<div class="lock-err">No se pudo cargar. Revisá la conexión y recargá.</div>'; return; }
@@ -853,9 +923,10 @@ document.getElementById('logout').addEventListener('click',()=>{ lsSet(KEY_STORE
   box.addEventListener('click',e=>{ const b=e.target.closest('[data-p]'); if(b) pickProfile(S.perfiles.find(p=>p.id===b.dataset.p)); });
   const saved=lsGet(KEY_STORE); if(!saved) return;
   try{ const s=JSON.parse(saved); const p=S.perfiles.find(x=>x.id===s.perfil);
-    if(!p||p.salt!==s.salt){ lsSet(KEY_STORE,null); return; }
+    const src= s.src==='local'? localGet(s.perfil) : p;
+    if(!p||!src||src.salt!==s.salt){ lsSet(KEY_STORE,null); return; }
     pickEl.hidden=true; box.closest('.lock-card').style.opacity='.5';
-    show(await unlock(p, b64(s.k)));
+    show(await loadVaults(await openSealed(b64(s.k), src), p));
   }catch(_){ lsSet(KEY_STORE,null); pickEl.hidden=false; document.querySelector('.lock-card').style.opacity='1'; }
 })();
 })();
