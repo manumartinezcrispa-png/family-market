@@ -611,7 +611,7 @@ function vCripto(){
     <div class="tk">${esc(x.sym)}</div>
     <div class="mid"><div class="nm">${esc(x.nombre||x.sym)}</div><div class="sub num">${fmtQty(x.cant)} ${esc(x.sym)} × ${usd(x.precio, x.precio<100?2:0)}</div></div>
     <div class="r num"><div class="v">${usd(x.valor)}</div>${x.dp!=null?`<span class="chip ${cls(x.dp)}">${pct(x.dp,2)}</span>`:''}</div></button>`).join('')}</div>
-  <div class="note">Solo lo ven ${esc((k.c.miembros||[]).join(', '))}. Aportado ${usd(k.aporte)} (${usd(k.aporte/k.n)} cada uno).${Math.abs(k.aporte-k.inv)>1?` El costo de las monedas suma ${usd(k.inv)}.`:''} Precios en vivo de Binance.</div>`;
+  <div class="note">Solo lo ven ${esc((k.c.miembros||[]).join(', '))}. Aportado ${usd(k.aporte)}${k.c.inicio?' el '+fdate(k.c.inicio):''} (${usd(k.aporte/k.n)} cada uno).${Math.abs(k.aporte-k.inv)>1?` Se compraron monedas por ${usd(k.inv)}; la diferencia de ${usd(k.aporte-k.inv)} fueron comisiones.`:''} Precios en vivo de Binance.</div>`;
 }
 function vDetCr(){
   const sym=S.det.slice(2), k=calcCr(); const x=k&&k.a.find(a=>a.sym===sym); if(!x) return '<button class="back" data-back="1">‹ Volver</button>';
