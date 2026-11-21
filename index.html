@@ -220,6 +220,47 @@ nav.tabs button.on{color:var(--blue)}
 .field input{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-size:17px}
 .toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 15px;border-radius:12px;font-size:13.5px;font-weight:600;opacity:0;transition:opacity .2s;z-index:30;pointer-events:none;max-width:90vw;text-align:center}
 .toast.show{opacity:1}
+
+/* noticias con portadas */
+.resumen-card{background:var(--ink);color:#fff;border-radius:var(--r);padding:16px 18px;font-size:15px;line-height:1.5;margin-bottom:12px;box-shadow:var(--shadow)}
+.cv{position:relative;overflow:hidden;background:var(--soft);flex:none}
+.cv img,.cv-gen{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cv img{z-index:2}
+.cv-gen{display:flex;align-items:flex-end;padding:8px 10px}
+.cv-gen span{position:relative;z-index:1;color:#fff;font-weight:800;font-size:13px;letter-spacing:-.2px}
+.cv-gen svg{position:absolute;left:0;right:0;bottom:22%;width:100%;height:40%}
+.nhero{background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);margin-bottom:12px;cursor:pointer}
+.nhero .cv.big{width:100%;aspect-ratio:16/9}
+.nhero .cv.big .cv-gen{padding:16px 18px}
+.nhero .cv.big .cv-gen span{font-size:30px}
+.nhb{padding:14px 16px 16px}
+.nhb h3{font-size:19px;line-height:1.3;margin:6px 0 0;font-weight:800;letter-spacing:-.3px}
+.more{font-size:12.5px;color:var(--blue);font-weight:700;margin-top:8px}
+.nhero.open .more{display:none}
+.nmeta{display:flex;align-items:center;gap:8px}
+.nmeta .when{font-size:12px;color:var(--mute);font-weight:600;margin-left:auto}
+.nlist{padding:4px 14px}
+.nrow{display:grid;grid-template-columns:84px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line);cursor:pointer;align-items:center}
+.nrow:first-child{border-top:0}
+.nrow .cv{width:84px;height:84px;border-radius:12px}
+.nrow h3{font-size:14.5px;line-height:1.35;margin:6px 0 0;font-weight:700;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.nrow.open h3{-webkit-line-clamp:unset}
+.nfull{display:none}
+.nrow .nfull{grid-column:1/-1}
+.open .nfull{display:block}
+.nfull p{font-size:14px;line-height:1.55;color:var(--ink2);margin:8px 0 0}
+.nfull .src{display:inline-block;margin-top:8px;font-size:13px;color:var(--blue);text-decoration:none;font-weight:700}
+.hscroll{display:flex;gap:10px;overflow-x:auto;margin:0 -16px;padding:2px 16px 8px;scrollbar-width:none;scroll-snap-type:x mandatory}
+.hscroll::-webkit-scrollbar{display:none}
+.agc{flex:none;width:150px;background:var(--card);border-radius:16px;padding:14px;box-shadow:var(--shadow);scroll-snap-align:start}
+.agd{display:flex;align-items:baseline;gap:5px;margin-bottom:8px}
+.agd b{font-size:28px;font-weight:800;color:var(--blue);letter-spacing:-1px}
+.agd span{font-size:13px;font-weight:700;color:var(--ink2);text-transform:uppercase}
+.agt{font-size:13.5px;line-height:1.4;font-weight:600}
+.idc{flex:none;width:240px;background:var(--card);border-radius:16px;padding:16px;box-shadow:var(--shadow);scroll-snap-align:start}
+.idc .ico{font-size:24px;margin-bottom:8px}
+.idc h3{font-size:15px;margin:0 0 6px;line-height:1.3}
+.idc p{font-size:13px;color:var(--ink2);line-height:1.45;margin:0}
 </style>
 </head>
 <body>
@@ -515,6 +556,32 @@ function vMercado(){
   <div class="note">Tocá cualquier índice para ver su gráfico. Precios de Wall Street en vivo con el mercado abierto (11:30 a 18 h); dólar de DolarApi.</div>`;
 }
 
+const COVC={IBIT:['#f7931a','#b35c00'],BTC:['#f7931a','#b35c00'],ETH:['#627eea','#3346a8'],BNB:['#f3ba2f','#b8860b'],NVDA:['#3f8f1f','#1f5c0c'],META:['#2a78d6','#0d2c57'],ORCL:['#c74634','#7a2016'],SNDK:['#d6262f','#7a0f14'],AVGO:['#cc092f','#6e0418'],
+  FED:['#0d2c57','#06152b'],MERVAL:['#4aa3df','#1d5f8f'],IBOV:['#1f9d55','#0b5a2e'],'S&P 500':['#3b4a6b','#1a2238'],MERCADO:['#4a5366','#1d2438']};
+function coverKey(i){
+  if((i.tickers||[]).length) return i.tickers[0];
+  const t=String(i.titulo||'');
+  if(/\bFed\b|tasa/i.test(t)) return 'FED'; if(/Merval|Argentin/i.test(t)) return 'MERVAL'; if(/Brasil|Ibovespa/i.test(t)) return 'IBOV'; if(/Wall Street|S&P/i.test(t)) return 'S&P 500';
+  return 'MERCADO';
+}
+function cover(i, big){
+  const k=coverKey(i), c=COVC[k]||COVC.MERCADO;
+  const gen=`<div class="cv-gen" style="background:linear-gradient(135deg,${c[0]},${c[1]})"><span>${esc(k)}</span><svg viewBox="0 0 120 40" preserveAspectRatio="none"><path d="M0 34 L18 28 L32 31 L50 20 L66 24 L84 12 L100 15 L120 4" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"/></svg></div>`;
+  const img= i.imagen&&/^https:\/\//.test(i.imagen) ? `<img src="${esc(i.imagen)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : '';
+  return `<div class="cv ${big?'big':''}">${gen}${img}</div>`;
+}
+function srcLink(i){ return i.url&&/^https:\/\//.test(i.url)? `<a class="src" href="${esc(i.url)}" target="_blank" rel="noopener noreferrer">Leer en ${esc(i.fuente||'la fuente')} ↗</a>` : ''; }
+function newsItem(i){
+  return `<div class="nrow" data-open="1">${cover(i,false)}
+    <div class="nb"><div class="nmeta"><span class="badge ${esc(i.tipo)}">${i.tipo==='cartera'?(i.tickers||[])[0]||'Cartera':'Mercado'}</span><span class="when num">${fds(i.fecha)}</span></div>
+    <h3>${esc(i.titulo)}</h3></div>
+    <div class="nfull"><p>${esc(i.texto)}</p>${srcLink(i)}</div></div>`;
+}
+function newsHero(i){
+  return `<div class="nhero" data-open="1">${cover(i,true)}
+    <div class="nhb"><div class="nmeta"><span class="badge ${esc(i.tipo)}">${i.tipo==='cartera'?'En cartera · '+((i.tickers||[])[0]||''):'Mercado'}</span><span class="when num">${fds(i.fecha)}</span></div>
+    <h3>${esc(i.titulo)}</h3><div class="nfull"><p>${esc(i.texto)}</p>${srcLink(i)}</div><div class="more">Tocá para leer más</div></div></div>`;
+}
 function vNoticias(){
   const n=S.noticias; if(!n) return `<div class="card empty">Todavía no hay noticias cargadas.</div>`;
   const filtros=[['todas','Todas'],['cartera','Nuestra cartera'],['mercado','Mercado'],['agenda','Agenda'],['ideas','Para mirar']];
@@ -523,22 +590,20 @@ function vNoticias(){
   const hoy=new Date().toISOString().slice(0,10);
   const upd=n.actualizado? new Date(n.actualizado):null;
   const updTxt= upd&&!isNaN(upd)? upd.toLocaleDateString('es-AR',{day:'numeric',month:'long'})+', '+hhmm(upd) : '';
-  const newsHtml=items.map(newsItem).join('');
-  const agHtml=(n.agenda||[]).slice().sort((a,b)=>String(a.fecha).localeCompare(String(b.fecha))).map(a=>`<div class="ag ${String(a.fecha)<hoy?'past':''}"><span class="d num">${fds(a.fecha)}</span><span>${esc(a.evento)}</span></div>`).join('');
-  const ideasHtml=(n.ideas||[]).map(i=>`<div class="idea"><h3>${esc(i.titulo)}</h3><p>${esc(i.texto)}</p></div>`).join('')+`<div class="disc">Información para seguir el mercado, no es una recomendación de compra o venta.</div>`;
-  const sec=(t,b)=>`<div class="sec-t"><h2>${t}</h2></div><div class="card">${b}</div>`;
+  const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  const ag=(n.agenda||[]).slice().sort((a,b)=>String(a.fecha).localeCompare(String(b.fecha))).filter(a=>String(a.fecha)>=hoy);
+  const agHtml= ag.length? `<div class="hscroll">${ag.map(a=>{ const p=String(a.fecha).split('-'); return `<div class="agc"><div class="agd"><b class="num">${+p[2]}</b><span>${MES[+p[1]-1]||''}</span></div><div class="agt">${esc(a.evento)}</div></div>`; }).join('')}</div>` : '<div class="empty">Sin eventos próximos.</div>';
+  const ICO=['📈','💾','📅','🔎','⚡'];
+  const ideasHtml=`<div class="hscroll">${(n.ideas||[]).map((i,ix)=>`<div class="idc"><div class="ico">${ICO[ix%ICO.length]}</div><h3>${esc(i.titulo)}</h3><p>${esc(i.texto)}</p></div>`).join('')}</div><div class="disc">Información para seguir el mercado, no es una recomendación de compra o venta.</div>`;
+  const sect=(t,h)=>`<div class="sec-t"><h2>${t}</h2></div>${h}`;
+  const list= items.length? newsHero(items[0]) + (items.length>1? `<div class="card nlist">${items.slice(1).map(newsItem).join('')}</div>` : '') : '<div class="card empty">Sin noticias.</div>';
   let body='';
-  if(f==='todas') body=`${n.resumen?sec('Resumen',`<div class="resumen">${esc(n.resumen)}</div>`):''}${newsHtml?sec('Noticias',newsHtml):''}${agHtml?sec('Agenda',agHtml):''}${(n.ideas||[]).length?sec('Para mirar',ideasHtml):''}`;
-  else if(f==='agenda') body=sec('Agenda',agHtml||'<div class="empty">Sin eventos.</div>');
-  else if(f==='ideas') body=sec('Para mirar',ideasHtml);
-  else body=sec(f==='cartera'?'Nuestra cartera':'Mercado', newsHtml||'<div class="empty">Sin noticias.</div>');
+  if(f==='todas') body=`${n.resumen?`<div class="resumen-card">${esc(n.resumen)}</div>`:''}${list}${sect('Agenda',agHtml)}${(n.ideas||[]).length?sect('Para mirar',ideasHtml):''}`;
+  else if(f==='agenda') body=agHtml;
+  else if(f==='ideas') body=ideasHtml;
+  else body=list;
   return `<div class="chips">${filtros.map(([k,l])=>`<button class="fchip ${k===f?'on':''}" data-nf="${k}">${l}</button>`).join('')}</div>
-    ${updTxt?`<div class="note" style="margin:-2px 4px 0">Actualizado el ${esc(updTxt)}</div>`:''}${body}`;
-}
-function newsItem(i){
-  return `<div class="news"><div class="meta"><span class="badge ${esc(i.tipo)}">${i.tipo==='cartera'?'En cartera':'Mercado'}</span>${(i.tickers||[]).map(t=>`<span class="badge">${esc(t)}</span>`).join('')}<span class="when num">${fds(i.fecha)}</span></div>
-    <h3>${esc(i.titulo)}</h3><p>${esc(i.texto)}</p>
-    ${i.url&&/^https:\/\//.test(i.url)?`<a class="src" href="${esc(i.url)}" target="_blank" rel="noopener noreferrer">${esc(i.fuente||'Fuente')} ↗</a>`:''}</div>`;
+    ${updTxt?`<div class="note" style="margin:-2px 4px 10px">Actualizado el ${esc(updTxt)}</div>`:''}${body}`;
 }
 
 function vCuentas(){
@@ -671,7 +736,7 @@ function vDetalle(){
     <div class="stat"><small>Peso en la cuenta</small><b>${pctAbs(p.peso)}</b></div>
     <div class="stat"><small>Próximo evento</small><b style="font-size:13.5px">${ag.length? esc(fds(ag[0].fecha)+' · '+ag[0].evento.replace(/\s*\(.*?\)/g,'')) : 'Sin eventos cargados'}</b></div>
   </div>`:''}
-  ${news.length?`<div class="sec-t"><h2>Noticias</h2></div><div class="card">${news.map(newsItem).join('')}</div>`:''}`;
+  ${news.length?`<div class="sec-t"><h2>Noticias</h2></div><div class="card nlist">${news.map(newsItem).join('')}</div>`:''}`;
 }
 function mountTV(){
   const box=document.getElementById('tvBox'); if(!box) return;
@@ -735,6 +800,8 @@ document.getElementById('view').addEventListener('click',e=>{
   const act=e.target.closest('[data-act]'); if(act){ if(act.dataset.act==='pass') openPassSheet(); else { lsSet('fm_nopass_'+S.me.id,'1'); S.askPass=false; render(); } return; }
   const sb=e.target.closest('[data-sub]'); if(sb){ S.sub=sb.dataset.sub; render(); return; }
   const nf=e.target.closest('[data-nf]'); if(nf){ S.nf=nf.dataset.nf; render(); return; }
+  if(e.target.closest('a')) return;
+  const op=e.target.closest('[data-open]'); if(op){ op.classList.toggle('open'); return; }
 });
 let rz; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(S.d&&!S.det&&S.tab==='inicio'){ const k=calc(); if(k) drawTotalChart(k); } if(S.d&&!S.det&&S.tab==='cripto') drawCrChart(); },150); });
 window.addEventListener('hashchange',()=>{ const h=location.hash.slice(1); if(h==='cripto'&&!S.cr) return; if(S.d&&TABS.includes(h)&&(h!==S.tab||S.det)){ S.tab=h; S.det=null; render(); } });
