@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Family Market">
+<title>Family Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#f4f4f2; --surface:#fcfcfb; --surface2:#efeeeb;
+  --text:#0b0b0b; --text2:#52514e; --muted:#7d7c77; --line:#e3e2de;
+  --accent:#2a78d6; --accent-soft:rgba(42,120,214,.12);
+  --good:#0a7a32; --bad:#c4302b; --warn-bg:#fff4d6; --warn-text:#6b4a00;
+  --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme: dark;
+    --bg:#111110; --surface:#1a1a19; --surface2:#232321;
+    --text:#f0efec; --text2:#c3c2b7; --muted:#8f8e87; --line:#2e2e2b;
+    --accent:#3987e5; --accent-soft:rgba(57,135,229,.16);
+    --good:#43c46f; --bad:#e66767; --warn-bg:#3a300f; --warn-text:#f1d68a;
+    --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#111110; --surface:#1a1a19; --surface2:#232321;
+  --text:#f0efec; --text2:#c3c2b7; --muted:#8f8e87; --line:#2e2e2b;
+  --accent:#3987e5; --accent-soft:rgba(57,135,229,.16);
+  --good:#43c46f; --bad:#e66767; --warn-bg:#3a300f; --warn-text:#f1d68a;
+  --shadow:none;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left)}
+button,input,select,textarea{font:inherit;color:inherit}
+.app{max-width:560px;margin:0 auto;padding:18px 16px calc(96px + env(safe-area-inset-bottom))}
+header.top{display:flex;align-items:center;justify-content:space-between;margin:4px 2px 18px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:34px;height:34px;border-radius:10px;background:var(--accent);display:grid;place-items:center;color:#fff;font-weight:700;font-size:15px;letter-spacing:-.5px}
+.brand h1{font-size:18px;margin:0;font-weight:700;letter-spacing:-.3px}
+.brand small{display:block;color:var(--muted);font-size:12px;font-weight:500}
+.sync{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.dot.on{background:var(--good)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.card h2{font-size:13px;font-weight:600;color:var(--text2);margin:0 0 12px;text-transform:uppercase;letter-spacing:.04em}
+.hero .label{color:var(--text2);font-size:13px;font-weight:500}
+.hero .big{font-size:38px;font-weight:700;letter-spacing:-1.2px;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.hero .sub{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:14px;color:var(--text2);margin-top:6px}
+.pill{display:inline-flex;align-items:center;gap:4px;font-weight:600;font-variant-numeric:tabular-nums}
+.up{color:var(--good)} .down{color:var(--bad)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.stat{background:var(--surface2);border-radius:12px;padding:10px 12px}
+.stat .k{font-size:12px;color:var(--muted);font-weight:500}
+.stat .v{font-size:17px;font-weight:650;margin-top:2px;font-variant-numeric:tabular-nums}
+.banner{background:var(--warn-bg);color:var(--warn-text);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.4;margin-bottom:14px}
+.note{font-size:12px;color:var(--muted);line-height:1.45;margin-top:10px}
+/* bars */
+.bars{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:grid;grid-template-columns:64px 1fr 52px;align-items:center;gap:10px;font-size:13px}
+.bar-row .t{font-weight:600}
+.bar-track{height:10px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;background:var(--accent);border-radius:0 4px 4px 0}
+.bar-row .p{text-align:right;color:var(--text2);font-variant-numeric:tabular-nums}
+/* chart */
+.chart-wrap{position:relative}
+.chart-wrap svg{display:block;width:100%;height:auto;touch-action:pan-y}
+.tip{position:absolute;pointer-events:none;background:var(--text);color:var(--bg);font-size:12px;padding:6px 8px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-115%);opacity:0;transition:opacity .1s}
+.tip b{display:block;font-size:13px}
+/* list */
+.list{display:flex;flex-direction:column}
+.row{display:flex;align-items:center;gap:12px;padding:12px 2px;border-top:1px solid var(--line);background:none;border-left:0;border-right:0;border-bottom:0;text-align:left;width:100%;cursor:default}
+.row:first-child{border-top:0}
+.row.tap{cursor:pointer}
+.row.tap:active{background:var(--surface2)}
+.tk{width:42px;height:42px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700;font-size:11px;letter-spacing:-.2px;flex:none}
+.tk.cash{background:var(--surface2);color:var(--text2)}
+.row .mid{flex:1;min-width:0}
+.row .name{font-weight:600;font-size:15px}
+.row .meta{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .right{text-align:right;font-variant-numeric:tabular-nums}
+.row .val{font-weight:600;font-size:15px}
+.row .chg{font-size:12px;margin-top:2px}
+.subtotal{display:flex;justify-content:space-between;font-size:13px;color:var(--text2);padding:10px 2px 0;border-top:1px solid var(--line);margin-top:4px}
+.btn{border:0;border-radius:12px;padding:12px 14px;font-weight:600;font-size:14px;cursor:pointer;background:var(--accent);color:#fff;width:100%}
+.btn.ghost{background:var(--surface2);color:var(--text)}
+.btn.danger{background:transparent;color:var(--bad);border:1px solid var(--bad)}
+.btn.small{width:auto;padding:8px 12px;font-size:13px}
+.btns{display:flex;gap:10px;margin-top:12px}
+.link{background:none;border:0;color:var(--accent);font-weight:600;font-size:13px;cursor:pointer;padding:0}
+.head-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.head-row h2{margin:0}
+.mv{display:flex;gap:12px;padding:12px 2px;border-top:1px solid var(--line)}
+.mv:first-child{border-top:0}
+.mv .d{width:52px;flex:none;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:2px}
+.mv .b{flex:1;min-width:0}
+.mv .ty{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text2)}
+.mv .ty.compra{color:var(--accent)} .mv .ty.aporte{color:var(--good)} .mv .ty.venta,.mv .ty.retiro{color:var(--bad)}
+.mv .tx{font-size:14px;margin-top:2px;line-height:1.4}
+.mv .am{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:14px}
+.year{font-size:12px;font-weight:700;color:var(--muted);margin:14px 2px 2px;letter-spacing:.04em}
+.acct .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.acct .nm{font-weight:700;font-size:16px}
+.acct .who{font-size:12px;color:var(--muted);margin-top:3px}
+.acct .amt{font-size:24px;font-weight:700;letter-spacing:-.5px;margin-top:10px;font-variant-numeric:tabular-nums}
+.acct .amt.na{font-size:15px;color:var(--muted);font-weight:500}
+.acct .when{font-size:12px;color:var(--muted)}
+.acct .rd{font-size:14px;margin-top:8px;font-weight:600}
+.acct .det{font-size:13px;color:var(--text2);line-height:1.5;margin-top:8px;white-space:pre-line}
+.tag{font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px;background:var(--surface2);color:var(--text2);white-space:nowrap}
+.empty{color:var(--muted);font-size:14px;text-align:center;padding:28px 10px;line-height:1.5}
+/* nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom));display:flex;justify-content:center;z-index:5}
+nav.tabs .in{display:grid;grid-template-columns:repeat(4,1fr);max-width:560px;width:100%}
+nav.tabs button{background:none;border:0;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer}
+nav.tabs button svg{width:22px;height:22px}
+nav.tabs button.on{color:var(--accent)}
+/* modal */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.scrim.open{display:flex}
+.sheet{background:var(--surface);width:100%;max-width:560px;border-radius:20px 20px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
+@media (min-width:600px){.scrim{align-items:center}.sheet{border-radius:20px}}
+.sheet h3{margin:0 0 14px;font-size:17px}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.field label{font-size:12px;font-weight:600;color:var(--text2)}
+.field input,.field select,.field textarea{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:11px 12px;font-size:16px;width:100%}
+.field textarea{min-height:90px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:12px;color:var(--muted);margin:-4px 0 12px;line-height:1.4}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 14px;border-radius:12px;font-size:13px;font-weight:500;opacity:0;transition:opacity .2s;z-index:30;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{opacity:1}
+.hl{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.hl:first-child{border-top:0}
+
+.lock{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 20px calc(24px + env(safe-area-inset-bottom))}
+.lock[hidden],#appRoot[hidden]{display:none!important}
+.lock-card{width:100%;max-width:360px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px 22px;text-align:center;box-shadow:var(--shadow)}
+.lock-card .big-logo{width:56px;height:56px;border-radius:16px;font-size:22px;margin:0 auto 14px}
+.lock-card h1{margin:0 0 6px;font-size:22px;letter-spacing:-.3px}
+.lock-card p{margin:0 0 18px;color:var(--text2);font-size:14px}
+.lock-card input[type=password]{width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-size:16px;margin-bottom:12px;text-align:center}
+.remember{display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:var(--text2);margin-bottom:16px}
+.lock-err{color:var(--bad);font-size:13px;min-height:18px;margin-top:10px}
+.btn:disabled{opacity:.6}
+</style>
+</head>
+<body>
+<div id="lock" class="lock">
+  <form id="lockForm" class="lock-card" autocomplete="off">
+    <div class="logo big-logo">FM</div>
+    <h1>Family Market</h1>
+    <p>Ingresá la clave para ver las inversiones.</p>
+    <input id="pass" type="password" placeholder="Clave" autocomplete="current-password" autocapitalize="none" spellcheck="false">
+    <label class="remember"><input type="checkbox" id="remember"> Recordarme en este celular</label>
+    <button class="btn" id="enter" type="submit">Entrar</button>
+    <div class="lock-err" id="lockErr"></div>
+  </form>
+</div>
+
+<div id="appRoot" hidden>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">FM</div>
+      <div><h1>Family Market</h1><small>Inversiones de los hermanos</small></div>
+    </div>
+    <button class="link" id="logout" type="button">Salir</button>
+  </header>
+  <main id="view"></main>
+</div>
+
+<nav class="tabs"><div class="in">
+  <button data-tab="inicio" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</button>
+  <button data-tab="cartera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Cartera</button>
+  <button data-tab="movimientos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M7 4L3 8M7 4l4 4M17 20V4M17 20l-4-4M17 20l4-4"/></svg>Movimientos</button>
+  <button data-tab="cuentas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg>Cuentas</button>
+</div></nav>
+</div>
+
+<script>
+(function(){
+"use strict";
+const S = { d:null, precios:null, tab:'inicio' };
+const KEY_STORE='fm_key_v1';
+
+/* ---------- helpers ---------- */
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = v => { const n = typeof v==='number'?v:parseFloat(v); return isFinite(n)?n:0; };
+const usd = (n,dec=0) => { if(n==null||!isFinite(n)) return '—'; const s=Math.abs(n).toLocaleString('es-AR',{minimumFractionDigits:dec,maximumFractionDigits:dec}); return (n<0?'−':'')+'US$ '+s; };
+const usdK = n => { const a=Math.abs(n); return (n<0?'−':'')+(a>=1000? (a/1000).toLocaleString('es-AR',{maximumFractionDigits:a>=100000?0:1})+'k' : Math.round(a)); };
+const pct = (n,d=1) => { if(n==null||!isFinite(n)) return '—'; return (n>0?'+':n<0?'−':'')+Math.abs(n).toLocaleString('es-AR',{minimumFractionDigits:d,maximumFractionDigits:d})+'%'; };
+const pctAbs = (n,d=1) => pct(n,d).replace('+','');
+const signCls = n => n>0?'up':n<0?'down':'';
+const fdate = s => { if(!s) return '—'; const p=String(s).slice(0,10).split('-'); if(p.length<3) return esc(s); return `${+p[2]}/${+p[1]}/${p[0]}`; };
+const fdateShort = s => { if(!s) return ''; const p=String(s).split('-'); return `${+p[2]}/${+p[1]}`; };
+const daysSince = s => s? Math.floor((Date.now()-new Date(String(s).slice(0,10)+'T12:00:00').getTime())/86400000) : 0;
+const b64 = s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
+const toB64 = u => btoa(String.fromCharCode(...new Uint8Array(u)));
+
+/* ---------- crypto ---------- */
+async function deriveKey(pass, enc){
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2', salt:b64(enc.salt), iterations:enc.iter, hash:'SHA-256'}, base, {name:'AES-GCM', length:256}, true, ['decrypt']);
+}
+async function decrypt(key, enc){
+  const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:b64(enc.iv)}, key, b64(enc.ct));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+async function getJSON(url){ const r = await fetch(url+'?t='+Date.now(), {cache:'no-store'}); if(!r.ok) throw new Error('http '+r.status); return r.json(); }
+
+/* ---------- data ---------- */
+function calc(){
+  const c = S.d && S.d.cartera; if(!c) return null;
+  const pr = S.precios && S.precios.precios || {};
+  const prFecha = S.precios && S.precios.fecha || '';
+  const usePr = prFecha && String(prFecha).slice(0,10) >= String(c.fecha||'');
+  const pos = (c.posiciones||[]).map(p=>{
+    const cant=num(p.cant), costo=num(p.costo);
+    const precio = (usePr && pr[p.ticker]!=null) ? num(pr[p.ticker]) : num(p.precio);
+    const valor=cant*precio, inv=cant*costo, pl=valor-inv;
+    return {...p, cant, costo, precio, valor, inv, pl, plp: inv? pl/inv*100 : 0};
+  });
+  const liq = (c.liquidez||[]).map(l=>({...l, valor:num(l.valor)}));
+  const acciones = pos.reduce((a,p)=>a+p.valor,0), invAcc = pos.reduce((a,p)=>a+p.inv,0);
+  const liquidez = liq.reduce((a,l)=>a+l.valor,0), total = acciones+liquidez;
+  pos.forEach(p=>p.peso = total? p.valor/total*100 : 0);
+  liq.forEach(l=>l.peso = total? l.valor/total*100 : 0);
+  pos.sort((a,b)=>b.valor-a.valor);
+  const aporte = num(c.aporte);
+  return {c, pos, liq, acciones, invAcc, liquidez, total, plAcc: acciones-invAcc, aporte, gan: total-aporte, ganp: aporte? (total-aporte)/aporte*100 : null,
+          fechaPrecios: usePr? prFecha : c.fecha};
+}
+
+/* ---------- views ---------- */
+function vInicio(){
+  const k=calc(); if(!k) return `<div class="card empty">Todavía no hay datos de la cartera.</div>`;
+  const stale = daysSince(k.c.fecha)>21;
+  const top = k.pos.slice(0,8);
+  const liqP = k.total? k.liquidez/k.total*100 : 0;
+  const maxP = Math.max(1,...top.map(p=>p.peso), liqP);
+  return `
+  ${stale?`<div class="banner">La composición de la cartera es del <b>${fdate(k.c.fecha)}</b>. Se actualiza cuando llega una captura nueva de StoneX.</div>`:''}
+  <div class="card hero">
+    <div class="label">Cuenta de los 4 · StoneX</div>
+    <div class="big">${usd(k.total)}</div>
+    <div class="sub">${k.ganp!=null?`<span class="pill ${signCls(k.gan)}">${pct(k.ganp)} · ${usd(k.gan)}</span><span>sobre el aporte de ${usd(k.aporte)}</span>`:''}</div>
+    <div class="grid2">
+      <div class="stat"><div class="k">Invertido en activos</div><div class="v">${usd(k.acciones)}</div></div>
+      <div class="stat"><div class="k">Liquidez</div><div class="v">${usd(k.liquidez)}</div></div>
+      <div class="stat"><div class="k">Resultado activos abiertos</div><div class="v ${signCls(k.plAcc)}">${usd(k.plAcc)}</div></div>
+      <div class="stat"><div class="k">Por hermano (¼)</div><div class="v">${usd(k.total/4)}</div></div>
+    </div>
+    <div class="note">Composición al ${fdate(k.c.fecha)} · precios al ${fdate(k.fechaPrecios)}. "Por hermano" supone partes iguales.</div>
+  </div>
+  <div class="card">
+    <h2>Evolución</h2>
+    <div class="chart-wrap" id="chart"></div>
+    <div class="note">Valor total de la cuenta en cada fecha registrada. La línea punteada es el aporte inicial.</div>
+  </div>
+  <div class="card">
+    <h2>En qué está la plata</h2>
+    <div class="bars">
+      ${top.map(p=>`<div class="bar-row"><span class="t">${esc(p.ticker)}</span><div class="bar-track"><div class="bar-fill" style="width:${(p.peso/maxP*100).toFixed(1)}%"></div></div><span class="p">${pctAbs(p.peso)}</span></div>`).join('')}
+      ${k.liquidez>0?`<div class="bar-row"><span class="t" style="color:var(--text2)">Liquidez</span><div class="bar-track"><div class="bar-fill" style="width:${(liqP/maxP*100).toFixed(1)}%;background:var(--muted)"></div></div><span class="p">${pctAbs(liqP)}</span></div>`:''}
+    </div>
+  </div>`;
+}
+
+function vCartera(){
+  const k=calc(); if(!k) return `<div class="card empty">Todavía no hay datos de la cartera.</div>`;
+  return `
+  <div class="card">
+    <div class="head-row"><h2>Activos</h2><span class="tag">Precios al ${fdate(k.fechaPrecios)}</span></div>
+    <div class="list">
+      ${k.pos.map(p=>`
+        <div class="row">
+          <div class="tk">${esc(String(p.ticker).slice(0,5))}</div>
+          <div class="mid"><div class="name">${esc(p.nombre||p.ticker)}</div>
+            <div class="meta">${p.cant.toLocaleString('es-AR')} × ${usd(p.precio,2)}</div>
+            <div class="meta">Costo prom. ${usd(p.costo,2)} · ${pctAbs(p.peso)} de la cuenta</div></div>
+          <div class="right"><div class="val">${usd(p.valor)}</div>
+            <div class="chg ${signCls(p.pl)}">${usd(p.pl)}</div><div class="chg ${signCls(p.pl)}">${pct(p.plp)}</div></div>
+        </div>`).join('') || `<div class="empty">Sin activos cargados.</div>`}
+    </div>
+    <div class="subtotal"><span>Subtotal activos · ${pctAbs(k.total?k.acciones/k.total*100:0)}</span><span>${usd(k.acciones)}</span></div>
+  </div>
+  <div class="card">
+    <h2>Liquidez</h2>
+    <div class="list">
+      ${k.liq.map(l=>`
+        <div class="row">
+          <div class="tk cash">US$</div>
+          <div class="mid"><div class="name">${esc(l.nombre)}</div>${l.detalle?`<div class="meta">${esc(l.detalle)}</div>`:''}</div>
+          <div class="right"><div class="val ${l.valor<0?'down':''}">${usd(l.valor)}</div><div class="chg" style="color:var(--muted)">${pctAbs(l.peso)}</div></div>
+        </div>`).join('') || `<div class="empty">Sin liquidez cargada.</div>`}
+    </div>
+  </div>
+  <div class="card hero"><div class="label">Total cuenta</div><div class="big" style="font-size:30px">${usd(k.total)}</div></div>`;
+}
+
+function vMovimientos(){
+  const list=[...(S.d.movimientos||[])].sort((a,b)=>String(b.fecha).localeCompare(String(a.fecha)));
+  let y='', out='';
+  list.forEach(m=>{
+    const yy=String(m.fecha||'').slice(0,4);
+    if(yy!==y){ if(y) out+='</div></div>'; y=yy; out+=`<div class="year">${esc(yy)}</div><div class="card" style="padding:4px 14px"><div class="list">`; }
+    const ty=String(m.tipo||'nota').toLowerCase();
+    out+=`<div class="mv"><div class="d">${fdateShort(m.fecha)}</div>
+      <div class="b"><div class="ty ${esc(ty)}">${esc(ty)}${m.activo?` · ${esc(m.activo)}`:''}</div><div class="tx">${esc(m.nota||'')}</div></div>
+      <div class="am">${m.monto!=null&&m.monto!==''?usd(num(m.monto)):''}</div></div>`;
+  });
+  if(y) out+='</div></div>';
+  return out || `<div class="card empty">Todavía no hay movimientos.</div>`;
+}
+
+function vCuentas(){
+  const list=[...(S.d.cuentas||[])].sort((a,b)=>num(a.orden)-num(b.orden));
+  const k=calc();
+  // la cuenta de los 4 usa el total calculado con los precios más recientes
+  const val = c => (c.orden===1 && k) ? k.total : (c.valor!=null&&c.valor!==''? num(c.valor) : null);
+  const fec = c => (c.orden===1 && k) ? k.fechaPrecios : c.fecha;
+  const sum=list.reduce((a,c)=>a+(val(c)||0),0);
+  return `
+  <div class="card hero"><div class="label">Total conocido entre las cuentas</div><div class="big" style="font-size:30px">${usd(sum)}</div>
+  <div class="note">Suma solo las cuentas con monto cargado, cada una a su propia fecha.</div></div>
+  ${list.map(c=>`
+    <div class="card acct">
+      <div class="top"><div><div class="nm">${esc(c.nombre)}</div><div class="who">${esc(c.gestor||'')}${c.custodio?` · ${esc(c.custodio)}`:''}</div></div>${c.tipo?`<span class="tag">${esc(c.tipo)}</span>`:''}</div>
+      ${val(c)!=null?`<div class="amt">${usd(val(c))}</div><div class="when">al ${fdate(fec(c))}</div>`:`<div class="amt na">Monto sin cargar</div>`}
+      ${c.rendimiento?`<div class="rd">${esc(c.rendimiento)}</div>`:''}
+      ${c.detalle?`<div class="det">${esc(c.detalle)}</div>`:''}
+    </div>`).join('')}`;
+}
+
+/* ---------- chart ---------- */
+function niceStep(raw){ if(raw<=0) return 1000; const p=Math.pow(10,Math.floor(Math.log10(raw))); const f=raw/p; return (f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*p; }
+function drawChart(){
+  const el=document.getElementById('chart'); if(!el) return;
+  const pts=(S.d.historial||[]).filter(h=>h.fecha&&h.valor!=null).map(h=>({t:new Date(h.fecha+'T12:00:00').getTime(), v:num(h.valor), f:h.fecha, n:h.nota||''})).sort((a,b)=>a.t-b.t);
+  if(pts.length<2){ el.innerHTML=`<div class="empty">Hacen falta al menos dos puntos para el gráfico.</div>`; return; }
+  const W=Math.max(280, el.clientWidth||320), H=190, L=44, R=12, T=14, B=26;
+  const aporte = num(S.d.cartera && S.d.cartera.aporte);
+  let lo=Math.min(...pts.map(p=>p.v), aporte||Infinity), hi=Math.max(...pts.map(p=>p.v), aporte||0);
+  const step=niceStep((hi-lo)/4); lo=Math.floor(lo*0.97/step)*step; hi=Math.ceil(hi*1.02/step)*step;
+  const t0=pts[0].t, t1=pts[pts.length-1].t;
+  const x=t=>L+(t-t0)/(t1-t0||1)*(W-L-R), y=v=>T+(hi-v)/(hi-lo||1)*(H-T-B);
+  let g=''; for(let v=lo; v<=hi+1e-6; v+=step){ g+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L-8}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="var(--muted)">${usdK(v)}</text>`; }
+  const ends=[pts[0],pts[pts.length-1]];
+  const xl=ends.map((p,i)=>`<text x="${x(p.t)}" y="${H-6}" text-anchor="${i?'end':'start'}" font-size="11" fill="var(--muted)">${fdateShort(p.f)}/${p.f.slice(2,4)}</text>`).join('');
+  const d=pts.map((p,i)=>(i?'L':'M')+x(p.t).toFixed(1)+' '+y(p.v).toFixed(1)).join(' ');
+  const area=d+` L${x(t1).toFixed(1)} ${H-B} L${x(t0).toFixed(1)} ${H-B} Z`;
+  const ap = aporte? `<line x1="${L}" x2="${W-R}" y1="${y(aporte)}" y2="${y(aporte)}" stroke="var(--text2)" stroke-dasharray="4 4"/>`:'';
+  const last=pts[pts.length-1];
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Evolución del valor de la cuenta">${g}${ap}
+    <path d="${area}" fill="var(--accent-soft)"/><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    ${pts.map(p=>`<circle cx="${x(p.t)}" cy="${y(p.v)}" r="3" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>`).join('')}
+    <circle cx="${x(last.t)}" cy="${y(last.v)}" r="5" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/>
+    <line id="cx" y1="${T}" y2="${H-B}" stroke="var(--text2)" opacity="0"/><circle id="cdot" r="6" fill="var(--accent)" stroke="var(--surface)" stroke-width="2" opacity="0"/>
+    ${xl}</svg><div class="tip" id="tip"></div>`;
+  const svg=el.querySelector('svg'), tip=el.querySelector('#tip'), cx=el.querySelector('#cx'), cd=el.querySelector('#cdot');
+  const move=e=>{ const r=svg.getBoundingClientRect(); const px=(e.clientX-r.left)*(W/r.width);
+    let best=pts[0],bd=1e9; pts.forEach(p=>{const dd=Math.abs(x(p.t)-px); if(dd<bd){bd=dd;best=p;}});
+    const X=x(best.t), Y=y(best.v);
+    cx.setAttribute('x1',X); cx.setAttribute('x2',X); cx.setAttribute('opacity','.4'); cd.setAttribute('cx',X); cd.setAttribute('cy',Y); cd.setAttribute('opacity','1');
+    tip.innerHTML=`<b>${usd(best.v)}</b>${fdate(best.f)}${best.n?` · ${esc(best.n)}`:''}`;
+    tip.style.left=Math.min(Math.max(X*(r.width/W),70),r.width-70)+'px'; tip.style.top=(Y*(r.height/H))+'px'; tip.style.opacity='1'; };
+  const out=()=>{tip.style.opacity='0'; cx.setAttribute('opacity','0'); cd.setAttribute('opacity','0');};
+  svg.addEventListener('pointermove',move); svg.addEventListener('pointerdown',move); svg.addEventListener('pointerleave',out);
+}
+
+/* ---------- render ---------- */
+function render(){
+  const map={inicio:vInicio,cartera:vCartera,movimientos:vMovimientos,cuentas:vCuentas};
+  document.getElementById('view').innerHTML=(map[S.tab]||vInicio)();
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===S.tab));
+  if(S.tab==='inicio') drawChart();
+}
+document.querySelector('nav.tabs').addEventListener('click',e=>{ const b=e.target.closest('button[data-tab]'); if(!b) return; S.tab=b.dataset.tab; try{location.hash=S.tab;}catch(_){} render(); window.scrollTo(0,0); });
+let rz; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(S.d&&S.tab==='inicio') drawChart(); },150); });
+window.addEventListener('hashchange',()=>{ const h=location.hash.slice(1); if(S.d&&['inicio','cartera','movimientos','cuentas'].includes(h)&&h!==S.tab){ S.tab=h; render(); } });
+{ const h=(location.hash||'').slice(1); if(['inicio','cartera','movimientos','cuentas'].includes(h)) S.tab=h; }
+
+/* ---------- lock ---------- */
+const lockEl=document.getElementById('lock'), appEl=document.getElementById('appRoot'), errEl=document.getElementById('lockErr'), btn=document.getElementById('enter');
+let ENC=null;
+async function loadEnc(){ if(!ENC) ENC = await getJSON('data.enc.json'); return ENC; }
+async function loadPrecios(){ try{ S.precios = await getJSON('precios.json'); }catch(_){ S.precios=null; } }
+function show(data){ S.d=data; lockEl.hidden=true; appEl.hidden=false; render(); }
+function store(get, val){ try{ if(get) return localStorage.getItem(KEY_STORE); if(val===null) localStorage.removeItem(KEY_STORE); else localStorage.setItem(KEY_STORE,val); }catch(_){ return null; } }
+
+document.getElementById('lockForm').addEventListener('submit', async e=>{
+  e.preventDefault(); errEl.textContent='';
+  const pass=document.getElementById('pass').value.trim(); if(!pass){ errEl.textContent='Escribí la clave.'; return; }
+  if(!window.crypto||!crypto.subtle){ errEl.textContent='Este navegador no permite abrir la app. Probá con Safari o Chrome actualizados.'; return; }
+  btn.disabled=true; btn.textContent='Abriendo…';
+  try{
+    const enc=await loadEnc(); await loadPrecios();
+    const key=await deriveKey(pass, enc);
+    let data; try{ data=await decrypt(key, enc); }catch(_){ errEl.textContent='Clave incorrecta.'; return; }
+    if(document.getElementById('remember').checked){ const raw=await crypto.subtle.exportKey('raw', key); store(false, JSON.stringify({salt:enc.salt, k:toB64(raw)})); }
+    show(data);
+  }catch(_){ errEl.textContent='No se pudieron cargar los datos. Revisá la conexión.'; }
+  finally{ btn.disabled=false; btn.textContent='Entrar'; }
+});
+document.getElementById('logout').addEventListener('click',()=>{ store(false,null); S.d=null; appEl.hidden=true; lockEl.hidden=false; document.getElementById('pass').value=''; });
+
+(async function auto(){
+  const saved=store(true); if(!saved) return;
+  try{
+    const s=JSON.parse(saved); const enc=await loadEnc(); await loadPrecios();
+    if(s.salt!==enc.salt){ store(false,null); return; } // cambió la clave
+    const key=await crypto.subtle.importKey('raw', b64(s.k), {name:'AES-GCM'}, false, ['decrypt']);
+    show(await decrypt(key, enc));
+  }catch(_){ store(false,null); }
+})();
+})();
+</script>
+</body>
+</html>
