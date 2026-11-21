@@ -565,8 +565,8 @@ function calcCr(){
   const total=a.reduce((s,x)=>s+x.valor,0), inv=a.reduce((s,x)=>s+x.inv,0);
   const con=a.filter(x=>x.d24!=null), d24=con.length? con.reduce((s,x)=>s+x.d24,0) : null;
   a.forEach(x=>x.peso= total? x.valor/total*100:0);
-  const n=(c.miembros||[]).length||1;
-  return {c,a,total,inv,pl:total-inv,plp: inv?(total-inv)/inv*100:0,d24,dp24:(d24!=null&&total-d24)? d24/(total-d24)*100:null,live:a.some(x=>x.live),n};
+  const n=(c.miembros||[]).length||1, aporte=num(c.aporte)||inv;
+  return {c,a,total,inv,aporte,pl:total-aporte,plp: aporte?(total-aporte)/aporte*100:0,d24,dp24:(d24!=null&&total-d24)? d24/(total-d24)*100:null,live:a.some(x=>x.live),n};
 }
 const CTF={'1D':['5m',288],'1S':['1h',168],'1M':['4h',180],'1A':['1d',365]};
 async function loadCrSeries(tf){
@@ -596,14 +596,14 @@ function vCripto(){
   return `<div class="card hero">
     <div class="k">${esc(k.c.nombre||'Cartera cripto')} · ${esc(k.c.donde||'')}</div>
     <div class="tot num">${usd(k.total)}</div>
-    <div class="chg num">${k.d24!=null?`<span class="${cls(k.d24)}">${arrow(k.d24)} ${usd(Math.abs(k.d24))} (${pct(k.dp24,2)})</span> <small>24 h</small> · `:''}<small><span class="${cls(k.pl)}" style="font-weight:700">${pct(k.plp)}</span> desde la compra</small></div>
+    <div class="chg num">${k.d24!=null?`<span class="${cls(k.d24)}">${arrow(k.d24)} ${usd(Math.abs(k.d24))} (${pct(k.dp24,2)})</span> <small>24 h</small> · `:''}<small><span class="${cls(k.pl)}" style="font-weight:700">${pct(k.plp)}</span> desde el aporte</small></div>
     <div class="chart" id="crchart"></div>
     <div class="tf" id="ctfBar">${Object.keys(CTF).map(t=>`<button data-ctf="${t}" class="${t===S.ctf?'on':''}">${t}</button>`).join('')}</div>
   </div>
   <div class="stats num">
-    <div class="stat"><small>Invertido</small><b>${usd(k.inv)}</b></div>
-    <div class="stat"><small>Resultado</small><b class="${cls(k.pl)}">${usdS(k.pl)}</b></div>
-    <div class="stat"><small>Por persona (1/${k.n})</small><b>${usd(k.total/k.n)}</b></div>
+    <div class="stat"><small>Aportado</small><b>${usd(k.aporte)}</b></div>
+    <div class="stat"><small>Resultado</small><b class="${cls(k.pl)}">${usdS(k.pl)} (${pct(k.plp)})</b></div>
+    <div class="stat"><small>Por persona hoy (1/${k.n})</small><b>${usd(k.total/k.n)}</b></div>
     <div class="stat"><small>Participan</small><b style="font-size:14px">${esc((k.c.miembros||[]).join(', '))}</b></div>
   </div>
   <div class="sec-t"><h2>Monedas</h2><span>${k.live?'en vivo · 24/7':''}</span></div>
@@ -611,7 +611,7 @@ function vCripto(){
     <div class="tk">${esc(x.sym)}</div>
     <div class="mid"><div class="nm">${esc(x.nombre||x.sym)}</div><div class="sub num">${fmtQty(x.cant)} ${esc(x.sym)} × ${usd(x.precio, x.precio<100?2:0)}</div></div>
     <div class="r num"><div class="v">${usd(x.valor)}</div>${x.dp!=null?`<span class="chip ${cls(x.dp)}">${pct(x.dp,2)}</span>`:''}</div></button>`).join('')}</div>
-  <div class="note">Solo lo ven ${esc((k.c.miembros||[]).join(', '))}. Precios en vivo de Binance; costo promedio calculado con lo que muestra ${esc(k.c.donde||'el exchange')} al ${fdate(k.c.fecha)}.</div>`;
+  <div class="note">Solo lo ven ${esc((k.c.miembros||[]).join(', '))}. Resultado calculado sobre lo aportado (${usd(k.aporte)}, ${usd(k.aporte/k.n)} cada uno). El costo de las monedas según ${esc(k.c.donde||'el exchange')} suma ${usd(k.inv)}: la diferencia pueden ser comisiones o ventas/conversiones. Precios en vivo de Binance.</div>`;
 }
 function vDetCr(){
   const sym=S.det.slice(2), k=calcCr(); const x=k&&k.a.find(a=>a.sym===sym); if(!x) return '<button class="back" data-back="1">‹ Volver</button>';
