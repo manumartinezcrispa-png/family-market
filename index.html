@@ -196,26 +196,39 @@ nav.tabs .in{display:grid;grid-template-columns:repeat(5,1fr);max-width:560px;wi
 nav.tabs button{background:none;border:0;padding:6px 0 2px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:700;color:var(--mute);cursor:pointer}
 nav.tabs svg{width:23px;height:23px}
 nav.tabs button.on{color:var(--blue)}
+
+/* perfiles */
+.profiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.prof{display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--card);border:0;border-radius:18px;padding:18px 10px;box-shadow:var(--shadow);cursor:pointer;font-weight:700;font-size:16px;color:var(--ink)}
+.prof:active{transform:scale(.97)}
+.av{width:52px;height:52px;border-radius:50%;display:inline-grid;place-items:center;color:#fff;font-weight:800;font-size:22px;background:#4a5366;flex:none}
+.av.sm{width:30px;height:30px;font-size:13px}
+.who-sel{display:flex;align-items:center;justify-content:center;gap:12px;font-size:18px;margin-bottom:18px}
+.who-sel .av{width:44px;height:44px;font-size:19px}
 </style>
 </head>
 <body>
 <div id="lock" class="lock">
-  <form id="lockForm" class="lock-card" autocomplete="off">
+  <div class="lock-card">
     <img src="icons/icon-192.png?v=2" alt="">
     <h1>Family Market</h1>
-    <p>Inversiones de los hermanos</p>
-    <input id="pass" type="password" placeholder="Clave" autocomplete="current-password" autocapitalize="none" spellcheck="false">
-    <label class="remember"><input type="checkbox" id="remember" checked> Recordarme en este celular</label>
-    <button class="btn" id="enter" type="submit">Entrar</button>
-    <div class="lock-err" id="lockErr"></div>
-  </form>
+    <div id="pickStep"><p>¿Quién sos?</p><div class="profiles" id="profiles"><div class="lock-err">Cargando…</div></div></div>
+    <form id="lockForm" hidden autocomplete="off">
+      <div class="who-sel"><span class="av" id="selAv"></span><span>Hola, <b id="selName"></b></span></div>
+      <input id="pass" type="password" placeholder="Tu clave" autocomplete="current-password" autocapitalize="none" spellcheck="false">
+      <label class="remember"><input type="checkbox" id="remember" checked> Recordarme en este celular</label>
+      <button class="btn" id="enter" type="submit">Entrar</button>
+      <button class="link" id="changeProf" type="button" style="margin-top:14px">Cambiar de perfil</button>
+      <div class="lock-err" id="lockErr"></div>
+    </form>
+  </div>
 </div>
 
 <div id="appRoot" hidden>
 <div class="app">
   <header class="top">
     <div class="brand"><img src="icons/icon-192.png?v=2" alt=""><b>Family Market</b></div>
-    <div class="top-r"><span class="live" id="livePill" hidden><i></i><span id="liveTxt"></span></span><button class="link" id="logout" type="button">Salir</button></div>
+    <div class="top-r"><span class="live" id="livePill" hidden><i></i><span id="liveTxt"></span></span><span class="av sm" id="meAv"></span><button class="link" id="logout" type="button">Salir</button></div>
   </header>
   <div class="tape" id="tape" hidden><div class="tape-in num" id="tapeIn"></div></div>
   <main id="view"></main>
@@ -224,6 +237,7 @@ nav.tabs button.on{color:var(--blue)}
 <nav class="tabs"><div class="in">
   <button data-tab="inicio" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</button>
   <button data-tab="cartera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Cartera</button>
+  <button data-tab="cripto" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5h4a2 2 0 0 1 0 4h-4zM9.5 11.5h4.5a2 2 0 0 1 0 4H9.5zM9.5 7.5v8M11 6v1.5M11 15.5V17M13 6v1.5M13 15.5V17"/></svg>Cripto</button>
   <button data-tab="mercado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Mercado</button>
   <button data-tab="noticias"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v10a2 2 0 0 1-2 2"/><path d="M8 9h5M8 13h5M8 17h3"/></svg>Noticias</button>
   <button data-tab="cuentas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg>Cuentas</button>
@@ -234,9 +248,9 @@ nav.tabs button.on{color:var(--blue)}
 (function(){
 "use strict";
 const S = { d:null, precios:null, noticias:null, cierres:null, tab:'inicio', sub:'pos', nf:'todas', tf:'1D', det:null, dtf:'1D',
-            live:{}, prev:{}, liveAt:0, liveOk:false, btc:null, dolar:null };
-const KEY_STORE='fm_key_v1';
-const TABS=['inicio','cartera','mercado','noticias','cuentas'];
+            live:{}, prev:{}, liveAt:0, liveOk:false, btc:null, dolar:null, cr:null, crLive:{}, crSeries:{}, ctf:'1D', me:null, perfiles:null };
+const TABS=['inicio','cartera','cripto','mercado','noticias','cuentas'];
+const AVC={igna:'#2a78d6',toto:'#0a7a32',peky:'#c2410c',manu:'#7c3aed'};
 const NOMBRES={SPY:'S&P 500',QQQ:'Nasdaq 100',DIA:'Dow Jones'};
 const EXCH={ORCL:'NYSE',NU:'NYSE',SPY:'AMEX',DIA:'AMEX'};
 const INDICES=['SPY','QQQ','DIA'];
@@ -521,8 +535,93 @@ function vCuentas(){
     ${c.rendimiento?`<div class="rd">${esc(c.rendimiento)}</div>`:''}${c.detalle?`<div class="det">${esc(c.detalle)}</div>`:''}</div>`).join('')}`;
 }
 
+/* ---------- cripto ---------- */
+function calcCr(){
+  const c=S.cr; if(!c) return null;
+  const a=(c.activos||[]).map(x=>{
+    const L=S.crLive[x.sym], cant=num(x.cant), costo=num(x.costo);
+    const p= L? L.c : (num(x.valor_ref)/cant||costo);
+    const valor=cant*p, inv=cant*costo, d24= L&&L.dp!=null? valor-valor/(1+L.dp/100) : null;
+    return {...x, cant, costo, precio:p, valor, inv, pl:valor-inv, plp: inv?(valor-inv)/inv*100:0, dp: L?L.dp:null, d24, live:!!L};
+  }).sort((x,y)=>y.valor-x.valor);
+  const total=a.reduce((s,x)=>s+x.valor,0), inv=a.reduce((s,x)=>s+x.inv,0);
+  const con=a.filter(x=>x.d24!=null), d24=con.length? con.reduce((s,x)=>s+x.d24,0) : null;
+  a.forEach(x=>x.peso= total? x.valor/total*100:0);
+  const n=(c.miembros||[]).length||1;
+  return {c,a,total,inv,pl:total-inv,plp: inv?(total-inv)/inv*100:0,d24,dp24:(d24!=null&&total-d24)? d24/(total-d24)*100:null,live:a.some(x=>x.live),n};
+}
+const CTF={'1D':['5m',288],'1S':['1h',168],'1M':['4h',180],'1A':['1d',365]};
+async function loadCrSeries(tf){
+  if(!S.cr) return; const [iv,lim]=CTF[tf]; const act=S.cr.activos||[];
+  const res=await Promise.all(act.map(x=>fetch(`https://api.binance.com/api/v3/klines?symbol=${x.sym}USDT&interval=${iv}&limit=${lim}`).then(r=>r.ok?r.json():null).catch(()=>null)));
+  if(res.some(r=>!Array.isArray(r)||!r.length)){ if(!S.crSeries[tf]) S.crSeries[tf]={pts:[],err:true}; return; }
+  const mk=t=>Math.floor(t/60000);
+  const maps=res.map(r=>new Map(r.map(k=>[mk(k[0]), parseFloat(k[4])])));
+  const pts=[]; res[0].forEach(k=>{ const t=k[0]; let v=0, ok=true; act.forEach((x,i)=>{ const px=maps[i].get(mk(t)); if(px==null) ok=false; else v+=num(x.cant)*px; }); if(ok) pts.push({t, v}); });
+  S.crSeries[tf]={pts, at:Date.now()};
+}
+function drawCrChart(){
+  const el=document.getElementById('crchart'); if(!el) return;
+  const s=S.crSeries[S.ctf], k=calcCr();
+  if(!s){ el.innerHTML='<div class="empty">Cargando gráfico…</div>'; return; }
+  const pts=s.pts.slice(); if(pts.length && k && k.live) pts.push({t:Date.now(), v:k.total});
+  const intraday=S.ctf==='1D';
+  lineChart(el, pts, { base: pts.length? pts[0].v : null, aria:'Valor de la cartera cripto',
+    emptyMsg: s.err? 'No se pudo cargar el gráfico. Revisá la conexión.' : 'Todavía no hay datos.',
+    fmtT: t => intraday? hhmm(t) : new Date(t).toLocaleDateString('es-AR',{day:'numeric',month:'numeric'}),
+    fmtTip: t => intraday||S.ctf==='1S'? new Date(t).toLocaleDateString('es-AR',{day:'numeric',month:'short'})+' '+hhmm(t) : new Date(t).toLocaleDateString('es-AR',{day:'numeric',month:'short',year:'numeric'}) });
+}
+function fmtQty(q){ return q.toLocaleString('es-AR',{maximumFractionDigits: q<1?6:4}); }
+function vCripto(){
+  const k=calcCr(); if(!k) return '<div class="card empty">No tenés acceso a esta sección.</div>';
+  const s=S.crSeries[S.ctf]; const per=s&&s.pts&&s.pts.length? k.total-s.pts[0].v : null;
+  return `<div class="card hero">
+    <div class="k">${esc(k.c.nombre||'Cartera cripto')} · ${esc(k.c.donde||'')}</div>
+    <div class="tot num">${usd(k.total)}</div>
+    <div class="chg num">${k.d24!=null?`<span class="${cls(k.d24)}">${arrow(k.d24)} ${usd(Math.abs(k.d24))} (${pct(k.dp24,2)})</span> <small>24 h</small> · `:''}<small><span class="${cls(k.pl)}" style="font-weight:700">${pct(k.plp)}</span> desde la compra</small></div>
+    <div class="chart" id="crchart"></div>
+    <div class="tf" id="ctfBar">${Object.keys(CTF).map(t=>`<button data-ctf="${t}" class="${t===S.ctf?'on':''}">${t}</button>`).join('')}</div>
+  </div>
+  <div class="stats num">
+    <div class="stat"><small>Invertido</small><b>${usd(k.inv)}</b></div>
+    <div class="stat"><small>Resultado</small><b class="${cls(k.pl)}">${usdS(k.pl)}</b></div>
+    <div class="stat"><small>Por persona (1/${k.n})</small><b>${usd(k.total/k.n)}</b></div>
+    <div class="stat"><small>Participan</small><b style="font-size:14px">${esc((k.c.miembros||[]).join(', '))}</b></div>
+  </div>
+  <div class="sec-t"><h2>Monedas</h2><span>${k.live?'en vivo · 24/7':''}</span></div>
+  <div class="card list" style="padding:4px 16px">${k.a.map(x=>`<button class="row ${S.flash['C:'+x.sym]||''}" data-det="C:${esc(x.sym)}">
+    <div class="tk">${esc(x.sym)}</div>
+    <div class="mid"><div class="nm">${esc(x.nombre||x.sym)}</div><div class="sub num">${fmtQty(x.cant)} ${esc(x.sym)} × ${usd(x.precio, x.precio<100?2:0)}</div></div>
+    <div class="r num"><div class="v">${usd(x.valor)}</div>${x.dp!=null?`<span class="chip ${cls(x.dp)}">${pct(x.dp,2)}</span>`:''}</div></button>`).join('')}</div>
+  <div class="note">Solo lo ven ${esc((k.c.miembros||[]).join(', '))}. Precios en vivo de Binance; costo promedio calculado con lo que muestra ${esc(k.c.donde||'el exchange')} al ${fdate(k.c.fecha)}.</div>`;
+}
+function vDetCr(){
+  const sym=S.det.slice(2), k=calcCr(); const x=k&&k.a.find(a=>a.sym===sym); if(!x) return '<button class="back" data-back="1">‹ Volver</button>';
+  return `<button class="back" data-back="1">‹ Volver</button>
+  <div class="dhead"><div class="tk big">${esc(sym)}</div><div><div class="t1">${esc(x.nombre||sym)}</div><div class="t2">${esc(sym)} / USD · cripto</div></div></div>
+  <div class="card hero"><div class="tot num" id="dPx">${usd(x.precio, x.precio<100?2:0)}</div>
+    <div class="chg num" id="dChg">${x.dp!=null?`<span class="${cls(x.dp)}">${arrow(x.dp)} ${pct(x.dp,2)}</span> <small>24 h</small>`:'<small>Sin cotización en vivo</small>'}</div>
+    <div class="tv" id="tvBox"></div>
+    <div class="tf" id="dtfBar">${Object.keys(DTF).map(t=>`<button data-dtf="${t}" class="${t===S.dtf?'on':''}">${t}</button>`).join('')}</div></div>
+  <div class="stats num">
+    <div class="stat"><small>Tenemos</small><b>${fmtQty(x.cant)} ${esc(sym)}</b></div>
+    <div class="stat"><small>Valor</small><b>${usd(x.valor)}</b></div>
+    <div class="stat"><small>Precio promedio de compra</small><b>${usd(x.costo, x.costo<100?2:0)}</b></div>
+    <div class="stat"><small>Resultado</small><b class="${cls(x.pl)}">${usdS(x.pl)} (${pct(x.plp)})</b></div>
+    <div class="stat"><small>Invertido</small><b>${usd(x.inv)}</b></div>
+    <div class="stat"><small>Peso en la cartera</small><b>${pctAbs(x.peso)}</b></div>
+  </div>`;
+}
+function softDetCr(){
+  const sym=S.det.slice(2), k=calcCr(); const x=k&&k.a.find(a=>a.sym===sym); if(!x) return;
+  const a=document.getElementById('dPx'), b=document.getElementById('dChg');
+  if(a){ const old=a.textContent; a.textContent=usd(x.precio, x.precio<100?2:0); if(old!==a.textContent){ a.classList.remove('fl-up','fl-dn'); void a.offsetWidth; a.classList.add(S.flash['C:'+sym]||'fl-up'); } }
+  if(b&&x.dp!=null) b.innerHTML=`<span class="${cls(x.dp)}">${arrow(x.dp)} ${pct(x.dp,2)}</span> <small>24 h</small>`;
+}
+
 /* ---------- detalle con gráfico de TradingView ---------- */
 function tvSymbol(t){
+  if(t.startsWith('C:')) return 'BINANCE:'+t.slice(2)+'USDT';
   if(t==='BTC') return 'BITSTAMP:BTCUSD';
   if(t==='MERVAL') return 'BCBA:IMV';
   const pos=((S.d.cartera&&S.d.cartera.posiciones)||[]).find(p=>p.ticker===t);
@@ -574,18 +673,19 @@ function mountTV(){
 S.flash={};
 function render(){
   const v=document.getElementById('view');
-  if(S.det){ v.innerHTML=vDetalle(); mountTV(); }
+  if(S.det){ v.innerHTML= S.det.startsWith('C:')? vDetCr() : vDetalle(); mountTV(); }
   else {
-    const map={inicio:vInicio,cartera:vCartera,mercado:vMercado,noticias:vNoticias,cuentas:vCuentas};
+    const map={inicio:vInicio,cartera:vCartera,cripto:vCripto,mercado:vMercado,noticias:vNoticias,cuentas:vCuentas};
     v.innerHTML=(map[S.tab]||vInicio)();
     if(S.tab==='inicio'){ const k=calc(); if(k) drawTotalChart(k); }
+    if(S.tab==='cripto') drawCrChart();
   }
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===S.tab));
   renderTape();
 }
 // actualización liviana del detalle (no recarga el gráfico de TradingView)
 function softDetail(){
-  const t=S.det; const k=calc(); const p=k&&k.pos.find(x=>x.ticker===t);
+  const t=S.det; if(t.startsWith('C:')) return softDetCr(); const k=calc(); const p=k&&k.pos.find(x=>x.ticker===t);
   const q= t==='BTC'? S.btc : S.live[t];
   const px= p? p.precio : (q? q.c:null); const dp= p? p.dpHoy : (q&&q.pc?(q.c-q.pc)/q.pc*100:(q&&q.dp!=null?q.dp:null));
   const dAbs= p&&p.pc? p.precio-p.pc : (q&&q.pc? q.c-q.pc:null);
@@ -598,6 +698,7 @@ function renderTape(){
   const items=[];
   const add=(lbl,q)=>{ if(!q) return; const dp=q.pc? (q.c-q.pc)/q.pc*100 : q.dp; if(dp==null||!isFinite(dp)) return; items.push(`<span>${esc(lbl)}<b class="${cls(dp)}">${pct(dp,2)}</b></span>`); };
   add('S&P 500',S.live.SPY); add('Nasdaq',S.live.QQQ); add('BTC',S.btc);
+  if(S.cr) (S.cr.activos||[]).forEach(a=>{ if(a.sym!=='BTC') add(a.sym,S.crLive[a.sym]); });
   ((S.d&&S.d.cartera&&S.d.cartera.posiciones)||[]).forEach(p=>add(p.ticker,S.live[p.ticker]));
   if(!items.length){ tape.hidden=true; return; }
   const html=items.join('');
@@ -612,11 +713,12 @@ document.getElementById('view').addEventListener('click',e=>{
   if(e.target.closest('[data-back]')){ S.det=null; render(); return; }
   const tf=e.target.closest('[data-tf]'); if(tf){ S.tf=tf.dataset.tf; document.querySelectorAll('#tfBar button').forEach(b=>b.classList.toggle('on',b.dataset.tf===S.tf)); const k=calc(); if(k) drawTotalChart(k); return; }
   const dtf=e.target.closest('[data-dtf]'); if(dtf){ S.dtf=dtf.dataset.dtf; document.querySelectorAll('#dtfBar button').forEach(b=>b.classList.toggle('on',b.dataset.dtf===S.dtf)); mountTV(); return; }
+  const ctf=e.target.closest('[data-ctf]'); if(ctf){ S.ctf=ctf.dataset.ctf; document.querySelectorAll('#ctfBar button').forEach(b=>b.classList.toggle('on',b.dataset.ctf===S.ctf)); drawCrChart(); loadCrSeries(S.ctf).then(()=>{ if(S.tab==='cripto'&&!S.det) drawCrChart(); }); return; }
   const sb=e.target.closest('[data-sub]'); if(sb){ S.sub=sb.dataset.sub; render(); return; }
   const nf=e.target.closest('[data-nf]'); if(nf){ S.nf=nf.dataset.nf; render(); return; }
 });
-let rz; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(S.d&&!S.det&&S.tab==='inicio'){ const k=calc(); if(k) drawTotalChart(k); } },150); });
-window.addEventListener('hashchange',()=>{ const h=location.hash.slice(1); if(S.d&&TABS.includes(h)&&(h!==S.tab||S.det)){ S.tab=h; S.det=null; render(); } });
+let rz; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(S.d&&!S.det&&S.tab==='inicio'){ const k=calc(); if(k) drawTotalChart(k); } if(S.d&&!S.det&&S.tab==='cripto') drawCrChart(); },150); });
+window.addEventListener('hashchange',()=>{ const h=location.hash.slice(1); if(h==='cripto'&&!S.cr) return; if(S.d&&TABS.includes(h)&&(h!==S.tab||S.det)){ S.tab=h; S.det=null; render(); } });
 { const h=(location.hash||'').slice(1); if(TABS.includes(h)) S.tab=h; }
 
 /* ---------- datos en vivo ---------- */
@@ -636,18 +738,30 @@ async function fetchQuote(sym){
 async function refreshStocks(){
   const syms=[...new Set(((S.d.cartera&&S.d.cartera.posiciones)||[]).map(p=>p.ticker).concat(INDICES))];
   const res=await Promise.allSettled(syms.map(s=>fetchQuote(s)));
-  let ok=0;
+  let ok=0; S.flash={};
   res.forEach((r,i)=>{ if(r.status!=='fulfilled') return; const s=syms[i], q=r.value; const old=S.live[s];
     if(old&&old.c!==q.c) S.flash[s]= q.c>old.c?'fl-up':'fl-dn';
     S.live[s]={c:q.c, pc:q.pc, dp:q.dp, t:q.t}; ok++; });
   if(ok){ S.liveOk=true; S.liveAt=Date.now(); const k=calc(); if(k&&k.live) intraAdd(k.total); }
 }
-async function refreshBTC(){
-  try{ const r=await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT'); if(!r.ok) return; const j=await r.json();
-    const c=parseFloat(j.lastPrice), dp=parseFloat(j.priceChangePercent); if(!(c>0)) return;
-    if(S.btc&&S.btc.c!==c) S.flash.BTC = c>S.btc.c?'fl-up':'fl-dn';
-    S.btc={c, dp, pc: isFinite(dp)? c/(1+dp/100) : null}; // referencia: hace 24 h
-  }catch(_){}
+function setCr(s,c,dp){
+  if(!(c>0)) return; const old=S.crLive[s];
+  if(old&&old.c!==c) S.flash['C:'+s]= c>old.c?'fl-up':'fl-dn';
+  S.crLive[s]={c, dp:isFinite(dp)?dp:null, pc:isFinite(dp)? c/(1+dp/100):null};
+  if(s==='BTC'){ if(S.btc&&S.btc.c!==c) S.flash.BTC=c>S.btc.c?'fl-up':'fl-dn'; S.btc={...S.crLive.BTC}; }
+}
+async function refreshCrypto(){
+  const syms=new Set(['BTC']); ((S.cr&&S.cr.activos)||[]).forEach(a=>syms.add(a.sym));
+  try{
+    const r=await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols='+encodeURIComponent(JSON.stringify([...syms].map(s=>s+'USDT'))));
+    if(!r.ok) throw new Error('binance');
+    const j=await r.json(); j.forEach(x=>setCr(x.symbol.replace(/USDT$/,''), parseFloat(x.lastPrice), parseFloat(x.priceChangePercent)));
+  }catch(_){
+    const ids={BTC:'bitcoin',ETH:'ethereum',BNB:'binancecoin',SOL:'solana',XRP:'ripple',ADA:'cardano',DOGE:'dogecoin'};
+    const want=[...syms].filter(s=>ids[s]);
+    try{ const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+want.map(s=>ids[s]).join(',')+'&vs_currencies=usd&include_24hr_change=true');
+      const j=await r.json(); want.forEach(s=>{ const o=j[ids[s]]; if(o) setCr(s, o.usd, o.usd_24h_change); }); }catch(_){}
+  }
 }
 async function refreshDolar(){
   try{ const r=await fetch('https://dolarapi.com/v1/dolares'); if(!r.ok) return; const j=await r.json();
@@ -662,8 +776,9 @@ function setPill(){
 }
 async function liveCycle(force){
   if(!S.d || document.hidden) return;
-  const open=marketOpen(); S.flash={};
-  const jobs=[refreshBTC()];
+  const open=marketOpen();
+  const jobs=[refreshCrypto()];
+  if(S.cr && (force || (S.tab==='cripto' && !S.det && tick%3===0))) jobs.push(loadCrSeries(S.ctf));
   if(force || open || Date.now()-S.liveAt>300000) jobs.push(refreshStocks());
   if(force || tick%15===0) jobs.push(refreshDolar());
   tick++;
@@ -674,37 +789,74 @@ async function liveCycle(force){
 function startLive(){ if(liveTimer) return; liveCycle(true); liveTimer=setInterval(()=>liveCycle(false), 20000);
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) liveCycle(true); }); }
 
-/* ---------- acceso ---------- */
+/* ---------- acceso por perfil ---------- */
+const KEY_STORE='fm_perfil_v2';
 const lockEl=document.getElementById('lock'), appEl=document.getElementById('appRoot'), errEl=document.getElementById('lockErr'), btn=document.getElementById('enter');
-let ENC=null;
-async function loadEnc(){ if(!ENC) ENC=await getJSON('data.enc.json'); return ENC; }
+const formEl=document.getElementById('lockForm'), pickEl=document.getElementById('pickStep');
+let SEL=null;
+lsSet('fm_key_v1',null);
+async function openSealed(rawKey, box){
+  const key=await crypto.subtle.importKey('raw', rawKey, {name:'AES-GCM'}, false, ['decrypt']);
+  const pt=await crypto.subtle.decrypt({name:'AES-GCM', iv:b64(box.iv)}, key, b64(box.ct));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+async function deriveBits(pass, prof){
+  const base=await crypto.subtle.importKey('raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveBits']);
+  return new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2', salt:b64(prof.salt), iterations:prof.iter, hash:'SHA-256'}, base, 256));
+}
 async function loadPublic(){
   const [p,n,c]=await Promise.allSettled([getJSON('precios.json'),getJSON('noticias.json'),getJSON('cierres.json')]);
   S.precios=p.status==='fulfilled'?p.value:null; S.noticias=n.status==='fulfilled'?n.value:null; S.cierres=c.status==='fulfilled'?c.value:null;
 }
-function show(data){ S.d=data; lockEl.hidden=true; appEl.hidden=false; render(); startLive(); }
-document.getElementById('lockForm').addEventListener('submit', async e=>{
+async function unlock(prof, bits){
+  const g=await openSealed(bits, prof); // si la clave es incorrecta, falla acá
+  const [vf, vc]=await Promise.all([getJSON('vault-familia.enc.json'), g.keys.cripto? getJSON('vault-cripto.enc.json') : Promise.resolve(null), loadPublic()]);
+  const d=await openSealed(b64(g.keys.familia), vf);
+  const cr= vc? await openSealed(b64(g.keys.cripto), vc) : null;
+  return {d, cr, me:{id:prof.id, nombre:g.nombre}};
+}
+function avatar(el, id, nombre){ el.textContent=(nombre||'?').slice(0,1).toUpperCase(); el.style.background=AVC[id]||'#4a5366'; }
+function show(r){
+  S.d=r.d; S.cr=r.cr; S.me=r.me;
+  const cb=document.querySelector('nav.tabs button[data-tab=cripto]'); cb.hidden=!S.cr;
+  document.querySelector('nav.tabs .in').style.gridTemplateColumns=`repeat(${S.cr?6:5},1fr)`;
+  if(S.tab==='cripto'&&!S.cr) S.tab='inicio';
+  avatar(document.getElementById('meAv'), S.me.id, S.me.nombre);
+  lockEl.hidden=true; appEl.hidden=false; render(); startLive();
+  if(S.cr) loadCrSeries(S.ctf).then(()=>{ if(S.tab==='cripto'&&!S.det) drawCrChart(); });
+}
+function pickProfile(p){
+  SEL=p; pickEl.hidden=true; formEl.hidden=false; errEl.textContent='';
+  avatar(document.getElementById('selAv'), p.id, p.nombre); document.getElementById('selName').textContent=p.nombre;
+  const i=document.getElementById('pass'); i.value=''; setTimeout(()=>i.focus(),50);
+}
+document.getElementById('changeProf').addEventListener('click',()=>{ SEL=null; formEl.hidden=true; pickEl.hidden=false; });
+formEl.addEventListener('submit', async e=>{
   e.preventDefault(); errEl.textContent='';
-  const pass=document.getElementById('pass').value.trim(); if(!pass){ errEl.textContent='Escribí la clave.'; return; }
+  const pass=document.getElementById('pass').value.trim(); if(!pass){ errEl.textContent='Escribí tu clave.'; return; }
   if(!window.crypto||!crypto.subtle){ errEl.textContent='Este navegador no permite abrir la app. Probá con Safari o Chrome actualizados.'; return; }
   btn.disabled=true; btn.textContent='Abriendo…';
   try{
-    const enc=await loadEnc(); await loadPublic();
-    const key=await deriveKey(pass, enc);
-    let data; try{ data=await decrypt(key, enc); }catch(_){ errEl.textContent='Clave incorrecta.'; return; }
-    if(document.getElementById('remember').checked){ const raw=await crypto.subtle.exportKey('raw', key); lsSet(KEY_STORE, JSON.stringify({salt:enc.salt, k:toB64(raw)})); }
-    show(data);
+    const bits=await deriveBits(pass, SEL);
+    let r; try{ r=await unlock(SEL, bits); }catch(err){ errEl.textContent= String(err&&err.message||'').startsWith('http')? 'No se pudieron cargar los datos. Revisá la conexión.' : 'Clave incorrecta.'; return; }
+    if(document.getElementById('remember').checked) lsSet(KEY_STORE, JSON.stringify({perfil:SEL.id, salt:SEL.salt, k:toB64(bits)}));
+    show(r);
   }catch(_){ errEl.textContent='No se pudieron cargar los datos. Revisá la conexión.'; }
   finally{ btn.disabled=false; btn.textContent='Entrar'; }
 });
 document.getElementById('logout').addEventListener('click',()=>{ lsSet(KEY_STORE,null); location.reload(); });
-(async function auto(){
+(async function start(){
+  try{ S.perfiles=(await getJSON('perfiles.json')).perfiles; }
+  catch(_){ document.getElementById('profiles').innerHTML='<div class="lock-err">No se pudo cargar. Revisá la conexión y recargá.</div>'; return; }
+  const box=document.getElementById('profiles');
+  box.innerHTML=S.perfiles.map(p=>`<button type="button" class="prof" data-p="${esc(p.id)}"><span class="av" style="background:${AVC[p.id]||'#4a5366'}">${esc(p.nombre.slice(0,1))}</span><span>${esc(p.nombre)}</span></button>`).join('');
+  box.addEventListener('click',e=>{ const b=e.target.closest('[data-p]'); if(b) pickProfile(S.perfiles.find(p=>p.id===b.dataset.p)); });
   const saved=lsGet(KEY_STORE); if(!saved) return;
-  try{ const s=JSON.parse(saved); const enc=await loadEnc(); await loadPublic();
-    if(s.salt!==enc.salt){ lsSet(KEY_STORE,null); return; }
-    const key=await crypto.subtle.importKey('raw', b64(s.k), {name:'AES-GCM'}, false, ['decrypt']);
-    show(await decrypt(key, enc));
-  }catch(_){ lsSet(KEY_STORE,null); }
+  try{ const s=JSON.parse(saved); const p=S.perfiles.find(x=>x.id===s.perfil);
+    if(!p||p.salt!==s.salt){ lsSet(KEY_STORE,null); return; }
+    pickEl.hidden=true; box.closest('.lock-card').style.opacity='.5';
+    show(await unlock(p, b64(s.k)));
+  }catch(_){ lsSet(KEY_STORE,null); pickEl.hidden=false; document.querySelector('.lock-card').style.opacity='1'; }
 })();
 })();
 </script>
