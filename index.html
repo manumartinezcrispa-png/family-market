@@ -269,6 +269,9 @@ nav.tabs button.on{color:var(--blue)}
 .stline b{display:block;font-size:13.5px}.stline span{color:var(--ink2)}
 .stline i{width:10px;height:10px;border-radius:50%;margin-top:4px;flex:none;background:var(--dn)}
 .stline i.ok{background:var(--up)}
+.sec-t .addbtn{border:0;background:var(--blue-soft);color:var(--blue);font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px;cursor:pointer;font-family:inherit}
+.mk .row .sub .own{color:var(--blue);font-weight:700}
+.btn.ghost{background:var(--card);color:var(--blue);border:1px solid var(--line);box-shadow:var(--shadow);margin-top:14px}
 </style>
 </head>
 <body>
@@ -318,8 +321,25 @@ const S = { d:null, precios:null, noticias:null, cierres:null, tab:'inicio', sub
 const TABS=['inicio','cartera','cripto','mercado','noticias','cuentas'];
 const AVC={igna:'#2a78d6',toto:'#0a7a32',peky:'#c2410c',manu:'#7c3aed'};
 const NOMBRES={SPY:'S&P 500',QQQ:'Nasdaq 100',DIA:'Dow Jones'};
-const EXCH={ORCL:'NYSE',NU:'NYSE',SPY:'AMEX',DIA:'AMEX'};
+const EXCH={ORCL:'NYSE',NU:'NYSE',SPY:'AMEX',DIA:'AMEX',IWM:'AMEX',GLD:'AMEX',SLV:'AMEX',USO:'AMEX',YPF:'NYSE',BMA:'NYSE',PAM:'NYSE',VIST:'NYSE',TSM:'NYSE',JPM:'NYSE',V:'NYSE',KO:'NYSE',DIS:'NYSE',WMT:'NYSE'};
 const INDICES=['SPY','QQQ','DIA'];
+// listas del apartado Mercado
+const MK=[
+  {id:'grandes', t:'Grandes tecnológicas', items:[['AAPL','Apple'],['MSFT','Microsoft'],['NVDA','Nvidia'],['GOOGL','Alphabet (Google)'],['AMZN','Amazon'],['META','Meta'],['TSLA','Tesla'],['AVGO','Broadcom'],['TSM','TSMC'],['NFLX','Netflix']]},
+  {id:'arg', t:'Argentinas en Wall Street', items:[['MELI','Mercado Libre'],['YPF','YPF'],['GGAL','Grupo Galicia'],['BMA','Banco Macro'],['PAM','Pampa Energía'],['VIST','Vista Energy']]},
+  {id:'otras', t:'Otras conocidas', items:[['JPM','JPMorgan'],['V','Visa'],['KO','Coca-Cola'],['WMT','Walmart'],['DIS','Disney']]},
+  {id:'mat', t:'Oro, plata y petróleo', items:[['GLD','Oro'],['SLV','Plata'],['USO','Petróleo']]}
+];
+const MK_IDX=[['SPY','S&P 500'],['QQQ','Nasdaq 100'],['DIA','Dow Jones'],['IWM','Russell 2000']];
+const MKC=[['BTC','Bitcoin'],['ETH','Ethereum'],['SOL','Solana'],['XRP','XRP'],['BNB','BNB'],['DOGE','Dogecoin'],['ADA','Cardano']];
+const MKC_SET=new Set(MKC.map(x=>x[0]));
+MK_IDX.concat(...MK.map(g=>g.items)).forEach(([s,n])=>{ if(!NOMBRES[s]) NOMBRES[s]=n; });
+MKC.forEach(([s,n])=>{ if(!NOMBRES[s]) NOMBRES[s]=n; });
+// mi lista: acciones que cada uno agrega en su celular
+function lista(){ try{ const a=JSON.parse(localStorage.getItem('fm_lista')||'[]'); return Array.isArray(a)? a.filter(x=>x&&x.t) : []; }catch(_){ return []; } }
+function setLista(a){ try{ localStorage.setItem('fm_lista', JSON.stringify(a)); }catch(_){} }
+function enLista(t){ return lista().some(x=>x.t===t); }
+const pxDec = v => v==null? 0 : v<1? 4 : v<1000? 2 : 0;
 
 /* ---------- helpers ---------- */
 const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -539,30 +559,40 @@ function vMovimientos(){
   return out || `<div class="card empty">Todavía no hay movimientos.</div>`;
 }
 
-function quoteRow(sym, name, sub, q, fmt){
-  const fl=S.flash[sym]||'';
+function quoteRow(sym, name, sub, q, fmt, subHtml){
+  const fl=S.flash[(MKC_SET.has(sym)&&sym!=='BTC'?'C:':'')+sym]||'';
   const dp=q&&q.pc? (q.c-q.pc)/q.pc*100 : (q&&q.dp!=null? q.dp : null);
   return `<button class="row ${fl}" data-det="${esc(sym)}"><div class="tk">${esc(sym.slice(0,5))}</div>
-    <div class="mid"><div class="nm">${esc(name)}</div><div class="sub">${esc(sub)}</div></div>
+    <div class="mid"><div class="nm">${esc(name)}</div><div class="sub">${subHtml? sub : esc(sub)}</div></div>
     <div class="r num"><div class="v" data-px="${esc(sym)}">${q? fmt(q.c) : '—'}</div>${dp!=null?`<span class="chip ${cls(dp)}">${pct(dp,2)}</span>`:''}</div></button>`;
 }
 function vMercado(){
-  const L=S.live, b=S.btc, dl=S.dolar;
-  const idx=INDICES.map(s=>quoteRow(s, NOMBRES[s], s+' · ETF del índice', L[s], v=>usd(v,2))).join('');
-  const btcRow = `<button class="row ${S.flash.BTC||''}" data-det="BTC"><div class="tk">BTC</div><div class="mid"><div class="nm">Bitcoin</div><div class="sub">BTC / USD · 24 h</div></div>
-     <div class="r num"><div class="v">${b? usd(b.c,0) : '—'}</div>${b?`<span class="chip ${cls(b.dp)}">${pct(b.dp,2)}</span>`:''}</div></button>`;
+  const L=S.live, dl=S.dolar;
+  const own=new Set(((S.d.cartera&&S.d.cartera.posiciones)||[]).map(p=>p.ticker));
+  const crOwn=new Set(((S.cr&&S.cr.activos)||[]).map(a=>a.sym));
+  const sub=(s,base)=> own.has(s)||crOwn.has(s)? base+' · <b class="own">en cartera</b>' : base;
+  const row=(s,n,base,q)=>quoteRow(s, n, sub(s,esc(base)), q, v=>usd(v,pxDec(v)), true);
+  const idx=MK_IDX.map(([s,n])=>row(s,n,s+' · ETF del índice',L[s])).join('');
+  const crs=MKC.map(([s,n])=>row(s,n,s+' / USD · 24 h', S.crLive[s])).join('');
+  const groups=MK.map(g=>`<div class="sec-t"><h2>${esc(g.t)}</h2></div>
+    <div class="card list mk" style="padding:4px 16px">${g.items.map(([s,n])=>row(s,n,s,L[s])).join('')}</div>`).join('');
+  const ml=lista();
+  const mine=`<div class="sec-t"><h2>Mi lista</h2><button class="addbtn" id="mlAdd">+ Agregar</button></div>
+    <div class="card list mk" style="padding:4px 16px">${ml.length? ml.map(x=>row(x.t, x.n||x.t, x.t, L[x.t])).join('')
+      : `<div class="empty" style="padding:14px 2px">Agregá cualquier acción o ETF de Wall Street para seguirla acá. Solo se guarda en tu celular.</div>`}</div>`;
   const dolarRows = dl? dl.map(x=>`<div class="row" style="cursor:default"><div class="tk cash">$</div><div class="mid"><div class="nm">Dólar ${esc(x.nombre)}</div><div class="sub">Compra ${ars(x.compra)}</div></div><div class="r num"><div class="v">${ars(x.venta)}</div><div class="sub">venta</div></div></div>`).join('') : `<div class="empty" style="padding:14px">Cargando cotizaciones…</div>`;
-  return `
-  <div class="sec-t"><h2>Wall Street</h2><span>${S.liveOk? (marketOpen()?'en vivo':'último precio'):''}</span></div>
+  return `${mine}
+  <div class="sec-t"><h2>Índices de Wall Street</h2><span>${S.liveOk? (marketOpen()?'en vivo':'último precio'):''}</span></div>
   <div class="card list mk" style="padding:4px 16px">${idx}</div>
   <div class="sec-t"><h2>Cripto</h2><span>24/7</span></div>
-  <div class="card list mk" style="padding:4px 16px">${btcRow}</div>
+  <div class="card list mk" style="padding:4px 16px">${crs}</div>
+  ${groups}
   <div class="sec-t"><h2>Argentina</h2></div>
   <div class="card list mk" style="padding:4px 16px">
     <button class="row" data-det="MERVAL"><div class="tk">MERV</div><div class="mid"><div class="nm">S&amp;P Merval</div><div class="sub">Índice de la Bolsa de Buenos Aires</div></div><div class="r" style="color:var(--blue);font-weight:700;font-size:13px">Ver gráfico ›</div></button>
     ${dolarRows}
   </div>
-  <div class="note">Tocá cualquier índice para ver su gráfico. Precios de Wall Street en vivo con el mercado abierto (11:30 a 18 h); dólar de DolarApi.</div>`;
+  <div class="note">Tocá cualquier fila para ver su gráfico. Wall Street se actualiza con el mercado abierto (11:30 a 18 h); cripto las 24 h; dólar de DolarApi.</div>`;
 }
 
 const COVC={IBIT:['#f7931a','#b35c00'],BTC:['#f7931a','#b35c00'],ETH:['#627eea','#3346a8'],BNB:['#f3ba2f','#b8860b'],NVDA:['#3f8f1f','#1f5c0c'],META:['#2a78d6','#0d2c57'],ORCL:['#c74634','#7a2016'],SNDK:['#d6262f','#7a0f14'],AVGO:['#cc092f','#6e0418'],
@@ -727,6 +757,8 @@ function softDetCr(){
 function tvSymbol(t){
   if(t.startsWith('C:')) return 'BINANCE:'+t.slice(2)+'USDT';
   if(t==='BTC') return 'BITSTAMP:BTCUSD';
+  if(MKC_SET.has(t)) return 'BINANCE:'+t+'USDT';
+  { const m=lista().find(x=>x.t===t); if(m&&m.x) return m.x+':'+t; }
   if(t==='MERVAL') return 'BCBA:IMV';
   const pos=((S.d.cartera&&S.d.cartera.posiciones)||[]).find(p=>p.ticker===t);
   return (pos&&pos.mercado? pos.mercado : (EXCH[t]||'NASDAQ'))+':'+t;
@@ -735,8 +767,9 @@ const DTF={'1D':{range:'1D',interval:'5'},'1S':{range:'5D',interval:'30'},'1M':{
 function vDetalle(){
   const t=S.det, k=calc();
   const p=k&&k.pos.find(x=>x.ticker===t);
-  let name = p? (p.nombre||t) : (NOMBRES[t]|| (t==='BTC'?'Bitcoin': t==='MERVAL'?'S&P Merval':t));
-  let q = t==='BTC'? S.btc : S.live[t];
+  let name = p? (p.nombre||t) : (NOMBRES[t]|| (t==='BTC'?'Bitcoin': t==='MERVAL'?'S&P Merval': ((lista().find(x=>x.t===t)||{}).n||t)));
+  const canList = !p && t!=='MERVAL' && !MKC_SET.has(t) && !INDICES.includes(t);
+  let q = t==='BTC'? S.btc : MKC_SET.has(t)? S.crLive[t] : S.live[t];
   const px = p? p.precio : (q? q.c : null);
   const dp = p? p.dpHoy : (q&&q.pc? (q.c-q.pc)/q.pc*100 : (q&&q.dp!=null?q.dp:null));
   const dAbs = p&&p.pc? p.precio-p.pc : (q&&q.pc? q.c-q.pc : null);
@@ -744,8 +777,8 @@ function vDetalle(){
   const ag=((S.noticias&&S.noticias.agenda)||[]).filter(a=>String(a.evento).includes(t));
   return `<button class="back" data-back="1">‹ Volver</button>
   <div class="dhead"><div class="tk big">${esc(t.slice(0,5))}</div><div><div class="t1">${esc(name)}</div><div class="t2">${esc(tvSymbol(t).replace(':',' · '))}</div></div></div>
-  ${t!=='MERVAL'?`<div class="card hero"><div class="tot num" id="dPx">${px!=null? usd(px, px<1000?2:0) : '—'}</div>
-    <div class="chg num" id="dChg">${dp!=null?`<span class="${cls(dp)}">${arrow(dp)} ${dAbs!=null?usd(Math.abs(dAbs),2)+' ':''}(${pct(dp,2)})</span> <small>${marketOpen()?'hoy':'última rueda'}</small>`:'<small>Sin cotización en vivo</small>'}</div>
+  ${t!=='MERVAL'?`<div class="card hero"><div class="tot num" id="dPx">${px!=null? usd(px, pxDec(px)) : '—'}</div>
+    <div class="chg num" id="dChg">${dp!=null?`<span class="${cls(dp)}">${arrow(dp)} ${dAbs!=null?usd(Math.abs(dAbs),2)+' ':''}(${pct(dp,2)})</span> <small>${MKC_SET.has(t)?'24 h':(marketOpen()?'hoy':'última rueda')}</small>`:'<small>Sin cotización en vivo</small>'}</div>
     <div class="tv" id="tvBox"></div>
     <div class="tf" id="dtfBar">${Object.keys(DTF).map(x=>`<button data-dtf="${x}" class="${x===S.dtf?'on':''}">${x}</button>`).join('')}</div></div>`
   : `<div class="card"><div class="tv" id="tvBox" style="margin-top:0"></div><div class="tf" id="dtfBar">${Object.keys(DTF).map(x=>`<button data-dtf="${x}" class="${x===S.dtf?'on':''}">${x}</button>`).join('')}</div></div>`}
@@ -757,6 +790,7 @@ function vDetalle(){
     <div class="stat"><small>Peso en la cuenta</small><b>${pctAbs(p.peso)}</b></div>
     <div class="stat"><small>Próximo evento</small><b style="font-size:13.5px">${ag.length? esc(fds(ag[0].fecha)+' · '+ag[0].evento.replace(/\s*\(.*?\)/g,'')) : 'Sin eventos cargados'}</b></div>
   </div>`:''}
+  ${canList?`<button class="btn ghost" id="mlToggle" data-t="${esc(t)}">${enLista(t)?'Quitar de mi lista':'☆ Agregar a mi lista'}</button>`:''}
   ${news.length?`<div class="sec-t"><h2>Noticias</h2></div><div class="card nlist">${news.map(newsItem).join('')}</div>`:''}`;
 }
 function mountTV(){
@@ -790,12 +824,12 @@ function render(){
 // actualización liviana del detalle (no recarga el gráfico de TradingView)
 function softDetail(){
   const t=S.det; if(t.startsWith('C:')) return softDetCr(); const k=calc(); const p=k&&k.pos.find(x=>x.ticker===t);
-  const q= t==='BTC'? S.btc : S.live[t];
+  const q= t==='BTC'? S.btc : MKC_SET.has(t)? S.crLive[t] : S.live[t];
   const px= p? p.precio : (q? q.c:null); const dp= p? p.dpHoy : (q&&q.pc?(q.c-q.pc)/q.pc*100:(q&&q.dp!=null?q.dp:null));
   const dAbs= p&&p.pc? p.precio-p.pc : (q&&q.pc? q.c-q.pc:null);
   const a=document.getElementById('dPx'), b=document.getElementById('dChg');
-  if(a&&px!=null){ const old=a.textContent; a.textContent=usd(px, px<1000?2:0); if(old!==a.textContent){ a.classList.remove('fl-up','fl-dn'); void a.offsetWidth; a.classList.add((S.flash[t]||'fl-up')); } }
-  if(b&&dp!=null) b.innerHTML=`<span class="${cls(dp)}">${arrow(dp)} ${dAbs!=null?usd(Math.abs(dAbs),2)+' ':''}(${pct(dp,2)})</span> <small>${marketOpen()?'hoy':'última rueda'}</small>`;
+  if(a&&px!=null){ const old=a.textContent; a.textContent=usd(px, pxDec(px)); if(old!==a.textContent){ a.classList.remove('fl-up','fl-dn'); void a.offsetWidth; a.classList.add((S.flash[t]||'fl-up')); } }
+  if(b&&dp!=null) b.innerHTML=`<span class="${cls(dp)}">${arrow(dp)} ${dAbs!=null?usd(Math.abs(dAbs),2)+' ':''}(${pct(dp,2)})</span> <small>${MKC_SET.has(t)?'24 h':(marketOpen()?'hoy':'última rueda')}</small>`;
 }
 function renderTape(){
   const tape=document.getElementById('tape'), inn=document.getElementById('tapeIn');
@@ -812,8 +846,12 @@ function renderTape(){
 
 /* ---------- eventos ---------- */
 document.querySelector('nav.tabs').addEventListener('click',e=>{ const b=e.target.closest('button[data-tab]'); if(!b) return; S.tab=b.dataset.tab; S.det=null; try{location.hash=S.tab;}catch(_){} render(); window.scrollTo(0,0); });
+function mkKick(){ if(S.tab!=='mercado'&&!S.det) return; Promise.allSettled([refreshMarket(false), S.tab==='mercado'? refreshCrypto():null]).then(()=>{ if(S.det) softDetail(); else if(S.tab==='mercado') render(); }); }
+document.querySelector('nav.tabs').addEventListener('click',e=>{ if(e.target.closest('button[data-tab=mercado]')) mkKick(); });
 document.getElementById('view').addEventListener('click',e=>{
-  const d=e.target.closest('[data-det]'); if(d){ S.det=d.dataset.det; S.dtf='1D'; render(); window.scrollTo(0,0); return; }
+  if(e.target.closest('#mlAdd')){ openListSheet(); return; }
+  const mt=e.target.closest('#mlToggle'); if(mt){ const t=mt.dataset.t; if(enLista(t)){ setLista(lista().filter(x=>x.t!==t)); toast(t+' salió de tu lista'); } else { addToList(t); } render(); return; }
+  const d=e.target.closest('[data-det]'); if(d){ S.det=d.dataset.det; S.dtf='1D'; render(); window.scrollTo(0,0); if(!S.det.startsWith('C:')&&!S.live[S.det]&&!MKC_SET.has(S.det)){ mkAt=0; mkKick(); } return; }
   if(e.target.closest('[data-back]')){ S.det=null; render(); return; }
   const tf=e.target.closest('[data-tf]'); if(tf){ S.tf=tf.dataset.tf; document.querySelectorAll('#tfBar button').forEach(b=>b.classList.toggle('on',b.dataset.tf===S.tf)); const k=calc(); if(k) drawTotalChart(k); return; }
   const dtf=e.target.closest('[data-dtf]'); if(dtf){ S.dtf=dtf.dataset.dtf; document.querySelectorAll('#dtfBar button').forEach(b=>b.classList.toggle('on',b.dataset.dtf===S.dtf)); mountTV(); return; }
@@ -853,6 +891,29 @@ async function refreshStocks(){
   if(ok){ S.liveOk=true; S.liveAt=Date.now(); S.st.fin={ok:true,msg:ok+' de '+syms.length+' cotizaciones en vivo',at:Date.now()}; const k=calc(); if(k&&k.live) intraAdd(k.total); }
   else if(!S.st.fin || S.st.fin.ok){ const e=res.find(r=>r.status==='rejected'); S.st.fin={ok:false,msg:'Finnhub no responde'+(e&&e.reason&&e.reason.message?' ('+e.reason.message+')':''),at:Date.now()}; }
 }
+// acciones del apartado Mercado: solo mientras se mira, cada 1 min (10 min con el mercado cerrado)
+let mkAt=0, mkBusy=false;
+function mkWanted(){ return S.tab==='mercado' || (S.det && !S.det.startsWith('C:') && !MKC_SET.has(S.det) && S.det!=='MERVAL'); }
+async function refreshMarket(force){
+  if(!S.d || mkBusy || !mkWanted()) return;
+  if(!force && Date.now()-mkAt < (marketOpen()? 60000 : 600000)) return;
+  const own=new Set(((S.d.cartera&&S.d.cartera.posiciones)||[]).map(p=>p.ticker).concat(INDICES));
+  let syms=[...new Set(MK_IDX.map(x=>x[0]).concat(...MK.map(g=>g.items.map(i=>i[0])), lista().map(x=>x.t)))].filter(x=>!own.has(x));
+  if(S.det && !own.has(S.det) && !syms.includes(S.det) && mkWanted()) syms.push(S.det);
+  if(S.tab!=='mercado') syms=syms.filter(x=>x===S.det);
+  if(!syms.length) return;
+  mkBusy=true; mkAt=Date.now();
+  try{
+    for(let i=0;i<syms.length;i+=8){
+      const part=syms.slice(i,i+8);
+      const res=await Promise.allSettled(part.map(x=>fetchQuote(x)));
+      res.forEach((r,j)=>{ if(r.status!=='fulfilled') return; const x=part[j], q=r.value, old=S.live[x];
+        if(old&&old.c!==q.c) S.flash[x]= q.c>old.c?'fl-up':'fl-dn';
+        S.live[x]={c:q.c, pc:q.pc, dp:q.dp, t:q.t}; });
+      if(res.some(r=>r.status==='rejected'&&/429/.test(String(r.reason&&r.reason.message)))) break;
+    }
+  } finally { mkBusy=false; }
+}
 function setCr(s,c,dp){
   if(!(c>0)) return; const old=S.crLive[s];
   if(old&&old.c!==c) S.flash['C:'+s]= c>old.c?'fl-up':'fl-dn';
@@ -861,7 +922,8 @@ function setCr(s,c,dp){
 }
 const CG={BTC:'bitcoin',ETH:'ethereum',BNB:'binancecoin',SOL:'solana',XRP:'ripple',ADA:'cardano',DOGE:'dogecoin'};
 async function refreshCrypto(){
-  const syms=[...new Set(['BTC'].concat(((S.cr&&S.cr.activos)||[]).map(a=>a.sym)))];
+  const wantMk = S.tab==='mercado' || (S.det && MKC_SET.has(S.det));
+  const syms=[...new Set(['BTC'].concat(((S.cr&&S.cr.activos)||[]).map(a=>a.sym), wantMk? MKC.map(x=>x[0]) : []))];
   // 1) variación 24 h y precio de respaldo: Binance, si no CoinGecko
   const dp={}, px={};
   let src='';
@@ -900,7 +962,8 @@ async function liveCycle(force){
   const open=marketOpen();
   const jobs=[refreshCrypto()];
   if(S.cr && (force || (S.tab==='cripto' && !S.det && tick%3===0))) jobs.push(loadCrSeries(S.ctf));
-  if(force || open || Date.now()-S.liveAt>300000) jobs.push(refreshStocks());
+  if(force || (open && tick%2===0) || Date.now()-S.liveAt>300000) jobs.push(refreshStocks());
+  jobs.push(refreshMarket(force));
   if(force || tick%15===0) jobs.push(refreshDolar());
   tick++;
   await Promise.allSettled(jobs);
@@ -911,7 +974,7 @@ function startLive(){ if(liveTimer) return; liveCycle(true); liveTimer=setInterv
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) liveCycle(true); }); }
 
 /* ---------- actualización automática de la app ---------- */
-const APP_VERSION='20261122015731';
+const APP_VERSION='20261122020500';
 async function checkVersion(){
   try{ const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'}); if(!r.ok) return; const j=await r.json();
     if(j.v && j.v!==APP_VERSION){ const u=new URL(location.href); if(u.searchParams.get('v')===j.v) return; u.searchParams.set('v', j.v); location.replace(u.toString()); }
@@ -1003,6 +1066,37 @@ document.getElementById('meAv').addEventListener('click',()=>{
   document.getElementById('shOut').onclick=()=>{ lsSet(KEY_STORE,null); location.reload(); };
   const rs=document.getElementById('shReset'); if(rs) rs.onclick=()=>{ lsSet('fm_local_'+S.me.id,null); lsSet(KEY_STORE,null); toast('Listo, volvés a entrar con la clave original.'); setTimeout(()=>location.reload(),1200); };
 });
+const EXN=x=>/nasdaq/i.test(x)?'NASDAQ': /new york|nyse/i.test(x)?'NYSE': /arca|amex|american/i.test(x)?'AMEX':'';
+async function lookupTicker(t){
+  const q=await fetchQuote(t);
+  let n=t, x='';
+  try{ const k=(S.d.finnhub||[])[keyIdx]; const r=await fetch('https://finnhub.io/api/v1/stock/profile2?symbol='+encodeURIComponent(t)+'&token='+encodeURIComponent(k));
+    if(r.ok){ const j=await r.json(); if(j&&j.name) n=j.name; if(j&&j.exchange) x=EXN(j.exchange); } }catch(_){}
+  return {q, n, x};
+}
+function addToList(t, n, x){ const a=lista().filter(y=>y.t!==t); a.push({t, n:n||NOMBRES[t]||t, x:x||EXCH[t]||''}); setLista(a); toast(t+' agregada a tu lista'); }
+function openListSheet(){
+  sheet.innerHTML=`<h3>Agregar a mi lista</h3>
+    <div class="field"><label>Ticker de Wall Street</label><input id="mlT" placeholder="Ej: KO, AMD, SPOT" autocapitalize="characters" autocomplete="off" spellcheck="false"></div>
+    <div class="note" style="margin:0 2px 14px">Acciones y ETF que cotizan en EE.UU. La lista se guarda solo en este celular.</div>
+    <div class="lock-err" id="mlErr" style="margin:0 0 10px"></div>
+    <button class="btn" id="mlOk">Agregar</button>
+    <button class="link" id="mlCancel" style="display:block;margin:14px auto 0">Cancelar</button>`;
+  scrim.classList.add('open');
+  const inp=document.getElementById('mlT'); setTimeout(()=>inp.focus(),50);
+  document.getElementById('mlCancel').onclick=closeSheet;
+  const go=async()=>{
+    const t=inp.value.trim().toUpperCase().replace(/[^A-Z0-9.\-]/g,''), err=document.getElementById('mlErr'), b=document.getElementById('mlOk');
+    if(!t){ err.textContent='Escribí un ticker.'; return; }
+    if(enLista(t)){ err.textContent='Ya está en tu lista.'; return; }
+    b.disabled=true; b.textContent='Buscando…'; err.textContent='';
+    try{ const r=await lookupTicker(t); S.live[t]={c:r.q.c, pc:r.q.pc, dp:r.q.dp, t:r.q.t}; addToList(t, r.n, r.x); closeSheet(); render(); }
+    catch(e){ err.textContent= /429/.test(String(e&&e.message))? 'Demasiadas consultas, probá en un minuto.' : 'No encontré "'+t+'" en Wall Street. Revisá el ticker.'; }
+    finally{ b.disabled=false; b.textContent='Agregar'; }
+  };
+  document.getElementById('mlOk').onclick=go;
+  inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); go(); } });
+}
 function openPassSheet(){
   sheet.innerHTML=`<h3>Tu propia clave</h3>
     <div class="field"><label>Nueva clave</label><input id="np1" type="password" autocomplete="new-password" autocapitalize="none"></div>
