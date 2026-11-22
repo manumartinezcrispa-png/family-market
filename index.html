@@ -264,6 +264,11 @@ nav.tabs button.on{color:var(--blue)}
 .idc .ico{font-size:24px;margin-bottom:8px}
 .idc h3{font-size:15px;margin:0 0 6px;line-height:1.3}
 .idc p{font-size:13px;color:var(--ink2);line-height:1.45;margin:0}
+
+.stline{display:flex;gap:10px;align-items:flex-start;padding:9px 2px;border-top:1px solid var(--line);font-size:13px}
+.stline b{display:block;font-size:13.5px}.stline span{color:var(--ink2)}
+.stline i{width:10px;height:10px;border-radius:50%;margin-top:4px;flex:none;background:var(--dn)}
+.stline i.ok{background:var(--up)}
 </style>
 </head>
 <body>
@@ -309,7 +314,7 @@ nav.tabs button.on{color:var(--blue)}
 (function(){
 "use strict";
 const S = { d:null, precios:null, noticias:null, cierres:null, tab:'inicio', sub:'pos', nf:'todas', tf:'1D', det:null, dtf:'1D',
-            live:{}, prev:{}, liveAt:0, liveOk:false, btc:null, dolar:null, cr:null, crLive:{}, crSeries:{}, ctf:'1D', me:null, perfiles:null };
+            live:{}, prev:{}, liveAt:0, liveOk:false, btc:null, dolar:null, cr:null, crLive:{}, crSeries:{}, ctf:'1D', me:null, perfiles:null, st:{fin:null, cr:null} };
 const TABS=['inicio','cartera','cripto','mercado','noticias','cuentas'];
 const AVC={igna:'#2a78d6',toto:'#0a7a32',peky:'#c2410c',manu:'#7c3aed'};
 const NOMBRES={SPY:'S&P 500',QQQ:'Nasdaq 100',DIA:'Dow Jones'};
@@ -476,7 +481,8 @@ function vInicio(){
   const stale=daysSince(k.c.fecha)>21;
   return `
   ${S.askPass?`<div class="banner" style="background:var(--blue-soft);color:var(--navy)">¿Querés usar tu propia clave en este celular? <button class="link" data-act="pass">Crear mi clave</button> · <button class="link" data-act="nopass" style="color:var(--ink2)">Ahora no</button></div>`:''}
-  ${stale?`<div class="banner">Las cantidades de cada acción son del <b>${fdate(k.c.fecha)}</b>; los precios sí son actuales. Se corrige con una captura nueva de StoneX.</div>`:''}
+  ${S.st.fin&&!S.st.fin.ok?`<div class="banner" style="background:var(--dn-soft);color:var(--dn)">Las acciones no se están actualizando en vivo: ${esc(S.st.fin.msg)}. Se muestran los ${esc(preciosTxt(k))}.</div>`:''}
+  ${stale?`<div class="banner">Las cantidades de cada acción son del <b>${fdate(k.c.fecha)}</b>. Se corrigen con una captura nueva de StoneX.</div>`:''}
   <div class="card hero">
     <div class="k">Cuenta de los 4 · valor actual</div>
     <div class="tot num">${usd(k.total)}</div>
@@ -640,7 +646,19 @@ const CTF={'1D':['5m',288],'1S':['1h',168],'1M':['4h',180],'1A':['1d',365]};
 async function loadCrSeries(tf){
   if(!S.cr) return; const [iv,lim]=CTF[tf]; const act=S.cr.activos||[];
   const res=await Promise.all(act.map(x=>fetch(`https://api.binance.com/api/v3/klines?symbol=${x.sym}USDT&interval=${iv}&limit=${lim}`).then(r=>r.ok?r.json():null).catch(()=>null)));
-  if(res.some(r=>!Array.isArray(r)||!r.length)){ if(!S.crSeries[tf]) S.crSeries[tf]={pts:[],err:true}; return; }
+  if(res.some(r=>!Array.isArray(r)||!r.length)){
+    // respaldo: CoinGecko
+    const days={'1D':1,'1S':7,'1M':30,'1A':365}[tf];
+    const cg=await Promise.all(act.map(x=>CG[x.sym]? fetch(`https://api.coingecko.com/api/v3/coins/${CG[x.sym]}/market_chart?vs_currency=usd&days=${days}`).then(r=>r.ok?r.json():null).catch(()=>null) : null));
+    if(cg.every(j=>j&&Array.isArray(j.prices)&&j.prices.length)){
+      const base=cg[0].prices; const pts=[];
+      const near=(arr,t)=>{ let best=arr[0]; for(const p of arr){ if(Math.abs(p[0]-t)<Math.abs(best[0]-t)) best=p; } return best[1]; };
+      const step=Math.max(1,Math.floor(base.length/300));
+      for(let i=0;i<base.length;i+=step){ const t=base[i][0]; let v=0; act.forEach((x,k)=>{ v+=num(x.cant)*near(cg[k].prices,t); }); pts.push({t,v}); }
+      S.crSeries[tf]={pts, at:Date.now()}; return;
+    }
+    if(!S.crSeries[tf]) S.crSeries[tf]={pts:[],err:true}; return;
+  }
   const mk=t=>Math.floor(t/60000);
   const maps=res.map(r=>new Map(r.map(k=>[mk(k[0]), parseFloat(k[4])])));
   const pts=[]; res[0].forEach(k=>{ const t=k[0]; let v=0, ok=true; act.forEach((x,i)=>{ const px=maps[i].get(mk(t)); if(px==null) ok=false; else v+=num(x.cant)*px; }); if(ok) pts.push({t, v}); });
@@ -817,7 +835,8 @@ async function fetchQuote(sym){
   for(let i=0;i<keys.length;i++){
     const k=keys[(keyIdx+i)%keys.length];
     const r=await fetch('https://finnhub.io/api/v1/quote?symbol='+encodeURIComponent(sym)+'&token='+encodeURIComponent(k));
-    if(r.status===401||r.status===403) continue;
+    if(r.status===401||r.status===403){ S.st.fin={ok:false,msg:'La clave de Finnhub fue rechazada ('+r.status+')',at:Date.now()}; continue; }
+    if(r.status===429){ S.st.fin={ok:false,msg:'Finnhub: se pasó el límite de consultas',at:Date.now()}; throw new Error('http 429'); }
     if(!r.ok) throw new Error('http '+r.status);
     keyIdx=(keyIdx+i)%keys.length;
     const q=await r.json(); if(!q||!(q.c>0)) throw new Error('sin dato'); return q;
@@ -831,7 +850,8 @@ async function refreshStocks(){
   res.forEach((r,i)=>{ if(r.status!=='fulfilled') return; const s=syms[i], q=r.value; const old=S.live[s];
     if(old&&old.c!==q.c) S.flash[s]= q.c>old.c?'fl-up':'fl-dn';
     S.live[s]={c:q.c, pc:q.pc, dp:q.dp, t:q.t}; ok++; });
-  if(ok){ S.liveOk=true; S.liveAt=Date.now(); const k=calc(); if(k&&k.live) intraAdd(k.total); }
+  if(ok){ S.liveOk=true; S.liveAt=Date.now(); S.st.fin={ok:true,msg:ok+' de '+syms.length+' cotizaciones en vivo',at:Date.now()}; const k=calc(); if(k&&k.live) intraAdd(k.total); }
+  else if(!S.st.fin || S.st.fin.ok){ const e=res.find(r=>r.status==='rejected'); S.st.fin={ok:false,msg:'Finnhub no responde'+(e&&e.reason&&e.reason.message?' ('+e.reason.message+')':''),at:Date.now()}; }
 }
 function setCr(s,c,dp){
   if(!(c>0)) return; const old=S.crLive[s];
@@ -839,18 +859,30 @@ function setCr(s,c,dp){
   S.crLive[s]={c, dp:isFinite(dp)?dp:null, pc:isFinite(dp)? c/(1+dp/100):null};
   if(s==='BTC'){ if(S.btc&&S.btc.c!==c) S.flash.BTC=c>S.btc.c?'fl-up':'fl-dn'; S.btc={...S.crLive.BTC}; }
 }
+const CG={BTC:'bitcoin',ETH:'ethereum',BNB:'binancecoin',SOL:'solana',XRP:'ripple',ADA:'cardano',DOGE:'dogecoin'};
 async function refreshCrypto(){
-  const syms=new Set(['BTC']); ((S.cr&&S.cr.activos)||[]).forEach(a=>syms.add(a.sym));
+  const syms=[...new Set(['BTC'].concat(((S.cr&&S.cr.activos)||[]).map(a=>a.sym)))];
+  // 1) variación 24 h y precio de respaldo: Binance, si no CoinGecko
+  const dp={}, px={};
+  let src='';
   try{
-    const r=await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols='+encodeURIComponent(JSON.stringify([...syms].map(s=>s+'USDT'))));
-    if(!r.ok) throw new Error('binance');
-    const j=await r.json(); j.forEach(x=>setCr(x.symbol.replace(/USDT$/,''), parseFloat(x.lastPrice), parseFloat(x.priceChangePercent)));
+    const r=await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols='+encodeURIComponent(JSON.stringify(syms.map(s=>s+'USDT'))));
+    if(!r.ok) throw new Error('binance '+r.status);
+    (await r.json()).forEach(x=>{ const s=x.symbol.replace(/USDT$/,''); dp[s]=parseFloat(x.priceChangePercent); px[s]=parseFloat(x.lastPrice); }); src='Binance';
   }catch(_){
-    const ids={BTC:'bitcoin',ETH:'ethereum',BNB:'binancecoin',SOL:'solana',XRP:'ripple',ADA:'cardano',DOGE:'dogecoin'};
-    const want=[...syms].filter(s=>ids[s]);
-    try{ const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+want.map(s=>ids[s]).join(',')+'&vs_currencies=usd&include_24hr_change=true');
-      const j=await r.json(); want.forEach(s=>{ const o=j[ids[s]]; if(o) setCr(s, o.usd, o.usd_24h_change); }); }catch(_){}
+    try{ const want=syms.filter(s=>CG[s]); const r=await fetch('https://api.coingecko.com/api/v3/simple/price?ids='+want.map(s=>CG[s]).join(',')+'&vs_currencies=usd&include_24hr_change=true');
+      const j=await r.json(); want.forEach(s=>{ const o=j[CG[s]]; if(o){ dp[s]=o.usd_24h_change; px[s]=o.usd; } }); src='CoinGecko'; }catch(_){}
   }
+  // 2) precio: Coinbase (el mismo que ven en su app); si falla, el de arriba
+  const cb=await Promise.allSettled(syms.map(s=>fetch('https://api.coinbase.com/v2/prices/'+s+'-USD/spot').then(r=>r.ok?r.json():Promise.reject(r.status))));
+  let nCb=0;
+  syms.forEach((s,i)=>{ const r=cb[i]; let c=null;
+    if(r.status==='fulfilled' && r.value && r.value.data){ c=parseFloat(r.value.data.amount); if(c>0) nCb++; }
+    if(!(c>0)) c=px[s];
+    setCr(s, c, dp[s]);
+  });
+  const ok=syms.filter(s=>S.crLive[s]).length;
+  S.st.cr={ok: ok===syms.length, msg: ok? `Precios: ${nCb?'Coinbase':src}${nCb&&nCb<syms.length?' + '+src:''} · variación 24 h: ${src||'sin dato'}` : 'No responde ninguna fuente de precios cripto', at:Date.now()};
 }
 async function refreshDolar(){
   try{ const r=await fetch('https://dolarapi.com/v1/dolares'); if(!r.ok) return; const j=await r.json();
@@ -879,7 +911,7 @@ function startLive(){ if(liveTimer) return; liveCycle(true); liveTimer=setInterv
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) liveCycle(true); }); }
 
 /* ---------- actualización automática de la app ---------- */
-const APP_VERSION='20261121222558';
+const APP_VERSION='20261122014821';
 async function checkVersion(){
   try{ const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'}); if(!r.ok) return; const j=await r.json();
     if(j.v && j.v!==APP_VERSION){ const u=new URL(location.href); if(u.searchParams.get('v')===j.v) return; u.searchParams.set('v', j.v); location.replace(u.toString()); }
@@ -961,6 +993,10 @@ document.getElementById('meAv').addEventListener('click',()=>{
     <button class="sh-opt" id="shPass">${has?'Cambiar mi clave':'Crear mi propia clave'}<span>›</span></button>
     ${has?'<button class="sh-opt" id="shReset">Volver a la clave original en este celular<span>›</span></button>':''}
     <button class="sh-opt" id="shOut" style="color:var(--dn)">Cerrar sesión<span>›</span></button>
+    <div class="sec-t" style="margin:16px 2px 6px"><h2>Estado de los datos</h2></div>
+    <div class="stline"><i class="${S.st.fin&&S.st.fin.ok?'ok':'bad'}"></i><div><b>Acciones</b><span>${esc(S.st.fin? S.st.fin.msg+' · '+hhmm(S.st.fin.at) : 'Sin consultar todavía')}</span></div></div>
+    <div class="stline"><i class="${S.st.cr&&S.st.cr.ok?'ok':'bad'}"></i><div><b>Cripto</b><span>${esc(S.st.cr? S.st.cr.msg+' · '+hhmm(S.st.cr.at) : 'Sin consultar todavía')}</span></div></div>
+    <div class="stline"><i class="${S.precios?'ok':'bad'}"></i><div><b>Cierres guardados</b><span>${esc(S.precios? 'al '+fdate(S.precios.fecha) : 'no disponibles')}</span></div></div>
     <div class="note" style="margin:12px 2px 0">${has?'En este celular entrás con tu clave propia. La clave original que te pasó Manu sigue funcionando por si te la olvidás o cambiás de teléfono.':'Tu clave propia queda guardada solo en este celular. La original sigue funcionando por si te la olvidás o cambiás de teléfono.'}</div>`;
   scrim.classList.add('open');
   document.getElementById('shPass').onclick=openPassSheet;

@@ -1,12 +1,12 @@
 {
- "fecha": "2026-09-01",
- "fuente": "Tabla de composición de StoneX",
+ "fecha": "2026-11-18",
+ "fuente": "Cierres del 17-18/11 (búsqueda web)",
  "precios": {
-  "IBIT": 44.04,
-  "META": 579.13,
-  "SNDK": 194.3038,
-  "NVDA": 218.18,
-  "ORCL": 142.31,
-  "AVGO": 367.49
+  "IBIT": 36.14,
+  "META": 616.38,
+  "SNDK": 97.03,
+  "NVDA": 150.96,
+  "ORCL": 114.9,
+  "AVGO": 354.59
  }
 }
