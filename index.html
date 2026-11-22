@@ -911,7 +911,7 @@ function startLive(){ if(liveTimer) return; liveCycle(true); liveTimer=setInterv
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) liveCycle(true); }); }
 
 /* ---------- actualización automática de la app ---------- */
-const APP_VERSION='20261122014821';
+const APP_VERSION='20261122015731';
 async function checkVersion(){
   try{ const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'}); if(!r.ok) return; const j=await r.json();
     if(j.v && j.v!==APP_VERSION){ const u=new URL(location.href); if(u.searchParams.get('v')===j.v) return; u.searchParams.set('v', j.v); location.replace(u.toString()); }
