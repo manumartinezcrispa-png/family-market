@@ -1,12 +1,12 @@
 {
- "fecha": "2026-11-20",
- "fuente": "Cierres del 20/11 (búsqueda web)",
+ "fecha": "2026-11-23",
+ "fuente": "Cierres del 23/11 (búsqueda web)",
  "precios": {
-  "IBIT": 33.02,
-  "META": 560.84,
-  "SNDK": 79.24,
-  "NVDA": 125.53,
-  "ORCL": 101.19,
-  "AVGO": 304.41
+  "IBIT": 34.62,
+  "META": 597.6,
+  "SNDK": 87.71,
+  "NVDA": 165.05,
+  "ORCL": 113.68,
+  "AVGO": 313.55
  }
 }
