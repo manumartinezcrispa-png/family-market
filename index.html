@@ -568,7 +568,7 @@ function accList(){
   return L;
 }
 function badge(it){
-  if(it.tk) return it.tk.slice(0,5);
+  if(it.tk) return it.tk.replace(/\..*/,'').slice(0,5);
   const s=String(it.s||'');
   if(/Nota/.test(s)) return 'NOTA'; if(/Bono/.test(s)) return 'BONO'; if(/Preferida/.test(s)) return 'PREF';
   if(/Fondo/.test(s)) return 'FONDO'; if(/Money|Efectivo/.test(s)) return 'US$'; return '•';
@@ -607,14 +607,24 @@ function lastTasa(after){
   const T=(S.val&&S.val.tasas)||{}; const ds=Object.keys(T).filter(x=>x>after&&T[x]&&T[x].t).sort();
   return ds.length? {f:ds[ds.length-1], ...T[ds[ds.length-1]]} : null;
 }
+// libras: último precio de gilt guardado y tipo de cambio de esa fecha (escalado al que usa el custodio)
+function lastGilt(after, g){ const G=(S.val&&S.val.gilts)||{}; const ds=Object.keys(G).filter(x=>x>after&&G[x]&&G[x][g]!=null).sort(); return ds.length? {f:ds[ds.length-1], px:num(G[ds[ds.length-1]][g])} : null; }
+function gbpFx(f, p, c){ const R=(S.val&&S.val.gbp)||{}; const ds=Object.keys(R).filter(x=>x<=f).sort(); if(!ds.length||!c.base||!c.base.gbp) return null; return num(p.fx)*num(R[ds[ds.length-1]])/c.base.gbp; }
 function modelBond(p, c){
-  const b=c.base; if(!b||!p.mod||!p.cup||!p.vto||!(p.px>0)) return null;
+  const b=c.base, vto=p.vtoModel||p.vto; if(!b||!p.mod||!p.cup||!vto||!(p.px>0)) return null;
+  const k=c.id+':'+p.n; if(Y0[k]==null) Y0[k]=bondYield(p.px, p.cup, vto, b.fecha);
+  if(p.mod==='gbp'){ // bono en libras: se mueve con el gilt 2039 y el spread de crédito
+    const G=lastGilt(b.fecha,'g39'); if(!G||!b.g39) return null; const fx=gbpFx(G.f,p,c); if(!fx) return null;
+    const dy=bondYield(G.px,4.25,'2039-09-07',G.f)-bondYield(b.g39,4.25,'2039-09-07',b.fecha);
+    const L=lastTasa(b.fecha), ds=L&&L.f<=G.f? (num(L.ig)-num(b.ig))/100 : 0;
+    const px=bondPrice(Y0[k]+dy+ds, p.cup, vto, G.f);
+    return {v:p.q*px/100*fx, px, f:G.f};
+  }
   if(p.fx && Math.abs(p.fx-1)>0.02) return null;
   const L=lastTasa(b.fecha); if(!L||L[p.mod]==null) return null;
-  const k=c.id+':'+p.n; if(Y0[k]==null) Y0[k]=bondYield(p.px, p.cup, p.vto, b.fecha);
-  const t0=tInterp(b.t, yearsTo(p.vto,b.fecha)), t1=tInterp(L.t, yearsTo(p.vto,L.f)); if(t0==null||t1==null) return null;
+  const t0=tInterp(b.t, yearsTo(vto,b.fecha)), t1=tInterp(L.t, yearsTo(vto,L.f)); if(t0==null||t1==null) return null;
   const y1=Y0[k]+(t1-t0)/100+(num(L[p.mod])-num(b[p.mod]))/100;
-  const px=bondPrice(y1, p.cup, p.vto, L.f);
+  const px=bondPrice(y1, p.cup, vto, L.f);
   return {v:p.q*px/100*(num(p.fx)||1), px, f:L.f};
 }
 // cierre de un ETF de referencia en una fecha exacta
@@ -628,6 +638,7 @@ function etfClose(sym, fecha, c){
 function exactOf(p, c){
   const N=(S.val&&S.val.navs)||{};
   if(p.fid && N[p.fid] && N[p.fid].f > c.fecha && p.q && num(N[p.fid].v)>0 && Math.abs(num(N[p.fid].v)/num(p.px)-1)<0.15) return {v:p.q*num(N[p.fid].v), px:num(N[p.fid].v), f:N[p.fid].f, kind:'nav'};
+  if(p.gilt){ const G=lastGilt(c.fecha,p.gilt), fx=G&&gbpFx(G.f,p,c); if(G&&fx&&G.px>0&&Math.abs(G.px/num(p.px)-1)<0.15) return {v:p.q*G.px/100*fx, px:G.px, f:G.f, kind:'mkt'}; }
   const m=modelBond(p, c); if(m) return {...m, kind:'tasa'};
   return {v:num(p.v), px:p.px, f:c.fecha, kind:'rep'};
 }
@@ -647,7 +658,7 @@ function accReport(id){
     if(bono) sub=`VN ${fmtN(p.q,0)} · ${fmtN(px,2)}${p.vto?' · vto '+String(p.vto).slice(0,4):''}`;
     else if(p.q) sub=`${fmtN(p.q, p.q>=100?0:2)} ${p.tk?'×':'cuotas ·'} ${usd(px, pxDec(px))}`;
     else sub=p.s||'';
-    return {...p, key:id+':'+i, det: p.tk||null, cost, v, px, pl, r: cost? pl/cost*100 : p.r, d, dp, live, est, vRep:num(p.v), xv:X.v, xf:X.f, xk:X.kind, sub, fl:p.tk?S.flash[p.tk]:(p.proxy?S.flash[p.proxy]:'')};
+    return {...p, key:id+':'+i, det: p.tk&&!p.tk.includes('.')? p.tk : null, cost, v, px, pl, r: cost? pl/cost*100 : p.r, d, dp, live, est, vRep:num(p.v), xv:X.v, xf:X.f, xk:X.kind, sub, fl:p.tk?S.flash[p.tk]:(p.proxy?S.flash[p.proxy]:'')};
   });
   const total=items.reduce((a,x)=>a+x.v,0), cost=items.reduce((a,x)=>a+x.cost,0);
   const order= id==='pershing'? ['Renta fija','Fondos y ETF','Acciones preferidas','Acciones','Efectivo'] : ['Renta fija','Acciones (fondos)','Efectivo'];
@@ -743,6 +754,7 @@ function itemRow(it, ci){
   if((it.live||it.est)&&it.dp!=null) det.push([(marketOpen()?'Hoy':'Última rueda')+(it.est?' (estimado)':''),`<span class="${cls(it.dp)}">${pct(it.dp,2)}</span>`]);
   if(it.xk==='nav') det.push(['Cuota oficial',`${usd(it.xv/num(it.q),4)} al ${fdate(it.xf)}`]);
   if(it.xk==='tasa') det.push(['Recalculado con tasas',`${usd(it.xv)} al ${fdate(it.xf)}`]);
+  if(it.xk==='mkt') det.push(['Precio de mercado',`${fmtN(it.xv/num(it.q)*100/(num(it.fx)||1),2)} al ${fdate(it.xf)}`]);
   if(it.xk) det.push(['Valor del reporte',usd(it.vRep)]);
   if(it.est) det.push(['Se estima en vivo con',esc(it.proxy+' · '+(PROXY_N[it.proxy]||'ETF'))]);
   else if(it.fijo==='reporte') det.push(['Actualización','Valor del último reporte']);
@@ -1240,7 +1252,7 @@ function startLive(){ if(liveTimer) return; liveCycle(true); liveTimer=setInterv
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) liveCycle(true); }); }
 
 /* ---------- actualización automática de la app ---------- */
-const APP_VERSION='20261125150641';
+const APP_VERSION='20261125151608';
 async function checkVersion(){
   try{ const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'}); if(!r.ok) return; const j=await r.json();
     if(j.v && j.v!==APP_VERSION){ const u=new URL(location.href); if(u.searchParams.get('v')===j.v) return; u.searchParams.set('v', j.v); location.replace(u.toString()); }
