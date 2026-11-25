@@ -110,7 +110,7 @@ button,input{font:inherit;color:inherit}
 .list .row{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line);cursor:pointer;width:100%;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left}
 .list .row:first-child{border-top:0}
 .list .row:active{opacity:.6}
-.tk{width:40px;height:40px;border-radius:12px;background:var(--blue-soft);color:var(--blue);font-size:10.5px;font-weight:800;display:grid;place-items:center;flex:none;letter-spacing:-.2px}
+.tk{width:40px;height:40px;border-radius:12px;background:var(--blue-soft);color:var(--blue);font-size:10px;font-weight:800;display:grid;place-items:center;flex:none;letter-spacing:-.2px}
 .tk.cash{background:var(--soft);color:var(--ink2)}
 .tk.big{width:48px;height:48px;font-size:12px;border-radius:14px}
 .row .mid{flex:1;min-width:0}
@@ -195,7 +195,7 @@ button,input{font:inherit;color:inherit}
 
 /* nav */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom));display:flex;justify-content:center;z-index:5}
-nav.tabs .in{display:grid;grid-template-columns:repeat(5,1fr);max-width:560px;width:100%}
+nav.tabs .in{display:grid;grid-template-columns:repeat(3,1fr);max-width:420px;width:100%}
 nav.tabs button{background:none;border:0;padding:6px 0 2px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:700;color:var(--mute);cursor:pointer}
 nav.tabs svg{width:23px;height:23px}
 nav.tabs button.on{color:var(--blue)}
@@ -288,6 +288,54 @@ nav.tabs button.on{color:var(--blue)}
 .ci span:last-child{white-space:nowrap;color:var(--ink);font-weight:600}
 .ci em{font-style:normal;font-weight:700;font-size:11.5px;margin-left:4px}
 .ci em.up{color:var(--up)}.ci em.dn{color:var(--dn)}
+
+/* ---------- cuentas v2 ---------- */
+.accs{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px 14px;padding:4px 16px 8px;scrollbar-width:none}
+.accs::-webkit-scrollbar{display:none}
+.acc{flex:none;scroll-snap-align:center;width:156px;min-height:96px;border:0;border-radius:18px;padding:13px 14px;text-align:left;cursor:pointer;color:#fff;
+  background:linear-gradient(140deg,var(--a),var(--b));display:flex;flex-direction:column;justify-content:space-between;gap:6px;position:relative;overflow:hidden;
+  box-shadow:0 6px 16px rgba(13,19,33,.12);opacity:.55;transform:scale(.96);transition:opacity .2s,transform .2s,box-shadow .2s}
+.acc::after{content:'';position:absolute;right:-26px;top:-26px;width:84px;height:84px;border-radius:50%;background:rgba(255,255,255,.12)}
+.acc.on{opacity:1;transform:none;box-shadow:0 10px 24px rgba(13,19,33,.22),0 0 0 2px #fff,0 0 0 4px var(--a)}
+.acc .al{font-size:12.5px;font-weight:700;opacity:.9;display:flex;align-items:center;gap:6px}
+.acc .al .lv{width:7px;height:7px;border-radius:50%;background:#7CFFB2;box-shadow:0 0 0 3px rgba(124,255,178,.25)}
+.acc b{font-size:17px;font-weight:800;letter-spacing:-.4px;white-space:nowrap}
+.acc .ad{font-size:12px;font-weight:700;background:rgba(255,255,255,.18);border-radius:7px;padding:2px 7px;align-self:flex-start}
+.acch{position:relative;overflow:hidden;padding-top:18px}
+.acch::before{content:'';position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--a),var(--b))}
+.acch .ah{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.acch .am{min-width:0}
+.acch .an{font-size:15px;font-weight:800;letter-spacing:-.2px}
+.acch .agx{font-size:12px;color:var(--mute);font-weight:600;margin-top:3px}
+.tag{flex:none;font-size:11px;font-weight:800;padding:4px 9px;border-radius:99px;background:var(--soft);color:var(--ink2);text-transform:uppercase;letter-spacing:.04em}
+.stl{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--mute);font-weight:600;margin-top:8px}
+.stl i{width:7px;height:7px;border-radius:50%;background:var(--mute);flex:none}
+.stl i.on{background:var(--up);animation:pulse 1.6s infinite}
+.comp2 .ct{font-size:13px;font-weight:800;color:var(--ink2);text-transform:uppercase;letter-spacing:.05em}
+.comp2 .cbar{display:flex;gap:2px;height:10px;border-radius:5px;overflow:hidden;margin:12px 0 6px}
+.comp2 .cbar i{display:block;min-width:3px}
+.lg{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13.5px;padding:8px 0;border-top:1px solid var(--soft);width:100%;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left;font-family:inherit;color:var(--ink)}
+.lg:first-of-type{border-top:0}
+.lg span:first-child{display:flex;align-items:center;gap:8px;font-weight:600;min-width:0}
+.lg span:last-child{white-space:nowrap;color:var(--ink2)}
+.lg span:last-child b{color:var(--ink)}
+.lg i{width:10px;height:10px;border-radius:3px;flex:none}
+.lgb{cursor:pointer}
+.sec-t h2 .gd{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:7px;vertical-align:0}
+.row .nm .lvd{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--up);margin-left:6px;vertical-align:middle}
+.prow{flex-wrap:wrap}
+.prow .pdet{display:none;flex-basis:100%;grid-template-columns:1fr 1fr;gap:8px 12px;background:var(--soft);border-radius:12px;padding:11px 12px;margin:2px 0 4px}
+.prow.open .pdet{display:grid}
+.pdet small{display:block;font-size:11px;color:var(--mute);font-weight:600}
+.pdet b{font-size:13.5px;font-weight:700;white-space:normal}
+.info .ir{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-top:1px solid var(--soft);font-size:14px}
+.info .ir:first-child{border-top:0;padding-top:2px}
+.info .ir small{color:var(--mute);font-weight:600;font-size:12.5px;flex:none;max-width:45%}
+.info .ir span{text-align:right;font-weight:600}
+.notes{margin:0;padding-left:18px;font-size:13.5px;line-height:1.55;color:var(--ink2)}
+.notes li{margin:4px 0}
+.plist .row .nm{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.3;font-size:14.5px}
+.plist .row .r{flex:none}
 </style>
 </head>
 <body>
@@ -318,12 +366,9 @@ nav.tabs button.on{color:var(--blue)}
 </div>
 
 <nav class="tabs"><div class="in">
-  <button data-tab="inicio" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</button>
-  <button data-tab="cartera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Cartera</button>
-  <button data-tab="cripto" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 7.5h4a2 2 0 0 1 0 4h-4zM9.5 11.5h4.5a2 2 0 0 1 0 4H9.5zM9.5 7.5v8M11 6v1.5M11 15.5V17M13 6v1.5M13 15.5V17"/></svg>Cripto</button>
+  <button data-tab="cuentas" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg>Cuentas</button>
   <button data-tab="mercado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Mercado</button>
   <button data-tab="noticias"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v10a2 2 0 0 1-2 2"/><path d="M8 9h5M8 13h5M8 17h3"/></svg>Noticias</button>
-  <button data-tab="cuentas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg>Cuentas</button>
 </div></nav>
 </div>
 <div class="scrim" id="scrim"><div class="sheet" id="sheet"></div></div>
@@ -332,13 +377,16 @@ nav.tabs button.on{color:var(--blue)}
 <script>
 (function(){
 "use strict";
-const S = { d:null, precios:null, noticias:null, cierres:null, tab:'inicio', sub:'pos', nf:'todas', tf:'1D', det:null, dtf:'1D',
+const S = { d:null, precios:null, noticias:null, cierres:null, tab:'cuentas', sub:'pos', acc:(function(){ try{ return localStorage.getItem('fm_acc')||'hermanos'; }catch(_){ return 'hermanos'; } })(), asub:'pos', openRows:new Set(), nf:'todas', tf:'1D', det:null, dtf:'1D',
             live:{}, prev:{}, liveAt:0, liveOk:false, btc:null, dolar:null, cr:null, crLive:{}, crSeries:{}, ctf:'1D', me:null, perfiles:null, st:{fin:null, cr:null} };
-const TABS=['inicio','cartera','cripto','mercado','noticias','cuentas'];
+const TABS=['cuentas','mercado','noticias'];
+const OLD_TAB={inicio:'hermanos',cartera:'hermanos',cripto:'cripto'};
 const AVC={igna:'#2a78d6',toto:'#0a7a32',peky:'#c2410c',manu:'#7c3aed'};
 const NOMBRES={SPY:'S&P 500',QQQ:'Nasdaq 100',DIA:'Dow Jones'};
 const EXCH={ORCL:'NYSE',NU:'NYSE',SPY:'AMEX',DIA:'AMEX',IWM:'AMEX',GLD:'AMEX',SLV:'AMEX',USO:'AMEX',YPF:'NYSE',BMA:'NYSE',PAM:'NYSE',VIST:'NYSE',TSM:'NYSE',JPM:'NYSE',V:'NYSE',KO:'NYSE',DIS:'NYSE',WMT:'NYSE'};
 const INDICES=['SPY','QQQ','DIA'];
+Object.assign(EXCH,{ILF:'AMEX',NLR:'AMEX',AEFC:'NYSE',DTB:'NYSE',PFH:'NYSE',TBB:'NYSE',MU:'NASDAQ',GOOG:'NASDAQ'});
+Object.assign(NOMBRES,{ILF:'ETF América Latina 40',NLR:'ETF Uranio y energía nuclear',SOXX:'ETF Semiconductores',AEFC:'Aegon (preferida)',DTB:'DTE Energy (preferida)',PFH:'Prudential Financial (preferida)',TBB:'AT&T (preferida)',MELI:'MercadoLibre'});
 // listas del apartado Mercado
 const MK=[
   {id:'grandes', t:'Grandes tecnológicas', items:[['AAPL','Apple'],['MSFT','Microsoft'],['NVDA','Nvidia'],['GOOGL','Alphabet (Google)'],['AMZN','Amazon'],['META','Meta'],['TSLA','Tesla'],['AVGO','Broadcom'],['TSM','TSMC'],['NFLX','Netflix']]},
@@ -504,62 +552,229 @@ function drawTotalChart(k){
 }
 
 /* ---------- vistas ---------- */
-function rowPos(p){
-  const fl = S.flash[p.ticker]||'';
-  return `<button class="row ${fl}" data-det="${esc(p.ticker)}">
-    <div class="tk">${esc(String(p.ticker).slice(0,5))}</div>
-    <div class="mid"><div class="nm">${esc(p.nombre||p.ticker)}</div><div class="sub num">${p.cant.toLocaleString('es-AR')} × ${usd(p.precio,2)}</div></div>
-    <div class="r num"><div class="v">${usd(p.valor)}</div>${p.dpHoy!=null?`<span class="chip ${cls(p.dpHoy)}">${pct(p.dpHoy,2)}</span>`:`<span class="chip ${cls(p.plp)}">${pct(p.plp)}</span>`}</div>
-  </button>`;
+/* ---------- cuentas: selector + tablero de cada cuenta ---------- */
+const ACC_C={hermanos:['#2a78d6','#0d2c57'],pershing:['#0e7490','#0b3b4f'],silver:['#7c3aed','#3b1a78'],cripto:['#f7931a','#9a4a00'],total:['#3b4a6b','#0d1321']};
+const GRP_C=['#2a78d6','#0e7490','#7c3aed','#d97706','#8a92a3','#0a7a32','#d13b34'];
+const fmtN = (n,d=3) => num(n).toLocaleString('es-AR',{maximumFractionDigits:d});
+const accMeta = id => (S.d.cuentas||[]).find(c=>c.id===id)||{};
+function accList(){
+  const L=[];
+  if(S.d.cartera) L.push('hermanos');
+  (S.d.cuentas||[]).filter(c=>c.id!=='hermanos').sort((a,b)=>num(a.orden)-num(b.orden)).forEach(c=>L.push(c.id));
+  if(S.cr) L.push('cripto');
+  if(L.length>1) L.push('total');
+  return L;
 }
-function vInicio(){
-  const k=calc(); if(!k) return `<div class="card empty">Todavía no hay datos de la cartera.</div>`;
-  const stale=daysSince(k.c.fecha)>21;
-  return `
-  ${S.askPass?`<div class="banner" style="background:var(--blue-soft);color:var(--navy)">¿Querés usar tu propia clave en este celular? <button class="link" data-act="pass">Crear mi clave</button> · <button class="link" data-act="nopass" style="color:var(--ink2)">Ahora no</button></div>`:''}
-  ${S.st.fin&&!S.st.fin.ok?`<div class="banner" style="background:var(--dn-soft);color:var(--dn)">Las acciones no se están actualizando en vivo: ${esc(S.st.fin.msg)}. Se muestran los ${esc(preciosTxt(k))}.</div>`:''}
-  ${stale?`<div class="banner">Las cantidades de cada acción son del <b>${fdate(k.c.fecha)}</b>. Se corrigen con una captura nueva de StoneX.</div>`:''}
-  <div class="card hero">
-    <div class="k">Cuenta de los 4 · valor actual</div>
-    <div class="tot num">${usd(k.total)}</div>
-    <div class="chg num">${k.dHoy!=null?`<span class="${cls(k.dHoy)}">${arrow(k.dHoy)} ${usd(Math.abs(k.dHoy))} (${pct(k.dpHoy,2)})</span> <small>${marketOpen()?'hoy':'última rueda'}</small> · `:''}<small><span class="${cls(k.gan)}" style="font-weight:700">${pct(k.ganp)}</span> desde el inicio</small></div>
-    <div class="chart" id="tchart"></div>
-    <div class="tf" id="tfBar">${['1D','1S','1M','1A','Todo'].map(t=>`<button data-tf="${t}" class="${t===S.tf?'on':''}">${t}</button>`).join('')}</div>
-  </div>
-  <div class="stats num">
-    <div class="stat"><small>Invertido en activos</small><b>${usd(k.acciones)}</b></div>
-    <div class="stat"><small>Liquidez</small><b>${usd(k.liquidez)}</b></div>
-    <div class="stat"><small>Ganancia desde el inicio</small><b class="${cls(k.gan)}">${usdS(k.gan)}</b></div>
-    <div class="stat"><small>Por hermano (¼)</small><b>${usd(k.total/4)}</b></div>
-  </div>
-  <div class="sec-t"><h2>Posiciones</h2><span>${esc(preciosTxt(k))}</span></div>
-  <div class="card list" style="padding:4px 16px">${k.pos.map(rowPos).join('')}</div>
-  <div class="note">Aporte inicial ${usd(k.aporte)} · composición al ${fdate(k.c.fecha)}. "Por hermano" supone partes iguales.</div>`;
+function badge(it){
+  if(it.tk) return it.tk.slice(0,5);
+  const s=String(it.s||'');
+  if(/Nota/.test(s)) return 'NOTA'; if(/Bono/.test(s)) return 'BONO'; if(/Preferida/.test(s)) return 'PREF';
+  if(/Fondo/.test(s)) return 'FONDO'; if(/Money|Efectivo/.test(s)) return 'US$'; return '•';
+}
+function groupsOf(items, order){
+  const m=new Map(); items.forEach(it=>{ if(!m.has(it.g)) m.set(it.g,[]); m.get(it.g).push(it); });
+  const keys=order? order.filter(k=>m.has(k)).concat([...m.keys()].filter(k=>!order.includes(k))) : [...m.keys()];
+  return keys.map(k=>({nombre:k, items:m.get(k).sort((a,b)=>b.v-a.v), valor:m.get(k).reduce((a,x)=>a+x.v,0)}));
+}
+// cuenta con posiciones cargadas desde un reporte (Pershing, SilverCloud): valor en vivo donde hay ticker
+function accReport(id){
+  const c=accMeta(id); if(!c.posiciones) return null;
+  let dHoy=0, nLive=0, vLive=0;
+  const items=c.posiciones.map((p,i)=>{
+    const cost=num(p.v)-num(p.pl); let v=num(p.v), px=p.px, d=null, dp=null, live=false;
+    const L=p.tk&&S.live[p.tk];
+    if(L&&L.c>0&&p.q){ v=p.q*L.c; px=L.c; live=true; if(L.pc>0){ d=p.q*(L.c-L.pc); dp=(L.c-L.pc)/L.pc*100; dHoy+=d; } nLive++; vLive+=v; }
+    const pl=v-cost;
+    const bono=!!p.bono;
+    let sub='';
+    if(bono) sub=`VN ${fmtN(p.q,0)} · ${fmtN(px,2)}${p.vto?' · vto '+String(p.vto).slice(0,4):''}`;
+    else if(p.q) sub=`${fmtN(p.q, p.q>=100?0:2)} ${p.tk?'×':'cuotas ·'} ${usd(px, pxDec(px))}`;
+    else sub=p.s||'';
+    return {...p, key:id+':'+i, det: p.tk||null, cost, v, px, pl, r: cost? pl/cost*100 : p.r, d, dp, live, sub, fl:p.tk?S.flash[p.tk]:''};
+  });
+  const total=items.reduce((a,x)=>a+x.v,0), cost=items.reduce((a,x)=>a+x.cost,0);
+  const order= id==='pershing'? ['Renta fija','Fondos y ETF','Acciones preferidas','Acciones','Efectivo'] : ['Renta fija','Acciones (fondos)','Efectivo'];
+  const groups=groupsOf(items, order);
+  const bonds=items.filter(x=>x.bono && !/default/.test(x.s));
+  const cupones=bonds.reduce((a,x)=>a+num(x.q)*num(x.cup)/100*(num(x.fx)||1),0);
+  const ai=items.reduce((a,x)=>a+num(x.ai),0);
+  const pr=pct(nLive? vLive/total*100:0,0).replace('+','');
+  const stats=[['Lo que se pagó (costo)',usd(cost)],['Resultado por precio',`<span class="${cls(total-cost)}">${usdS(total-cost)} (${pct(cost?(total-cost)/cost*100:0)})</span>`]];
+  if(cupones>0) stats.push(['Cupones de bonos por año (aprox.)',usd(cupones)]);
+  if(ai>0) stats.push(['Intereses corridos a cobrar',usd(ai)]);
+  stats.push(['Activos',String(items.length)]);
+  stats.push(['Se actualiza en vivo', nLive? `${nLive} activos · ${pr}` : 'Nada (precio del reporte)']);
+  const hist=(c.historial||[]).map(h=>({t:new Date(h.fecha+'T20:00:00Z').getTime(), v:num(h.valor), n:h.nota||''}));
+  return {id, c, nombre:c.nombre, corto:c.corto, total, cost, dHoy: nLive? dHoy:null, dpHoy: nLive&&total-dHoy? dHoy/(total-dHoy)*100:null,
+    dLbl: marketOpen()?'hoy, parte en vivo':'última rueda, parte en vivo', live:nLive>0,
+    asOf: nLive? `Acciones y ETF en vivo · bonos y fondos al ${fdate(c.fecha)}` : `Precios del reporte del ${fdate(c.fecha)}`,
+    res:{lbl:'por precio sobre lo pagado', v:total-cost, p: cost?(total-cost)/cost*100:null}, groups, stats, hist, tabs:['pos','info']};
+}
+function accHermanos(){
+  const k=calc(); if(!k) return null; const c=accMeta('hermanos');
+  const items=k.pos.map(p=>({key:'h:'+p.ticker, det:p.ticker, tk:p.ticker, g:'Acciones y ETF', n:p.nombre||p.ticker, sub:`${fmtN(p.cant)} × ${usd(p.precio,2)} · costo ${usd(p.costo,2)}`,
+    v:p.valor, pl:p.pl, r:p.plp, dp:p.dpHoy, live:p.live, fl:S.flash[p.ticker]||''}))
+    .concat(k.liq.map((l,i)=>({key:'hl:'+i, g:'Liquidez', s:'Efectivo', n:l.nombre, sub:l.detalle||'', v:l.valor})));
+  return {id:'hermanos', c, k, nombre:c.nombre||'Cuenta de los 4 hermanos', corto:c.corto||'Hermanos', total:k.total, dHoy:k.dHoy, dpHoy:k.dpHoy,
+    dLbl: marketOpen()?'hoy':'última rueda', live:k.live, asOf: preciosTxt(k)[0].toUpperCase()+preciosTxt(k).slice(1),
+    res:{lbl:'desde el inicio', v:k.gan, p:k.ganp}, groups:groupsOf(items,['Acciones y ETF','Liquidez']),
+    stats:[['Aporte inicial',usd(k.aporte)],['Ganancia desde el inicio',`<span class="${cls(k.gan)}">${usdS(k.gan)}</span>`],
+      ['Invertido en activos',usd(k.acciones)],['Resultado de los activos',`<span class="${cls(k.plAcc)}">${usdS(k.plAcc)}</span>`],
+      ['Liquidez',usd(k.liquidez)],['Por hermano (¼)',usd(k.total/4)]],
+    hist:(S.d.historial||[]).map(h=>({t:new Date(h.fecha+'T20:00:00Z').getTime(), v:num(h.valor), n:h.nota||''})), tabs:['pos','mov','info']};
+}
+function accCripto(){
+  const k=calcCr(); if(!k) return null;
+  const items=k.a.map(x=>({key:'c:'+x.sym, det:'C:'+x.sym, tk:x.sym, g:'Monedas', n:x.nombre||x.sym, sub:`${fmtQty(x.cant)} ${x.sym} × ${usd(x.precio, x.precio<100?2:0)}`,
+    v:x.valor, pl:x.pl, r:x.plp, dp:x.dp, live:x.live, fl:S.flash['C:'+x.sym]||''}));
+  return {id:'cripto', k, c:k.c, nombre:k.c.nombre||'Cartera cripto', corto:'Cripto', total:k.total, dHoy:k.d24, dpHoy:k.dp24, dLbl:'24 h', live:k.live,
+    asOf: k.live? 'En vivo las 24 h · precios de Coinbase' : 'Sin cotización en vivo', res:{lbl:'desde el aporte', v:k.pl, p:k.plp},
+    groups:[{nombre:'Monedas', items, valor:k.total}],
+    stats:[['Aportado',usd(k.aporte)],['Resultado',`<span class="${cls(k.pl)}">${usdS(k.pl)} (${pct(k.plp)})</span>`],['Por persona (1/'+k.n+')',usd(k.total/k.n)],['Participan',esc((k.c.miembros||[]).join(', '))]],
+    hist:[], tabs:['pos','info']};
+}
+function acct(id){
+  if(id==='hermanos') return accHermanos();
+  if(id==='cripto') return accCripto();
+  if(id==='total') return accTotal();
+  return accReport(id);
+}
+function accTotal(){
+  const parts=accList().filter(x=>x!=='total').map(acct).filter(Boolean);
+  const total=parts.reduce((a,x)=>a+x.total,0);
+  const wd=parts.filter(x=>x.dHoy!=null), dHoy=wd.length? wd.reduce((a,x)=>a+x.dHoy,0):null;
+  return {id:'total', nombre:'Todas las cuentas', corto:'Total', total, dHoy, dpHoy: dHoy!=null&&total-dHoy? dHoy/(total-dHoy)*100:null, dLbl:'hoy, lo que cotiza en vivo',
+    live:parts.some(x=>x.live), asOf:'Cada cuenta con su último precio disponible', parts, groups:[], stats:[], hist:[], tabs:[]};
 }
 
-function vCartera(){
-  const k=calc(); if(!k) return `<div class="card empty">Todavía no hay datos.</div>`;
-  const seg=`<div class="seg"><button data-sub="pos" class="${S.sub==='pos'?'on':''}">Posiciones</button><button data-sub="mov" class="${S.sub==='mov'?'on':''}">Movimientos</button></div>`;
-  if(S.sub==='mov') return seg+vMovimientos();
-  return seg+`
-  <div class="stats num">
-    <div class="stat"><small>Valor de los activos</small><b>${usd(k.acciones)}</b></div>
-    <div class="stat"><small>Resultado de los activos</small><b class="${cls(k.plAcc)}">${usdS(k.plAcc)}</b></div>
+/* --- piezas visuales --- */
+function accCard(a, on){
+  const [c1,c2]=ACC_C[a.id]||ACC_C.total;
+  return `<button class="acc ${on?'on':''}" data-acc="${a.id}" style="--a:${c1};--b:${c2}">
+    <span class="al">${esc(a.corto)}${a.live?'<i class="lv"></i>':''}</span>
+    <b class="num">${usd(a.total)}</b>
+    <span class="ad num">${a.dpHoy!=null? `${arrow(a.dpHoy)} ${pct(a.dpHoy,2)}` : (a.res&&a.res.p!=null? pct(a.res.p)+' total':'&nbsp;')}</span></button>`;
+}
+function compCard(a){
+  const g=a.groups.filter(x=>x.valor>0); if(!g.length) return '';
+  const tot=g.reduce((s,x)=>s+x.valor,0);
+  return `<div class="card comp2"><div class="ct">Composición</div>
+    <div class="cbar">${g.map((x,i)=>`<i style="flex:${x.valor};background:${GRP_C[i%GRP_C.length]}"></i>`).join('')}</div>
+    ${g.map((x,i)=>`<div class="lg"><span><i style="background:${GRP_C[i%GRP_C.length]}"></i>${esc(x.nombre)}</span><span class="num"><b>${pctAbs(x.valor/tot*100,0)}</b> · ${usd(x.valor)}</span></div>`).join('')}</div>`;
+}
+function itemRow(it, ci){
+  const col=GRP_C[ci%GRP_C.length];
+  const chip= it.dp!=null && it.live ? `<span class="chip ${cls(it.dp)}">${pct(it.dp,2)}</span>` : (it.r!=null&&isFinite(it.r)? `<span class="chip ${cls(it.r)}">${pct(it.r)}</span>`:'');
+  const right=`<div class="r num"><div class="v">${usd(it.v)}</div>${chip}</div>`;
+  const tkb=`<div class="tk" style="background:${col}17;color:${col}">${esc(badge(it))}</div>`;
+  const mid=`<div class="mid"><div class="nm">${esc(it.n)}${it.live?'<i class="lvd" title="en vivo"></i>':''}</div><div class="sub num">${esc(it.sub||'')}</div></div>`;
+  const det=[];
+  if(it.s) det.push(['Tipo',esc(it.s)]);
+  if(it.q!=null&&it.bono) det.push(['Valor nominal',fmtN(it.q,0)]); else if(it.q!=null) det.push(['Cantidad',fmtN(it.q)]);
+  if(it.px!=null) det.push(['Precio', it.bono? fmtN(it.px,3)+' (cada 100)' : usd(it.px,pxDec(it.px))]);
+  if(it.cu!=null) det.push(['Costo unitario',usd(it.cu,2)]);
+  if(it.cost!=null) det.push(['Se pagó',usd(it.cost)]);
+  if(it.pl!=null) det.push(['Resultado',`<span class="${cls(it.pl)}">${usdS(it.pl)}${it.r!=null?' ('+pct(it.r)+')':''}</span>`]);
+  if(it.cup) det.push(['Cupón',fmtN(it.cup,3)+'% anual']);
+  if(it.vto) det.push(['Vencimiento',fdate(it.vto)]);
+  if(it.ai) det.push(['Intereses corridos',usd(it.ai,2)]);
+  if(it.fx&&Math.abs(it.fx-1)>0.02) det.push(['Moneda','Libras (convertido a US$)']);
+  if(it.live&&it.dp!=null) det.push([marketOpen()?'Hoy':'Última rueda',`<span class="${cls(it.dp)}">${pct(it.dp,2)}</span>`]);
+  if(it.det) return `<button class="row ${it.fl||''}" data-det="${esc(it.det)}">${tkb}${mid}${right}</button>`;
+  const open=S.openRows.has(it.key);
+  return `<div class="row prow ${open?'open':''}" data-open="${esc(it.key)}">${tkb}${mid}${right}
+    <div class="pdet num">${det.map(([k,v])=>`<div><small>${k}</small><b>${v}</b></div>`).join('')}</div></div>`;
+}
+function posTab(a){
+  if(!a.groups.length) return '<div class="card empty">Sin posiciones cargadas.</div>';
+  return a.groups.map((g,i)=>`<div class="sec-t"><h2><i class="gd" style="background:${GRP_C[i%GRP_C.length]}"></i>${esc(g.nombre)}</h2><span class="num">${usd(g.valor)} · ${pctAbs(a.total?g.valor/a.total*100:0,0)}</span></div>
+    <div class="card list plist" style="padding:4px 16px">${g.items.map(it=>itemRow(it,i)).join('')}</div>`).join('')
+    + `<div class="note">${a.id==='hermanos'||a.id==='cripto'?'Tocá un activo para ver su gráfico.':'Tocá un activo para ver todo su detalle; los que tienen ticker abren su gráfico.'} El % es el resultado desde que se compró${a.groups.some(g=>g.items.some(x=>x.live&&x.dp!=null))?' (o la variación del día en los que cotizan en vivo)':''}.</div>`;
+}
+function infoTab(a){
+  const c=a.c||{}; const rows=[];
+  if(c.gestor) rows.push(['Gestor',c.gestor]); if(c.custodio) rows.push(['Custodio',c.custodio]); if(c.donde) rows.push(['Dónde está',c.donde]);
+  if(c.tipo) rows.push(['Perfil',c.tipo]); if(c.objetivo) rows.push(['Objetivo',c.objetivo]); if(c.rinde) rows.push(['Rendimiento informado',c.rinde]);
+  if(a.id==='hermanos'){ rows.push(['Aporte inicial',usd(a.k.aporte)+' (ago 2025)']); rows.push(['Composición al',fdate(a.k.c.fecha)]); }
+  if(a.id==='cripto'){ rows.push(['Participan',(c.miembros||[]).join(', ')]); rows.push(['Aportado',usd(a.k.aporte)+(c.inicio?' el '+fdate(c.inicio):'')]); rows.push(['Cada uno puso',usd(a.k.aporte/a.k.n)]); }
+  if(c.fuente) rows.push(['Último reporte',c.fuente]);
+  rows.push(['Precios',a.asOf]);
+  const notas=(c.notas||[]);
+  const hist=(a.hist||[]).slice().sort((x,y)=>y.t-x.t);
+  return `<div class="card info">${rows.map(([k,v])=>`<div class="ir"><small>${esc(k)}</small><span>${esc(v)}</span></div>`).join('')}</div>
+    ${notas.length?`<div class="sec-t"><h2>Notas</h2></div><div class="card"><ul class="notes">${notas.map(n=>`<li>${esc(n)}</li>`).join('')}</ul></div>`:''}
+    ${hist.length?`<div class="sec-t"><h2>Valores registrados</h2></div><div class="card list" style="padding:4px 16px">${hist.map(h=>`<div class="row" style="cursor:default"><div class="mid"><div class="nm num">${new Date(h.t).toLocaleDateString('es-AR',{day:'numeric',month:'short',year:'numeric'})}</div>${h.n?`<div class="sub">${esc(h.n)}</div>`:''}</div><div class="r num"><div class="v">${usd(h.v)}</div></div></div>`).join('')}</div>`:''}`;
+}
+function totalView(a){
+  const tot=a.total||1;
+  return `<div class="card comp2"><div class="ct">Cómo se reparte</div>
+    <div class="cbar">${a.parts.map(p=>`<i style="flex:${Math.max(p.total,0)};background:${(ACC_C[p.id]||ACC_C.total)[0]}"></i>`).join('')}</div>
+    ${a.parts.map(p=>`<button class="lg lgb" data-acc="${p.id}"><span><i style="background:${(ACC_C[p.id]||ACC_C.total)[0]}"></i>${esc(p.nombre)}</span><span class="num"><b>${pctAbs(p.total/tot*100,0)}</b> · ${usd(p.total)} ›</span></button>`).join('')}</div>
+    <div class="note">Suma cada cuenta con su último precio: lo que cotiza en vivo se actualiza solo y el resto queda al último reporte.</div>`;
+}
+function vCuentas(){
+  const L=accList(); if(!L.length) return '<div class="card empty">Todavía no hay cuentas cargadas.</div>';
+  if(!L.includes(S.acc)) S.acc=L[0];
+  const cards=L.map(id=>({id, a:acct(id)})).filter(x=>x.a);
+  const a=cards.find(x=>x.id===S.acc).a;
+  if(!a.tabs.includes(S.asub)) S.asub='pos';
+  const [c1,c2]=ACC_C[a.id]||ACC_C.total;
+  const chartId= a.id==='hermanos'?'tchart' : a.id==='cripto'?'crchart' : (a.hist&&a.hist.length>=2?'hchart':'');
+  const tfBar= a.id==='hermanos'? `<div class="tf" id="tfBar">${['1D','1S','1M','1A','Todo'].map(t=>`<button data-tf="${t}" class="${t===S.tf?'on':''}">${t}</button>`).join('')}</div>`
+             : a.id==='cripto'? `<div class="tf" id="ctfBar">${Object.keys(CTF).map(t=>`<button data-ctf="${t}" class="${t===S.ctf?'on':''}">${t}</button>`).join('')}</div>` : '';
+  const k=a.id==='hermanos'?a.k:null;
+  const banners=`${S.askPass?`<div class="banner" style="background:var(--blue-soft);color:var(--navy)">¿Querés usar tu propia clave en este celular? <button class="link" data-act="pass">Crear mi clave</button> · <button class="link" data-act="nopass" style="color:var(--ink2)">Ahora no</button></div>`:''}
+    ${S.st.fin&&!S.st.fin.ok&&a.id!=='cripto'&&a.id!=='silver'?`<div class="banner" style="background:var(--dn-soft);color:var(--dn)">Las acciones no se están actualizando en vivo: ${esc(S.st.fin.msg)}.</div>`:''}
+    ${k&&daysSince(k.c.fecha)>21?`<div class="banner">Las cantidades de cada acción son del <b>${fdate(k.c.fecha)}</b>. Se corrigen con un reporte nuevo de StoneX.</div>`:''}`;
+  const tabsLbl={pos:'Posiciones',mov:'Movimientos',info:'Info'};
+  return `${banners}
+  <div class="accs" id="accs">${cards.map(x=>accCard(x.a, x.id===S.acc)).join('')}</div>
+  <div class="card hero acch" style="--a:${c1};--b:${c2}">
+    <div class="ah"><div class="am"><div class="an">${esc(a.nombre)}</div>${a.c&&(a.c.gestor||a.c.donde)?`<div class="agx">${esc([a.c.gestor||a.c.donde,a.c.custodio].filter(Boolean).join(' · '))}</div>`:''}</div>${a.c&&a.c.tipo?`<span class="tag">${esc(a.c.tipo)}</span>`:''}</div>
+    <div class="tot num">${usd(a.total)}</div>
+    <div class="chg num">${a.dHoy!=null?`<span class="${cls(a.dHoy)}">${arrow(a.dHoy)} ${usd(Math.abs(a.dHoy))} (${pct(a.dpHoy,2)})</span> <small>${esc(a.dLbl)}</small>`:''}${a.dHoy!=null&&a.res?' · ':''}${a.res&&a.res.p!=null?`<small><span class="${cls(a.res.v)}" style="font-weight:700">${pct(a.res.p)}</span> ${esc(a.res.lbl)}</small>`:''}</div>
+    <div class="stl"><i class="${a.live?'on':''}"></i>${esc(a.asOf)}</div>
+    ${chartId?`<div class="chart" id="${chartId}"></div>${tfBar}`:''}
+    ${chartId==='hchart'&&a.hist.length<4?`<div class="note" style="margin:6px 0 0">Valores de los reportes que tenemos (${a.hist.map(h=>new Date(h.t).toLocaleDateString('es-AR',{month:'short',year:'2-digit'})).join(', ')}) y el de hoy. La línea se completa con cada reporte nuevo.</div>`:''}
+    ${!chartId&&a.id!=='total'?`<div class="note" style="margin:8px 0 0">El gráfico se arma a medida que carguemos reportes de esta cuenta.</div>`:''}
   </div>
-  <div class="sec-t"><h2>Activos</h2><span>${esc(preciosTxt(k))}</span></div>
-  <div class="card list" style="padding:4px 16px">
-    ${k.pos.map(p=>`<button class="row ${S.flash[p.ticker]||''}" data-det="${esc(p.ticker)}">
-      <div class="tk">${esc(String(p.ticker).slice(0,5))}</div>
-      <div class="mid"><div class="nm">${esc(p.nombre||p.ticker)}</div><div class="sub num">${p.cant.toLocaleString('es-AR')} acc. · costo ${usd(p.costo,2)} · ${pctAbs(p.peso)}</div></div>
-      <div class="r num"><div class="v">${usd(p.valor)}</div><div class="sub ${cls(p.pl)}" style="font-weight:700">${usdS(p.pl)} (${pct(p.plp)})</div></div>
-    </button>`).join('')}
-    <div class="subtotal num"><span>Total activos · ${pctAbs(k.total?k.acciones/k.total*100:0)}</span><span>${usd(k.acciones)}</span></div>
-  </div>
-  <div class="sec-t"><h2>Liquidez</h2></div>
-  <div class="card list" style="padding:4px 16px">
-    ${k.liq.map(l=>`<div class="row" style="cursor:default"><div class="tk cash">US$</div><div class="mid"><div class="nm">${esc(l.nombre)}</div>${l.detalle?`<div class="sub">${esc(l.detalle)}</div>`:''}</div><div class="r num"><div class="v ${l.valor<0?'dn':''}">${usd(l.valor)}</div><div class="sub">${pctAbs(l.peso)}</div></div></div>`).join('')}
-  </div>
-  <div class="card num" style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;color:var(--ink2)">Total de la cuenta</span><span style="font-size:20px;font-weight:800">${usd(k.total)}</span></div>`;
+  ${a.id==='total'? totalView(a) : `
+  ${compCard(a)}
+  <div class="stats num">${a.stats.map(([l,v])=>`<div class="stat"><small>${esc(l)}</small><b>${v}</b></div>`).join('')}</div>
+  <div class="seg">${a.tabs.map(t=>`<button data-asub="${t}" class="${S.asub===t?'on':''}">${tabsLbl[t]}</button>`).join('')}</div>
+  ${S.asub==='mov'? vMovimientos() : S.asub==='info'? infoTab(a) : posTab(a)}`}`;
+}
+function drawAccChart(){
+  if(S.tab!=='cuentas'||S.det) return;
+  if(S.acc==='hermanos'){ const k=calc(); if(k) drawTotalChart(k); }
+  else if(S.acc==='cripto') drawCrChart();
+  else { const el=document.getElementById('hchart'); if(!el) return; const a=acct(S.acc); if(!a) return;
+    const pts=a.hist.slice(); pts.push({t:Date.now(), v:a.total, n:'Ahora'}); pts.sort((x,y)=>x.t-y.t);
+    lineChart(el, pts, {base:null, aria:'Valor de la cuenta', fmtT:t=>new Date(t).toLocaleDateString('es-AR',{day:'numeric',month:'numeric',year:'2-digit'}), fmtTip:t=>new Date(t).toLocaleDateString('es-AR',{day:'numeric',month:'short',year:'numeric'})}); }
+}
+// precios en vivo de las cuentas con reporte (solo mientras se mira esa cuenta)
+let acAt={}, acBusy=false;
+function acTickers(id){ const c=accMeta(id); return c.posiciones? [...new Set(c.posiciones.filter(p=>p.tk).map(p=>p.tk))] : []; }
+async function refreshAcct(force){
+  if(!S.d || acBusy) return;
+  const ids= S.tab!=='cuentas'||S.det? [] : S.acc==='total'? accList().filter(x=>acTickers(x).length) : [S.acc];
+  const due=ids.filter(id=>acTickers(id).length && (force || Date.now()-(acAt[id]||0) > (marketOpen()?60000:600000)));
+  if(!due.length) return;
+  const own=new Set(((S.d.cartera&&S.d.cartera.posiciones)||[]).map(p=>p.ticker));
+  const syms=[...new Set(due.flatMap(acTickers))].filter(x=>!own.has(x));
+  acBusy=true; due.forEach(id=>acAt[id]=Date.now());
+  try{
+    const res=await Promise.allSettled(syms.map(x=>fetchQuote(x)));
+    res.forEach((r,i)=>{ if(r.status!=='fulfilled') return; const x=syms[i], q=r.value, old=S.live[x];
+      if(old&&old.c!==q.c) S.flash[x]= q.c>old.c?'fl-up':'fl-dn';
+      S.live[x]={c:q.c, pc:q.pc, dp:q.dp, t:q.t}; });
+  } finally { acBusy=false; }
+}
+function selectAcc(id){
+  S.acc=id; S.asub='pos'; lsSet('fm_acc', id); render();
+  const el=document.querySelector(`.acc[data-acc="${id}"]`); if(el) el.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+  if(id==='cripto' && S.cr) loadCrSeries(S.ctf).then(()=>{ if(S.tab==='cuentas'&&S.acc==='cripto'&&!S.det) drawCrChart(); });
+  if(acTickers(id).length || id==='total') refreshAcct(false).then(()=>{ if(S.tab==='cuentas'&&S.acc===id&&!S.det) render(); });
 }
 
 function vMovimientos(){
@@ -661,24 +876,6 @@ function vNoticias(){
     ${updTxt?`<div class="note" style="margin:-2px 4px 10px">Actualizado el ${esc(updTxt)}</div>`:''}${body}`;
 }
 
-const CGC=['#2a78d6','#0d2c57','#7c3aed','#8a92a3','#0a7a32'];
-function vCuentas(){
-  const list=[...(S.d.cuentas||[])].sort((a,b)=>num(a.orden)-num(b.orden));
-  const k=calc();
-  const val=c=>(c.orden===1&&k)? k.total : (c.valor!=null&&c.valor!==''? num(c.valor):null);
-  const fec=c=>(c.orden===1&&k)? (k.fechaPrecios==='live'?'hoy':fdate(k.fechaPrecios)) : fdate(c.fecha);
-  const sum=list.reduce((a,c)=>a+(val(c)||0),0);
-  return `<div class="card hero"><div class="k">Total conocido entre las cuentas</div><div class="tot num" style="font-size:32px">${usd(sum)}</div><div class="note" style="margin:4px 0 0">Suma las cuentas con monto cargado, cada una a su propia fecha.</div></div>
-  ${list.map(c=>`<div class="card acct"><div class="hd"><div><div class="nm">${esc(c.nombre)}</div><div class="who">${esc(c.gestor||'')}${c.custodio?` · ${esc(c.custodio)}`:''}</div></div>${c.tipo?`<span class="tag">${esc(c.tipo)}</span>`:''}</div>
-    ${val(c)!=null?`<div class="amt num">${usd(val(c))}</div><div class="when">al ${esc(fec(c))}</div>`:`<div class="amt na">Monto sin cargar</div>`}
-    ${(c.orden===1&&k&&k.aporte)?`<div class="rd"><b class="${cls(k.gan)}">${pct(k.ganp)}</b> sobre el aporte de ${usd(k.aporte)} (ago 2025)</div>`:(c.rendimiento?`<div class="rd">${esc(c.rendimiento)}</div>`:'')}${c.detalle?`<div class="det">${esc(c.detalle)}</div>`:''}
-    ${(c.grupos&&c.grupos.length)?`<details class="comp"><summary>Ver composición (${c.grupos.reduce((a,g)=>a+(g.items||[]).length,0)})</summary>
-      <div class="cbar">${c.grupos.map((g,i)=>`<i style="flex:${num(g.valor)};background:${CGC[i%CGC.length]}"></i>`).join('')}</div>
-      ${c.grupos.map((g,i)=>`<div class="cg"><div class="cgh"><span><i style="background:${CGC[i%CGC.length]}"></i>${esc(g.nombre)}</span><b class="num">${usd(num(g.valor))} · ${pctAbs(val(c)?num(g.valor)/val(c)*100:0,0)}</b></div>
-        ${(g.items||[]).map(it=>`<div class="ci"><span>${esc(it.n)}</span><span class="num">${usd(num(it.v))}${it.r!=null?` <em class="${cls(it.r)}">${pct(it.r)}</em>`:''}</span></div>`).join('')}</div>`).join('')}
-      <div class="note" style="margin:8px 0 0">El % al lado de cada uno es el resultado por precio desde que se compró.</div></details>`:''}</div>`).join('')}`;
-}
-
 /* ---------- cripto ---------- */
 function calcCr(){
   const c=S.cr; if(!c) return null;
@@ -728,29 +925,6 @@ function drawCrChart(){
     fmtTip: t => intraday||S.ctf==='1S'? new Date(t).toLocaleDateString('es-AR',{day:'numeric',month:'short'})+' '+hhmm(t) : new Date(t).toLocaleDateString('es-AR',{day:'numeric',month:'short',year:'numeric'}) });
 }
 function fmtQty(q){ return q.toLocaleString('es-AR',{maximumFractionDigits: q<1?6:4}); }
-function vCripto(){
-  const k=calcCr(); if(!k) return '<div class="card empty">No tenés acceso a esta sección.</div>';
-  const s=S.crSeries[S.ctf]; const per=s&&s.pts&&s.pts.length? k.total-s.pts[0].v : null;
-  return `<div class="card hero">
-    <div class="k">${esc(k.c.nombre||'Cartera cripto')} · ${esc(k.c.donde||'')}</div>
-    <div class="tot num">${usd(k.total)}</div>
-    <div class="chg num">${k.d24!=null?`<span class="${cls(k.d24)}">${arrow(k.d24)} ${usd(Math.abs(k.d24))} (${pct(k.dp24,2)})</span> <small>24 h</small> · `:''}<small><span class="${cls(k.pl)}" style="font-weight:700">${pct(k.plp)}</span> desde el aporte</small></div>
-    <div class="chart" id="crchart"></div>
-    <div class="tf" id="ctfBar">${Object.keys(CTF).map(t=>`<button data-ctf="${t}" class="${t===S.ctf?'on':''}">${t}</button>`).join('')}</div>
-  </div>
-  <div class="stats num">
-    <div class="stat"><small>Aportado</small><b>${usd(k.aporte)}</b></div>
-    <div class="stat"><small>Resultado</small><b class="${cls(k.pl)}">${usdS(k.pl)} (${pct(k.plp)})</b></div>
-    <div class="stat"><small>Por persona hoy (1/${k.n})</small><b>${usd(k.total/k.n)}</b></div>
-    <div class="stat"><small>Participan</small><b style="font-size:14px">${esc((k.c.miembros||[]).join(', '))}</b></div>
-  </div>
-  <div class="sec-t"><h2>Monedas</h2><span>${k.live?'en vivo · 24/7':''}</span></div>
-  <div class="card list" style="padding:4px 16px">${k.a.map(x=>`<button class="row ${S.flash['C:'+x.sym]||''}" data-det="C:${esc(x.sym)}">
-    <div class="tk">${esc(x.sym)}</div>
-    <div class="mid"><div class="nm">${esc(x.nombre||x.sym)}</div><div class="sub num">${fmtQty(x.cant)} ${esc(x.sym)} × ${usd(x.precio, x.precio<100?2:0)}</div></div>
-    <div class="r num"><div class="v">${usd(x.valor)}</div>${x.dp!=null?`<span class="chip ${cls(x.dp)}">${pct(x.dp,2)}</span>`:''}</div></button>`).join('')}</div>
-  <div class="note">Solo lo ven ${esc((k.c.miembros||[]).join(', '))}. Aportado ${usd(k.aporte)}${k.c.inicio?' el '+fdate(k.c.inicio):''} (${usd(k.aporte/k.n)} cada uno).${Math.abs(k.aporte-k.inv)>1?` Se compraron monedas por ${usd(k.inv)}; la diferencia de ${usd(k.aporte-k.inv)} fueron comisiones.`:''} Precios en vivo de Binance.</div>`;
-}
 function vDetCr(){
   const sym=S.det.slice(2), k=calcCr(); const x=k&&k.a.find(a=>a.sym===sym); if(!x) return '<button class="back" data-back="1">‹ Volver</button>';
   return `<button class="back" data-back="1">‹ Volver</button>
@@ -835,10 +1009,11 @@ function render(){
   const v=document.getElementById('view');
   if(S.det){ v.innerHTML= S.det.startsWith('C:')? vDetCr() : vDetalle(); mountTV(); }
   else {
-    const map={inicio:vInicio,cartera:vCartera,cripto:vCripto,mercado:vMercado,noticias:vNoticias,cuentas:vCuentas};
-    v.innerHTML=(map[S.tab]||vInicio)();
-    if(S.tab==='inicio'){ const k=calc(); if(k) drawTotalChart(k); }
-    if(S.tab==='cripto') drawCrChart();
+    const map={mercado:vMercado,noticias:vNoticias,cuentas:vCuentas};
+    const ax=document.getElementById('accs'), sl=ax? ax.scrollLeft : null;
+    v.innerHTML=(map[S.tab]||vCuentas)();
+    const ax2=document.getElementById('accs'); if(ax2&&sl!=null) ax2.scrollLeft=sl;
+    drawAccChart();
   }
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===S.tab));
   renderTape();
@@ -877,16 +1052,18 @@ document.getElementById('view').addEventListener('click',e=>{
   if(e.target.closest('[data-back]')){ S.det=null; render(); return; }
   const tf=e.target.closest('[data-tf]'); if(tf){ S.tf=tf.dataset.tf; document.querySelectorAll('#tfBar button').forEach(b=>b.classList.toggle('on',b.dataset.tf===S.tf)); const k=calc(); if(k) drawTotalChart(k); return; }
   const dtf=e.target.closest('[data-dtf]'); if(dtf){ S.dtf=dtf.dataset.dtf; document.querySelectorAll('#dtfBar button').forEach(b=>b.classList.toggle('on',b.dataset.dtf===S.dtf)); mountTV(); return; }
-  const ctf=e.target.closest('[data-ctf]'); if(ctf){ S.ctf=ctf.dataset.ctf; document.querySelectorAll('#ctfBar button').forEach(b=>b.classList.toggle('on',b.dataset.ctf===S.ctf)); drawCrChart(); loadCrSeries(S.ctf).then(()=>{ if(S.tab==='cripto'&&!S.det) drawCrChart(); }); return; }
+  const ctf=e.target.closest('[data-ctf]'); if(ctf){ S.ctf=ctf.dataset.ctf; document.querySelectorAll('#ctfBar button').forEach(b=>b.classList.toggle('on',b.dataset.ctf===S.ctf)); drawCrChart(); loadCrSeries(S.ctf).then(()=>{ if(S.tab==='cuentas'&&S.acc==='cripto'&&!S.det) drawCrChart(); }); return; }
+  const ac=e.target.closest('[data-acc]'); if(ac){ selectAcc(ac.dataset.acc); if(ac.classList.contains('lgb')) window.scrollTo({top:0,behavior:'smooth'}); return; }
+  const as=e.target.closest('[data-asub]'); if(as){ S.asub=as.dataset.asub; render(); return; }
   const act=e.target.closest('[data-act]'); if(act){ if(act.dataset.act==='pass') openPassSheet(); else { lsSet('fm_nopass_'+S.me.id,'1'); S.askPass=false; render(); } return; }
   const sb=e.target.closest('[data-sub]'); if(sb){ S.sub=sb.dataset.sub; render(); return; }
   const nf=e.target.closest('[data-nf]'); if(nf){ S.nf=nf.dataset.nf; render(); return; }
   if(e.target.closest('a')) return;
-  const op=e.target.closest('[data-open]'); if(op){ op.classList.toggle('open'); return; }
+  const op=e.target.closest('[data-open]'); if(op){ op.classList.toggle('open'); const key=op.dataset.open; if(key&&key!=='1'){ if(op.classList.contains('open')) S.openRows.add(key); else S.openRows.delete(key); } return; }
 });
-let rz; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(S.d&&!S.det&&S.tab==='inicio'){ const k=calc(); if(k) drawTotalChart(k); } if(S.d&&!S.det&&S.tab==='cripto') drawCrChart(); },150); });
-window.addEventListener('hashchange',()=>{ const h=location.hash.slice(1); if(h==='cripto'&&!S.cr) return; if(S.d&&TABS.includes(h)&&(h!==S.tab||S.det)){ S.tab=h; S.det=null; render(); } });
-{ const h=(location.hash||'').slice(1); if(TABS.includes(h)) S.tab=h; }
+let rz; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(S.d&&!S.det) drawAccChart(); },150); });
+window.addEventListener('hashchange',()=>{ let h=location.hash.slice(1); if(OLD_TAB[h]){ S.acc=OLD_TAB[h]; h='cuentas'; } if(S.d&&TABS.includes(h)&&(h!==S.tab||S.det)){ S.tab=h; S.det=null; render(); } });
+{ let h=(location.hash||'').slice(1); if(OLD_TAB[h]){ S.acc=OLD_TAB[h]; h='cuentas'; } if(TABS.includes(h)) S.tab=h; }
 
 /* ---------- datos en vivo ---------- */
 let keyIdx=0, liveTimer=null, tick=0;
@@ -983,20 +1160,21 @@ async function liveCycle(force){
   if(!S.d || document.hidden) return;
   const open=marketOpen();
   const jobs=[refreshCrypto()];
-  if(S.cr && (force || (S.tab==='cripto' && !S.det && tick%3===0))) jobs.push(loadCrSeries(S.ctf));
+  if(S.cr && (force || (S.tab==='cuentas' && S.acc==='cripto' && !S.det && tick%3===0))) jobs.push(loadCrSeries(S.ctf));
+  jobs.push(refreshAcct(force));
   if(force || (open && tick%2===0) || Date.now()-S.liveAt>300000) jobs.push(refreshStocks());
   jobs.push(refreshMarket(force));
   if(force || tick%15===0) jobs.push(refreshDolar());
   tick++;
   await Promise.allSettled(jobs);
   setPill();
-  if(S.det) softDetail(); else if(!(S.tab==='noticias' || S.tab==='cuentas') || force) render(); else renderTape();
+  if(S.det) softDetail(); else if(S.tab!=='noticias' || force) render(); else renderTape();
 }
 function startLive(){ if(liveTimer) return; liveCycle(true); liveTimer=setInterval(()=>liveCycle(false), 20000);
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) liveCycle(true); }); }
 
 /* ---------- actualización automática de la app ---------- */
-const APP_VERSION='20261125143529';
+const APP_VERSION='20261125144732';
 async function checkVersion(){
   try{ const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'}); if(!r.ok) return; const j=await r.json();
     if(j.v && j.v!==APP_VERSION){ const u=new URL(location.href); if(u.searchParams.get('v')===j.v) return; u.searchParams.set('v', j.v); location.replace(u.toString()); }
@@ -1041,12 +1219,10 @@ async function loadVaults(g, prof){
 function avatar(el, id, nombre){ el.textContent=(nombre||'?').slice(0,1).toUpperCase(); el.style.background=AVC[id]||'#4a5366'; }
 function show(r){
   S.d=r.d; S.cr=r.cr; S.me=r.me; S.grant=r.grant; S.askPass= !localGet(r.me.id) && !lsGet('fm_nopass_'+r.me.id);
-  const cb=document.querySelector('nav.tabs button[data-tab=cripto]'); cb.hidden=!S.cr;
-  document.querySelector('nav.tabs .in').style.gridTemplateColumns=`repeat(${S.cr?6:5},1fr)`;
-  if(S.tab==='cripto'&&!S.cr) S.tab='inicio';
+  if(S.acc==='cripto'&&!S.cr) S.acc='hermanos';
   avatar(document.getElementById('meAv'), S.me.id, S.me.nombre);
   lockEl.hidden=true; appEl.hidden=false; render(); startLive();
-  if(S.cr) loadCrSeries(S.ctf).then(()=>{ if(S.tab==='cripto'&&!S.det) drawCrChart(); });
+  if(S.cr) loadCrSeries(S.ctf).then(()=>{ if(S.tab==='cuentas'&&S.acc==='cripto'&&!S.det) drawCrChart(); });
 }
 function pickProfile(p){
   SEL=p; pickEl.hidden=true; formEl.hidden=false; errEl.textContent='';
