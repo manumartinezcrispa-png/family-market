@@ -1,130 +1,126 @@
 {
- "actualizado": "2026-11-24T08:11:00-03:00",
- "resumen": "Rebote fuerte el lunes: Wall Street tuvo su mejor día desde abril de 2025 (Nasdaq +6,5%) tras la vuelta de Jensen Huang a Nvidia, que subió 31%. Las cripto no acompañaron: Bitcoin volvió a la zona de US$ 60.000, y la semana corta trae el dato de inflación PCE el miércoles.",
+ "actualizado": "2026-11-25T08:40:00-03:00",
+ "resumen": "El martes se cortó el rebote de los chips: Nvidia cayó 5,9%, Sandisk 11% y el Nasdaq 1,5%, mientras el Dow subió 0,9%. Bitcoin perdió los US$ 60.000 y hoy sale la inflación PCE, el último dato fuerte antes de la Fed del 9/12.",
  "items": [
   {
-   "fecha": "2026-11-23",
+   "fecha": "2026-11-24",
    "tipo": "cartera",
    "tickers": [
     "NVDA"
    ],
-   "titulo": "Nvidia voló 31% con la vuelta de Jensen Huang como CEO",
-   "texto": "El directorio lo restituyó como presidente y CEO, días después de que renunciara por un escándalo personal; la investigación interna sobre sus vínculos sigue. La acción cerró en US$ 165,05 y arrastró a todo el mercado: Dow +3%, S&P 500 +4,7% y Nasdaq +6,5%, el mejor día desde abril de 2025.",
-   "fuente": "Yahoo Finance",
-   "url": "https://finance.yahoo.com/markets/live/stock-market-today-monday-november-23-dow-sp-500-nasdaq-surge-after-nvidia-reinstates-jensen-huang-182039397.html",
-   "imagen": "https://s.yimg.com/lo/mysterio/api/0e526a68da29ec5f8ecb6f5033889016c943db95de75baa345d75ca7e6f1296c/lightyear_networkapi/resizefill_w1200%3Bquality_80%3Bformat_webp/https%3A%2F%2Fd29szjachogqwa.cloudfront.net%2Fimages%2F2026-11%2Ff5008169-0f03-4389-8541-648e58a7fb47"
+   "titulo": "Nvidia cayó 5,9% y devolvió parte del salto del lunes",
+   "texto": "Cerró en US$ 155,38 después de subir 31% el lunes por la vuelta de Jensen Huang, y en el día llegó a perder cerca de 9%. Pesó la toma de ganancias y que siguen abiertas las investigaciones sobre Huang; en el after cedió otro 2%.",
+   "fuente": "Oninvest",
+   "url": "https://en.oninvest.com/article/nvidia-fell-6-why-did-the-huang-rally-end-so-quickly",
+   "imagen": "https://cdnnow.oninvest.com/uploads/r/1024x1024/og/en/article/nvidia-fell-6-why-did-the-huang-rally-end-so-quickly/e24980aa98a4fdbb.webp"
   },
   {
-   "fecha": "2026-11-23",
-   "tipo": "cartera",
-   "tickers": [
-    "ORCL"
-   ],
-   "titulo": "Oracle subió 12% y recuperó parte de lo perdido",
-   "texto": "Cerró en US$ 113,68, impulsada por el rebote de la IA y por su anuncio de que ya tiene asegurado el financiamiento para cumplir el contrato con OpenAI. Sigue lejos de sus máximos y el mercado mira su nivel de deuda.",
-   "fuente": "JKN",
-   "url": "https://news.jkn.co.kr/editions/english/post/1117602",
-   "imagen": "https://images.jkn.co.kr/data/images/full/112/69/1126957.jpg?v=1795470524&width=1200&height=630"
-  },
-  {
-   "fecha": "2026-11-23",
+   "fecha": "2026-11-24",
    "tipo": "cartera",
    "tickers": [
     "SNDK"
    ],
-   "titulo": "Sandisk rebotó casi 11% después de su peor semana",
-   "texto": "Cerró en US$ 87,71 (precio ya ajustado por el split 8 a 1), aunque llegó a tocar US$ 99 en la apertura y devolvió buena parte en el día. No hubo noticia propia: se movió con el rebote de los chips. Hoy presentan balance Dell y HP, dos termómetros de la demanda de memoria.",
+   "titulo": "Sandisk cayó 11% y borró el rebote del lunes",
+   "texto": "Cerró en US$ 77,95, sin noticias propias, arrastrada por las memorias: TrendForce ahora ve los precios de NAND entre estables y 5% abajo a comienzos de 2027. Dell mostró un pedido récord de servidores de IA, pero las memorias asiáticas igual cayeron fuerte el miércoles.",
    "fuente": "FinanceFeeds",
-   "url": "https://financefeeds.com/sandisk-sndk-stock-87-tuesday-after-11-percent-rally-dell-hp-results-tonight-bull-99-bear-79/",
+   "url": "https://financefeeds.com/sandisk-sndk-stock-77-wednesday-after-11-percent-drop-erases-monday-rally-bull-88-bear-70/",
    "imagen": "https://financefeeds.com/wp-content/uploads/2026/10/sandisk-milpitas-headquarters.jpg"
   },
   {
-   "fecha": "2026-11-23",
+   "fecha": "2026-11-24",
    "tipo": "cartera",
    "tickers": [
-    "META",
     "AVGO"
    ],
-   "titulo": "Meta y Broadcom también rebotaron, con menos fuerza",
-   "texto": "Meta ganó 6,5% a US$ 597,60 después de caer 12,6% la semana pasada, golpeada por juicios de accionistas por su plan de acciones Clase C. Broadcom subió 3% a US$ 313,55, menos que el resto de los chips, todavía con la duda del posible recorte de pedidos de Google.",
-   "fuente": "TradingKey / TradingView",
-   "url": "https://www.tradingkey.com/news/market-movers/262318798-market-movers-avgo-20261123",
+   "titulo": "Broadcom bajó 3,8% por la duda con los pedidos de Google",
+   "texto": "Cerró en US$ 301,75. Siguen los reportes de que Google recortaría pedidos de chips TPU para 2027 a favor de MediaTek, y Goldman Sachs bajó su precio objetivo de US$ 540 a 460. Presenta balance el 9/12.",
+   "fuente": "TradingKey",
+   "url": "https://www.tradingkey.com/news/market-movers/262320227-market-movers-avgo-20261124",
    "imagen": "https://resource.tradingkey.com/uploads/20251024/BROADCOM-118830a222044e86830a4a71e2b4452a.jpg"
   },
   {
    "fecha": "2026-11-24",
    "tipo": "cartera",
    "tickers": [
+    "ORCL"
+   ],
+   "titulo": "Oracle cedió 3,7% y devolvió un tercio del rebote",
+   "texto": "Cerró en US$ 109,50 con la caída de las acciones ligadas a la IA. Mizuho recortó sus proyecciones de inversión en IA para 2027 y 2028, y el mercado sigue mirando cuánto le cuesta a Oracle ampliar su nube.",
+   "fuente": "FinanceFeeds",
+   "url": "https://financefeeds.com/oracle-orcl-stock-109-wednesday-ai-selloff-undoes-third-of-rebound-bull-119-bear-100/",
+   "imagen": "https://financefeeds.com/wp-content/uploads/2026/09/oracle-orcl-stock-price-prediction-austin-campus-0926.jpg"
+  },
+  {
+   "fecha": "2026-11-24",
+   "tipo": "cartera",
+   "tickers": [
+    "META"
+   ],
+   "titulo": "Meta frenó sus acciones Clase C hasta que termine el juicio",
+   "texto": "Se comprometió ante la Justicia de Delaware a no emitir las acciones sin voto mientras dure el juicio de accionistas, previsto para abril de 2027. Eso demora la venta de acciones por US$ 60.000 millones para financiar chips y centros de datos. La acción bajó 1,3% a US$ 589,82.",
+   "fuente": "Benzinga / TradingView",
+   "url": "https://www.tradingview.com/news/benzinga:ff59bfe74094b:0-meta-stock-dips-premarket-as-class-c-share-pause-delays-60-billion-ai-funding-plan/"
+  },
+  {
+   "fecha": "2026-11-25",
+   "tipo": "cartera",
+   "tickers": [
     "IBIT"
    ],
-   "titulo": "IBIT subió 4,8%, pero noviembre ya tiene salidas récord",
-   "texto": "El ETF cerró el lunes en US$ 34,62, mientras Bitcoin rondaba los US$ 60.000-63.000. Los ETF de Bitcoin en EE.UU. acumulan salidas por US$ 4.710 millones en noviembre, un récord mensual, y el índice de miedo y codicia marca 11 (miedo extremo).",
-   "fuente": "CoinTurk",
-   "url": "https://en.coin-turk.com/us-bitcoin-etf-outflows-hit-4-71-billion-in-november-ibit-rises-4-85yuzde/",
-   "imagen": "https://en.coin-turk.com/wp-content/uploads/2026/09/bitcoin-1068-6a99e182bb5a6.webp"
-  },
-  {
-   "fecha": "2026-11-24",
-   "tipo": "mercado",
-   "tickers": [
-    "ETH"
-   ],
-   "titulo": "Ethereum devolvió todo el salto del lunes",
-   "texto": "Llegó a US$ 1.838 el lunes por un cierre masivo de posiciones bajistas, pero sin compradores nuevos volvió a US$ 1.707 el martes a la mañana. Los ETF de Ether suman siete días seguidos de salidas.",
+   "titulo": "Bitcoin perdió los US$ 60.000 y siguen las salidas de los ETF",
+   "texto": "Cayó hasta US$ 58.600 y hoy a la mañana ronda los US$ 59.000. Los ETF de Bitcoin sumaron el martes su sexto día seguido de salidas (unos US$ 232 millones, US$ 175 millones de IBIT) y el índice de miedo y codicia está en 13.",
    "fuente": "CryptoTicker",
-   "url": "https://cryptoticker.io/en/ethereum-price-nvidia-jump-erased-etf-outflows/",
-   "imagen": "https://d2jq4jjbn1fq59.cloudfront.net/ethereum_kurs_rally_abgegeben_1_d5183cf09f.webp"
+   "url": "https://cryptoticker.io/en/bitcoin-price-pce-sixth-etf-outflow-day/",
+   "imagen": "https://d2jq4jjbn1fq59.cloudfront.net/bitcoin_kurs_pce_sechster_etf_abflusstag_1_27550a898f.webp"
   },
   {
-   "fecha": "2026-11-24",
+   "fecha": "2026-11-25",
    "tipo": "mercado",
    "tickers": [
+    "ETH",
     "BNB"
    ],
-   "titulo": "BNB sigue débil, cerca de US$ 550",
-   "texto": "Cotiza alrededor de US$ 553, por debajo de todos sus promedios móviles y con indicadores de sobreventa. Los analistas marcan soporte en US$ 536 y US$ 519, y resistencia en US$ 579.",
-   "fuente": "Blockchain.News",
-   "url": "https://blockchain.news/news/20261124-price-prediction-bnb-oversold-spot-action-clashes-with-heavier",
-   "imagen": "https://image.blockchain.news:443/thumbnails/667AEC70DCF0B7318EC36F178B9BD0D69D4B020E9071FD235F7B3D8A674EAD80.jpg"
+   "titulo": "Ethereum toca US$ 1.650 y entra en sobreventa; BNB en US$ 540",
+   "texto": "Ether sigue cayendo y su RSI diario quedó por debajo de 30, una señal de sobreventa. La empresa BTCS vendió unos US$ 44 millones en ETH, y BNB perdió otro 1% hasta unos US$ 540, cerca de su soporte de US$ 536.",
+   "fuente": "The Cryptonomist",
+   "url": "https://en.cryptonomist.ch/2026/11/25/ethereum-price-s-daily-rsi-hits-but-november-25-2026/",
+   "imagen": "https://cryptonomist.ch/wp-content/uploads/2026/11/Ethereum-crypto-3.webp"
   },
   {
-   "fecha": "2026-11-23",
+   "fecha": "2026-11-24",
    "tipo": "mercado",
    "tickers": [],
-   "titulo": "Fed: semana corta con inflación PCE y PIB el miércoles",
-   "texto": "El miércoles salen el PCE de octubre (se espera un núcleo de 0,3% mensual, alrededor de 3,2-3,3% anual) y la segunda estimación del PIB. El jueves Wall Street no opera por Acción de Gracias y el viernes cierra temprano. El mercado da casi por hecha una suba de 0,25 puntos el 9/12.",
-   "fuente": "Gotrade / Admirals",
-   "url": "https://www.heygotrade.com/en/news/weekly-economic-outlook-2026-11-23/",
-   "imagen": "https://images.weserv.nl/?url=files-tr8.s3.ap-southeast-1.amazonaws.com%2Fblog_images%2Fus-economiccalendar_1769422651.webp&w=1200&q=75&we&il"
+   "titulo": "Wall Street mixto: el Dow subió y el Nasdaq cayó 1,5%",
+   "texto": "El Dow ganó 0,85% (50.019 puntos) con la rotación a acciones más tradicionales, el S&P 500 bajó 0,5% y el índice de semiconductores se hundió 7,9%. Después del cierre Dell mostró ventas que se duplicaron y una cartera récord de pedidos de IA de US$ 132.300 millones.",
+   "fuente": "StockTitan",
+   "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-24-2026",
+   "imagen": "https://www.stocktitan.net/img/articles/stock-market-today-live-november-24-2026.webp"
   },
   {
-   "fecha": "2026-11-23",
+   "fecha": "2026-11-25",
    "tipo": "mercado",
    "tickers": [],
-   "titulo": "Argentina: el riesgo país bajó 4%, pero sigue arriba de 1.000",
-   "texto": "Cayó a unos 1.027 puntos con el buen clima global, y los ADR argentinos subieron hasta 5,4% en Wall Street, con Galicia y BBVA a la cabeza. El Merval no operó por el feriado y en noviembre el riesgo país acumula una suba cercana al 29%.",
+   "titulo": "Hoy sale el PCE, el último dato antes de la Fed",
+   "texto": "A las 10:30 (hora argentina) se publican la inflación PCE de octubre, con un núcleo esperado de 3,2% anual (venía de 3,1%), y la segunda estimación del PIB. La tasa está en 3,75%-4,00% y el mercado da casi por segura una suba de 0,25 el 9/12.",
+   "fuente": "Admirals",
+   "url": "https://admiralmarkets.com/analytics/traders-blog/pce-inflation-october-2026-preview",
+   "imagen": "https://dynamic-images.admiralmarkets.com/1280x,webp/content-admin-7f77dca8-fb19-e189-3c4d-8489c9972f99.s3.eu-west-2.amazonaws.com/articles-featured-images/01M7Q5XDAA0F0PBGD6DY4N9YKB.jpg"
+  },
+  {
+   "fecha": "2026-11-24",
+   "tipo": "mercado",
+   "tickers": [],
+   "titulo": "Argentina: el riesgo país saltó a 1.094, máximo desde 2025",
+   "texto": "Llegó a superar los 1.100 puntos en la rueda, con caídas generalizadas de los bonos y de los ADR (YPF -3,8%, Galicia -3%). El Merval quedó casi plano y el dólar oficial marcó un récord de $1.615. En Brasil, el Ibovespa bajó 0,43% y el dólar cedió a R$ 5,91 tras la aprobación del ajuste fiscal en Diputados.",
    "fuente": "El Esquiú",
-   "url": "https://www.elesquiu.com/economia/2026/11/23/el-riesgo-pais-bajo-4-pero-se-mantiene-por-encima-de-los-1000-puntos-604526.html",
-   "imagen": "https://assets.elesquiu.com/social/604526-ff59b8486e.jpg"
-  },
-  {
-   "fecha": "2026-11-23",
-   "tipo": "mercado",
-   "tickers": [],
-   "titulo": "Brasil: el Ibovespa cayó 0,9% por las dudas fiscales",
-   "texto": "Cerró en 164.796 puntos, con Petrobras como lastre y el paquete fiscal en debate en el Congreso. El dólar llegó a tocar R$ 6 y después cerró en leve baja.",
-   "fuente": "SpaceMoney / InfoMoney",
-   "url": "https://www.spacemoney.com.br/investimentos/acoes/ibovespa-hoje/ibovespa-queda-petrobras-risco-fiscal-2"
+   "url": "https://www.elesquiu.com/economia/2026/11/24/el-riesgo-pais-cerro-en-1094-puntos-basicos-tras-superar-las-1100-unidades-604655.html",
+   "imagen": "https://assets.elesquiu.com/social/604655-691c1e8f90.jpg"
   }
  ],
  "agenda": [
   {
-   "fecha": "2026-11-24",
-   "evento": "Balances de Dell y HP, después del cierre"
-  },
-  {
    "fecha": "2026-11-25",
-   "evento": "Inflación PCE de octubre y PIB del 3T en EE.UU."
+   "evento": "Inflación PCE de octubre, PIB del 3T y Beige Book en EE.UU."
   },
   {
    "fecha": "2026-11-25",
@@ -139,6 +135,10 @@
    "evento": "Black Friday: Wall Street cierra temprano; vencen opciones de Bitcoin"
   },
   {
+   "fecha": "2026-12-04",
+   "evento": "Informe de empleo de noviembre en EE.UU."
+  },
+  {
    "fecha": "2026-12-09",
    "evento": "Decisión de tasas de la Fed"
   },
@@ -147,22 +147,30 @@
    "evento": "Balance de Broadcom (AVGO), después del cierre"
   },
   {
-   "fecha": "2026-12-09",
+   "fecha": "2026-12-10",
+   "evento": "Inflación CPI de noviembre en EE.UU."
+  },
+  {
+   "fecha": "2026-12-14",
    "evento": "Balance de Oracle (ORCL), fecha estimada a confirmar"
+  },
+  {
+   "fecha": "2026-12-23",
+   "evento": "Inflación PCE de noviembre en EE.UU."
   }
  ],
  "ideas": [
   {
-   "titulo": "Nvidia: el rebote no cierra los frentes abiertos",
-   "texto": "Con Huang de vuelta, siguen la investigación civil de la SEC, la de la fiscalía de California y el pedido del Tesoro, que vence el 25/11, para que aclare si sus chips llegaron a China por empresas pantalla."
+   "titulo": "Chips: del rebote a la duda en un día",
+   "texto": "El índice de semiconductores cayó 7,9% el martes tras el salto del lunes. Mizuho recortó su proyección de inversión en IA a US$ 1,4 billones en 2027 y 1,8 billones en 2028, y TrendForce ve precios de NAND estables o en baja. Del otro lado, Dell reportó pedidos de IA récord."
   },
   {
-   "titulo": "Inflación y suba de tasas",
-   "texto": "La tasa de la Fed está en 3,75%-4,00% y el mercado descuenta una suba de 0,25 el 9/12. Un PCE núcleo por encima de 3,3% anual reforzaría la idea de más subas en 2027."
+   "titulo": "PCE de hoy y suba de tasas",
+   "texto": "Con la tasa en 3,75%-4,00%, el mercado descuenta una suba de 0,25 el 9/12. Un núcleo del PCE por encima de 3,2% anual reforzaría la idea de más subas; el 4/12 llega el empleo y el 10/12, un día después de la Fed, el CPI."
   },
   {
-   "titulo": "Cripto en miedo extremo",
-   "texto": "El índice de miedo y codicia está en 11 y los ETF de Bitcoin tienen salidas récord en noviembre. El viernes vencen unos US$ 6.800 millones en opciones de Bitcoin, lo que puede sumar volatilidad."
+   "titulo": "Meta: el juicio de abril marca los tiempos",
+   "texto": "La emisión de acciones Clase C (un reparto previsto para enero de 2027) y la venta de US$ 60.000 millones para financiar IA quedan en pausa hasta el juicio en Delaware, fijado para el 19/4/2027."
   }
  ]
 }

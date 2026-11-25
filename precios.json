@@ -1,12 +1,12 @@
 {
- "fecha": "2026-11-23",
- "fuente": "Cierres del 23/11 (búsqueda web)",
+ "fecha": "2026-11-24",
+ "fuente": "Cierres del 24/11 (búsqueda web); IBIT sin cierre confirmado, queda el del 23/11",
  "precios": {
   "IBIT": 34.62,
-  "META": 597.6,
-  "SNDK": 87.71,
-  "NVDA": 165.05,
-  "ORCL": 113.68,
-  "AVGO": 313.55
+  "META": 589.82,
+  "SNDK": 77.95,
+  "NVDA": 155.38,
+  "ORCL": 109.5,
+  "AVGO": 301.75
  }
 }
