@@ -579,22 +579,75 @@ function groupsOf(items, order){
   return keys.map(k=>({nombre:k, items:m.get(k).sort((a,b)=>b.v-a.v), valor:m.get(k).reduce((a,x)=>a+x.v,0)}));
 }
 // cuenta con posiciones cargadas desde un reporte (Pershing, SilverCloud): valor en vivo donde hay ticker
+/* ---------- valuación diaria exacta (cuotas oficiales y bonos recalculados por tasas) ---------- */
+const TEN=[1,2,3,5,7,10,20,30];
+const dUTC = s => new Date(String(s).slice(0,10)+'T00:00:00Z');
+function tInterp(t, yrs){
+  if(!t) return null; const ks=TEN.filter(k=>t[k]!=null); if(!ks.length) return null;
+  if(yrs<=ks[0]) return num(t[ks[0]]); if(yrs>=ks[ks.length-1]) return num(t[ks[ks.length-1]]);
+  for(let i=0;i<ks.length-1;i++){ const a=ks[i], b=ks[i+1]; if(yrs<=b) return num(t[a])+(num(t[b])-num(t[a]))*(yrs-a)/(b-a); }
+  return null;
+}
+function yearsTo(vto, fecha){ return (dUTC(vto)-dUTC(fecha))/(365.25*86400000); }
+// precio limpio cada 100, cupón semestral, y = rendimiento anual (decimal)
+function bondPrice(y, cup, vto, fecha){
+  const d=dUTC(fecha), m=dUTC(vto); if(!(m>d)) return 100;
+  const months=(m.getUTCFullYear()-d.getUTCFullYear())*12+(m.getUTCMonth()-d.getUTCMonth())+(m.getUTCDate()-d.getUTCDate())/30.4375;
+  const per=months/6, n=Math.max(1,Math.ceil(per-1e-9)), frac=per-(n-1), c=cup/2, r=y/2;
+  let pv=0; for(let k=0;k<n;k++) pv+=(c+(k===n-1?100:0))/Math.pow(1+r, frac+k);
+  return pv - c*(1-frac);
+}
+function bondYield(px, cup, vto, fecha){
+  let lo=-0.05, hi=0.6;
+  for(let i=0;i<80;i++){ const mid=(lo+hi)/2; if(bondPrice(mid,cup,vto,fecha)>px) lo=mid; else hi=mid; }
+  return (lo+hi)/2;
+}
+const Y0={};
+function lastTasa(after){
+  const T=(S.val&&S.val.tasas)||{}; const ds=Object.keys(T).filter(x=>x>after&&T[x]&&T[x].t).sort();
+  return ds.length? {f:ds[ds.length-1], ...T[ds[ds.length-1]]} : null;
+}
+function modelBond(p, c){
+  const b=c.base; if(!b||!p.mod||!p.cup||!p.vto||!(p.px>0)) return null;
+  if(p.fx && Math.abs(p.fx-1)>0.02) return null;
+  const L=lastTasa(b.fecha); if(!L||L[p.mod]==null) return null;
+  const k=c.id+':'+p.n; if(Y0[k]==null) Y0[k]=bondYield(p.px, p.cup, p.vto, b.fecha);
+  const t0=tInterp(b.t, yearsTo(p.vto,b.fecha)), t1=tInterp(L.t, yearsTo(p.vto,L.f)); if(t0==null||t1==null) return null;
+  const y1=Y0[k]+(t1-t0)/100+(num(L[p.mod])-num(b[p.mod]))/100;
+  const px=bondPrice(y1, p.cup, p.vto, L.f);
+  return {v:p.q*px/100*(num(p.fx)||1), px, f:L.f};
+}
+// cierre de un ETF de referencia en una fecha exacta
+function etfClose(sym, fecha, c){
+  const E=(S.val&&S.val.etf)||{};
+  if(E[fecha]&&E[fecha][sym]!=null) return num(E[fecha][sym]);
+  if(c&&c.proxyRef&&c.proxyRef.fecha===fecha&&c.proxyRef.px[sym]!=null) return num(c.proxyRef.px[sym]);
+  return null;
+}
+// valor exacto más reciente de un activo de reporte: cuota oficial, bono recalculado o el reporte
+function exactOf(p, c){
+  const N=(S.val&&S.val.navs)||{};
+  if(p.fid && N[p.fid] && N[p.fid].f > c.fecha && p.q && num(N[p.fid].v)>0 && Math.abs(num(N[p.fid].v)/num(p.px)-1)<0.15) return {v:p.q*num(N[p.fid].v), px:num(N[p.fid].v), f:N[p.fid].f, kind:'nav'};
+  const m=modelBond(p, c); if(m) return {...m, kind:'tasa'};
+  return {v:num(p.v), px:p.px, f:c.fecha, kind:'rep'};
+}
+
 function accReport(id){
   const c=accMeta(id); if(!c.posiciones) return null;
-  let dHoy=0, nLive=0, vLive=0, nEst=0, vEst=0, hasD=false;
-  const ref=(c.proxyRef&&c.proxyRef.px)||{};
+  let dHoy=0, nLive=0, vLive=0, nEst=0, vEst=0, hasD=false, vExact=0, lastF=c.fecha;
   const items=c.posiciones.map((p,i)=>{
-    const cost=num(p.v)-num(p.pl); let v=num(p.v), px=p.px, d=null, dp=null, live=false, est=false;
-    const L=p.tk&&S.live[p.tk], E=p.proxy&&S.live[p.proxy], r0=p.proxy&&num(ref[p.proxy]);
+    const cost=num(p.v)-num(p.pl), X=exactOf(p,c); let v=X.v, px=X.px, d=null, dp=null, live=false, est=false;
+    const L=p.tk&&S.live[p.tk], E=p.proxy&&S.live[p.proxy], r0=p.proxy&&etfClose(p.proxy, X.f, c);
+    if(X.kind!=='rep'){ vExact+=X.v; if(X.f>lastF) lastF=X.f; }
     if(L&&L.c>0&&p.q){ v=p.q*L.c; px=L.c; live=true; if(L.pc>0){ d=p.q*(L.c-L.pc); dp=(L.c-L.pc)/L.pc*100; dHoy+=d; hasD=true; } nLive++; vLive+=v; }
-    else if(E&&E.c>0&&r0>0){ const f=E.c/r0; v=num(p.v)*f; if(p.px!=null) px=p.px*f; est=true; if(E.pc>0){ d=num(p.v)*(E.c-E.pc)/r0; dp=(E.c-E.pc)/E.pc*100; dHoy+=d; hasD=true; } nEst++; vEst+=v; }
+    else if(E&&E.c>0&&r0>0){ const f=E.c/r0; v=X.v*f; if(px!=null) px=px*f; est=true; if(E.pc>0){ d=v*(E.c-E.pc)/E.c; dp=(E.c-E.pc)/E.pc*100; dHoy+=d; hasD=true; } nEst++; vEst+=v; }
     const pl=v-cost;
     const bono=!!p.bono;
     let sub='';
     if(bono) sub=`VN ${fmtN(p.q,0)} · ${fmtN(px,2)}${p.vto?' · vto '+String(p.vto).slice(0,4):''}`;
     else if(p.q) sub=`${fmtN(p.q, p.q>=100?0:2)} ${p.tk?'×':'cuotas ·'} ${usd(px, pxDec(px))}`;
     else sub=p.s||'';
-    return {...p, key:id+':'+i, det: p.tk||null, cost, v, px, pl, r: cost? pl/cost*100 : p.r, d, dp, live, est, vRep:num(p.v), sub, fl:p.tk?S.flash[p.tk]:(p.proxy?S.flash[p.proxy]:'')};
+    return {...p, key:id+':'+i, det: p.tk||null, cost, v, px, pl, r: cost? pl/cost*100 : p.r, d, dp, live, est, vRep:num(p.v), xv:X.v, xf:X.f, xk:X.kind, sub, fl:p.tk?S.flash[p.tk]:(p.proxy?S.flash[p.proxy]:'')};
   });
   const total=items.reduce((a,x)=>a+x.v,0), cost=items.reduce((a,x)=>a+x.cost,0);
   const order= id==='pershing'? ['Renta fija','Fondos y ETF','Acciones preferidas','Acciones','Efectivo'] : ['Renta fija','Acciones (fondos)','Efectivo'];
@@ -609,11 +662,13 @@ function accReport(id){
   stats.push(['Activos',String(items.length)]);
   if(nLive) stats.push(['En vivo', `${nLive} activos · ${pr}`]);
   if(nEst) stats.push(['Estimado en vivo', `${nEst} activos · ${pe}`]);
+  const nX=items.filter(x=>x.xk!=='rep').length;
+  stats.push(['Valor exacto más reciente', nX? `${nX} activos al ${fdate(lastF).replace(/\/\d{4}$/,'')}` : `Reporte del ${fdate(c.fecha).replace(/\/\d{4}$/,'')}`]);
   const hist=(c.historial||[]).map(h=>({t:new Date(h.fecha+'T20:00:00Z').getTime(), v:num(h.valor), n:h.nota||''}));
   const repV=items.filter(x=>!x.live&&!x.est&&x.fijo!=='efectivo').reduce((a,x)=>a+x.v,0);
   return {id, c, nombre:c.nombre, corto:c.corto, total, cost, dHoy: hasD? dHoy:null, dpHoy: hasD&&total-dHoy? dHoy/(total-dHoy)*100:null,
     dLbl: marketOpen()?'hoy (estimado)':'última rueda (estimado)', live:nLive+nEst>0, est:nEst>0, repShare: total? repV/total*100:0,
-    asOf: nLive+nEst? [nLive?`En vivo ${pr}`:'', nEst?`estimado en vivo ${pe}`:'', `resto al reporte del ${fdate(c.fecha)}`].filter(Boolean).join(' · ').replace(/^e/,'E') : `Precios del reporte del ${fdate(c.fecha)}`,
+    asOf: [nLive?`En vivo ${pr}`:'', nEst?`estimado en vivo ${pe}`:'', nX? `cuotas y bonos exactos al ${fdate(lastF).replace(/\/\d{4}$/,'')}` : `reporte del ${fdate(c.fecha)}`].filter(Boolean).join(' · ').replace(/^./,m=>m.toUpperCase()),
     res:{lbl:'por precio sobre lo pagado', v:total-cost, p: cost?(total-cost)/cost*100:null}, groups, stats, hist, tabs:['pos','info']};
 }
 function accHermanos(){
@@ -686,8 +741,11 @@ function itemRow(it, ci){
   if(it.ai) det.push(['Intereses corridos',usd(it.ai,2)]);
   if(it.fx&&Math.abs(it.fx-1)>0.02) det.push(['Moneda','Libras (convertido a US$)']);
   if((it.live||it.est)&&it.dp!=null) det.push([(marketOpen()?'Hoy':'Última rueda')+(it.est?' (estimado)':''),`<span class="${cls(it.dp)}">${pct(it.dp,2)}</span>`]);
-  if(it.est){ det.push(['Valor del reporte',usd(it.vRep)]); det.push(['Se estima con',esc(it.proxy+' · '+(PROXY_N[it.proxy]||'ETF'))]); }
-  else if(it.fijo==='reporte') det.push(['Actualización','Valor del último reporte (no tiene un ETF equivalente)']);
+  if(it.xk==='nav') det.push(['Cuota oficial',`${usd(it.xv/num(it.q),4)} al ${fdate(it.xf)}`]);
+  if(it.xk==='tasa') det.push(['Recalculado con tasas',`${usd(it.xv)} al ${fdate(it.xf)}`]);
+  if(it.xk) det.push(['Valor del reporte',usd(it.vRep)]);
+  if(it.est) det.push(['Se estima en vivo con',esc(it.proxy+' · '+(PROXY_N[it.proxy]||'ETF'))]);
+  else if(it.fijo==='reporte') det.push(['Actualización','Valor del último reporte']);
   if(it.det) return `<button class="row ${it.fl||''}" data-det="${esc(it.det)}">${tkb}${mid}${right}</button>`;
   const open=S.openRows.has(it.key);
   return `<div class="row prow ${open?'open':''}" data-open="${esc(it.key)}">${tkb}${mid}${right}
@@ -697,7 +755,7 @@ function posTab(a){
   if(!a.groups.length) return '<div class="card empty">Sin posiciones cargadas.</div>';
   return a.groups.map((g,i)=>`<div class="sec-t"><h2><i class="gd" style="background:${GRP_C[i%GRP_C.length]}"></i>${esc(g.nombre)}</h2><span class="num">${usd(g.valor)} · ${pctAbs(a.total?g.valor/a.total*100:0,0)}</span></div>
     <div class="card list plist" style="padding:4px 16px">${g.items.map(it=>itemRow(it,i)).join('')}</div>`).join('')
-    + `<div class="note">${a.id==='hermanos'||a.id==='cripto'?'Tocá un activo para ver su gráfico.':'Tocá un activo para ver todo su detalle; los que tienen ticker abren su gráfico.'} El % es la variación del día en los que se actualizan en vivo y el resultado desde la compra en el resto.${a.est?' <b style="color:var(--up)">●</b> en vivo · <b style="color:#d97706">●</b> estimado en vivo con un ETF que sigue lo mismo; se corrige al valor exacto con cada reporte.':''}</div>`;
+    + `<div class="note">${a.id==='hermanos'||a.id==='cripto'?'Tocá un activo para ver su gráfico.':'Tocá un activo para ver todo su detalle; los que tienen ticker abren su gráfico.'} El % es la variación del día en los que se actualizan en vivo y el resultado desde la compra en el resto.${a.est?' <b style="color:var(--up)">●</b> en vivo · <b style="color:#d97706">●</b> estimado en vivo con un ETF que sigue lo mismo. Cada mañana se carga el valor exacto: cuota oficial de cada fondo y cada bono recalculado con las tasas del día.':''}</div>`;
 }
 function infoTab(a){
   const c=a.c||{}; const rows=[];
@@ -1182,7 +1240,7 @@ function startLive(){ if(liveTimer) return; liveCycle(true); liveTimer=setInterv
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) liveCycle(true); }); }
 
 /* ---------- actualización automática de la app ---------- */
-const APP_VERSION='20261125145235';
+const APP_VERSION='20261125150641';
 async function checkVersion(){
   try{ const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'}); if(!r.ok) return; const j=await r.json();
     if(j.v && j.v!==APP_VERSION){ const u=new URL(location.href); if(u.searchParams.get('v')===j.v) return; u.searchParams.set('v', j.v); location.replace(u.toString()); }
@@ -1208,7 +1266,8 @@ async function deriveBits(pass, prof){
   return new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2', salt:b64(prof.salt), iterations:prof.iter, hash:'SHA-256'}, base, 256));
 }
 async function loadPublic(){
-  const [p,n,c]=await Promise.allSettled([getJSON('precios.json'),getJSON('noticias.json'),getJSON('cierres.json')]);
+  const [p,n,c,vl]=await Promise.allSettled([getJSON('precios.json'),getJSON('noticias.json'),getJSON('cierres.json'),getJSON('valuacion.json')]);
+  S.val=vl.status==='fulfilled'?vl.value:null;
   S.precios=p.status==='fulfilled'?p.value:null; S.noticias=n.status==='fulfilled'?n.value:null; S.cierres=c.status==='fulfilled'?c.value:null;
 }
 function localGet(id){ try{ return JSON.parse(lsGet('fm_local_'+id)||'null'); }catch(_){ return null; } }
