@@ -272,6 +272,22 @@ nav.tabs button.on{color:var(--blue)}
 .sec-t .addbtn{border:0;background:var(--blue-soft);color:var(--blue);font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px;cursor:pointer;font-family:inherit}
 .mk .row .sub .own{color:var(--blue);font-weight:700}
 .btn.ghost{background:var(--card);color:var(--blue);border:1px solid var(--line);box-shadow:var(--shadow);margin-top:14px}
+.comp{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+.comp summary{cursor:pointer;font-weight:700;font-size:13.5px;color:var(--blue);list-style:none}
+.comp summary::-webkit-details-marker{display:none}
+.comp summary::after{content:' ›';display:inline-block;transition:transform .2s}
+.comp[open] summary::after{transform:rotate(90deg)}
+.cbar{display:flex;gap:2px;height:8px;border-radius:4px;overflow:hidden;margin:12px 0 4px}
+.cbar i{display:block;min-width:2px}
+.cg{margin-top:12px}
+.cgh{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;margin-bottom:4px}
+.cgh span{display:flex;align-items:center;gap:7px}.cgh i{width:9px;height:9px;border-radius:3px;display:inline-block}
+.cgh b{font-size:12.5px;color:var(--ink2)}
+.ci{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:6px 0 6px 16px;border-bottom:1px solid var(--soft);color:var(--ink2)}
+.ci:last-child{border-bottom:0}
+.ci span:last-child{white-space:nowrap;color:var(--ink);font-weight:600}
+.ci em{font-style:normal;font-weight:700;font-size:11.5px;margin-left:4px}
+.ci em.up{color:var(--up)}.ci em.dn{color:var(--dn)}
 </style>
 </head>
 <body>
@@ -595,7 +611,7 @@ function vMercado(){
   <div class="note">Tocá cualquier fila para ver su gráfico. Wall Street se actualiza con el mercado abierto (11:30 a 18 h); cripto las 24 h; dólar de DolarApi.</div>`;
 }
 
-const COVC={IBIT:['#f7931a','#b35c00'],BTC:['#f7931a','#b35c00'],ETH:['#627eea','#3346a8'],BNB:['#f3ba2f','#b8860b'],NVDA:['#3f8f1f','#1f5c0c'],META:['#2a78d6','#0d2c57'],ORCL:['#c74634','#7a2016'],SNDK:['#d6262f','#7a0f14'],AVGO:['#cc092f','#6e0418'],
+const COVC={IBIT:['#f7931a','#b35c00'],BTC:['#f7931a','#b35c00'],ETH:['#627eea','#3346a8'],BNB:['#f3ba2f','#b8860b'],NVDA:['#3f8f1f','#1f5c0c'],META:['#2a78d6','#0d2c57'],ORCL:['#c74634','#7a2016'],SNDK:['#d6262f','#7a0f14'],AVGO:['#cc092f','#6e0418'],MU:['#1d5fa8','#0b2f5c'],GOOG:['#4285f4','#1a56c4'],
   FED:['#0d2c57','#06152b'],MERVAL:['#4aa3df','#1d5f8f'],IBOV:['#1f9d55','#0b5a2e'],'S&P 500':['#3b4a6b','#1a2238'],MERCADO:['#4a5366','#1d2438']};
 function coverKey(i){
   if((i.tickers||[]).length) return i.tickers[0];
@@ -645,6 +661,7 @@ function vNoticias(){
     ${updTxt?`<div class="note" style="margin:-2px 4px 10px">Actualizado el ${esc(updTxt)}</div>`:''}${body}`;
 }
 
+const CGC=['#2a78d6','#0d2c57','#7c3aed','#8a92a3','#0a7a32'];
 function vCuentas(){
   const list=[...(S.d.cuentas||[])].sort((a,b)=>num(a.orden)-num(b.orden));
   const k=calc();
@@ -654,7 +671,12 @@ function vCuentas(){
   return `<div class="card hero"><div class="k">Total conocido entre las cuentas</div><div class="tot num" style="font-size:32px">${usd(sum)}</div><div class="note" style="margin:4px 0 0">Suma las cuentas con monto cargado, cada una a su propia fecha.</div></div>
   ${list.map(c=>`<div class="card acct"><div class="hd"><div><div class="nm">${esc(c.nombre)}</div><div class="who">${esc(c.gestor||'')}${c.custodio?` · ${esc(c.custodio)}`:''}</div></div>${c.tipo?`<span class="tag">${esc(c.tipo)}</span>`:''}</div>
     ${val(c)!=null?`<div class="amt num">${usd(val(c))}</div><div class="when">al ${esc(fec(c))}</div>`:`<div class="amt na">Monto sin cargar</div>`}
-    ${c.rendimiento?`<div class="rd">${esc(c.rendimiento)}</div>`:''}${c.detalle?`<div class="det">${esc(c.detalle)}</div>`:''}</div>`).join('')}`;
+    ${(c.orden===1&&k&&k.aporte)?`<div class="rd"><b class="${cls(k.gan)}">${pct(k.ganp)}</b> sobre el aporte de ${usd(k.aporte)} (ago 2025)</div>`:(c.rendimiento?`<div class="rd">${esc(c.rendimiento)}</div>`:'')}${c.detalle?`<div class="det">${esc(c.detalle)}</div>`:''}
+    ${(c.grupos&&c.grupos.length)?`<details class="comp"><summary>Ver composición (${c.grupos.reduce((a,g)=>a+(g.items||[]).length,0)})</summary>
+      <div class="cbar">${c.grupos.map((g,i)=>`<i style="flex:${num(g.valor)};background:${CGC[i%CGC.length]}"></i>`).join('')}</div>
+      ${c.grupos.map((g,i)=>`<div class="cg"><div class="cgh"><span><i style="background:${CGC[i%CGC.length]}"></i>${esc(g.nombre)}</span><b class="num">${usd(num(g.valor))} · ${pctAbs(val(c)?num(g.valor)/val(c)*100:0,0)}</b></div>
+        ${(g.items||[]).map(it=>`<div class="ci"><span>${esc(it.n)}</span><span class="num">${usd(num(it.v))}${it.r!=null?` <em class="${cls(it.r)}">${pct(it.r)}</em>`:''}</span></div>`).join('')}</div>`).join('')}
+      <div class="note" style="margin:8px 0 0">El % al lado de cada uno es el resultado por precio desde que se compró.</div></details>`:''}</div>`).join('')}`;
 }
 
 /* ---------- cripto ---------- */
@@ -974,7 +996,7 @@ function startLive(){ if(liveTimer) return; liveCycle(true); liveTimer=setInterv
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) liveCycle(true); }); }
 
 /* ---------- actualización automática de la app ---------- */
-const APP_VERSION='20261122020500';
+const APP_VERSION='20261125143529';
 async function checkVersion(){
   try{ const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'}); if(!r.ok) return; const j=await r.json();
     if(j.v && j.v!==APP_VERSION){ const u=new URL(location.href); if(u.searchParams.get('v')===j.v) return; u.searchParams.set('v', j.v); location.replace(u.toString()); }
