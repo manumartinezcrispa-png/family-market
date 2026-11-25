@@ -336,6 +336,7 @@ nav.tabs button.on{color:var(--blue)}
 .notes li{margin:4px 0}
 .plist .row .nm{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.3;font-size:14.5px}
 .plist .row .r{flex:none}
+.row .nm .lvd.est{background:#d97706}
 </style>
 </head>
 <body>
@@ -555,6 +556,7 @@ function drawTotalChart(k){
 /* ---------- cuentas: selector + tablero de cada cuenta ---------- */
 const ACC_C={hermanos:['#2a78d6','#0d2c57'],pershing:['#0e7490','#0b3b4f'],silver:['#7c3aed','#3b1a78'],cripto:['#f7931a','#9a4a00'],total:['#3b4a6b','#0d1321']};
 const GRP_C=['#2a78d6','#0e7490','#7c3aed','#d97706','#8a92a3','#0a7a32','#d13b34'];
+const PROXY_N={VCLT:'bonos corporativos largos de EE.UU.',VCIT:'bonos corporativos medianos de EE.UU.',HYG:'bonos high yield',EMB:'bonos de países emergentes',EMHY:'bonos high yield emergentes',IGOV:'bonos de gobiernos desarrollados',AOR:'cartera 60/40',XLK:'tecnológicas de EE.UU.',GDX:'mineras de oro',VTV:'acciones value de EE.UU.',PFF:'acciones preferidas',PYLD:'PIMCO multisector bonos',IWF:'acciones growth de EE.UU.',XLV:'salud de EE.UU.',ACWI:'acciones globales'};
 const fmtN = (n,d=3) => num(n).toLocaleString('es-AR',{maximumFractionDigits:d});
 const accMeta = id => (S.d.cuentas||[]).find(c=>c.id===id)||{};
 function accList(){
@@ -579,18 +581,20 @@ function groupsOf(items, order){
 // cuenta con posiciones cargadas desde un reporte (Pershing, SilverCloud): valor en vivo donde hay ticker
 function accReport(id){
   const c=accMeta(id); if(!c.posiciones) return null;
-  let dHoy=0, nLive=0, vLive=0;
+  let dHoy=0, nLive=0, vLive=0, nEst=0, vEst=0, hasD=false;
+  const ref=(c.proxyRef&&c.proxyRef.px)||{};
   const items=c.posiciones.map((p,i)=>{
-    const cost=num(p.v)-num(p.pl); let v=num(p.v), px=p.px, d=null, dp=null, live=false;
-    const L=p.tk&&S.live[p.tk];
-    if(L&&L.c>0&&p.q){ v=p.q*L.c; px=L.c; live=true; if(L.pc>0){ d=p.q*(L.c-L.pc); dp=(L.c-L.pc)/L.pc*100; dHoy+=d; } nLive++; vLive+=v; }
+    const cost=num(p.v)-num(p.pl); let v=num(p.v), px=p.px, d=null, dp=null, live=false, est=false;
+    const L=p.tk&&S.live[p.tk], E=p.proxy&&S.live[p.proxy], r0=p.proxy&&num(ref[p.proxy]);
+    if(L&&L.c>0&&p.q){ v=p.q*L.c; px=L.c; live=true; if(L.pc>0){ d=p.q*(L.c-L.pc); dp=(L.c-L.pc)/L.pc*100; dHoy+=d; hasD=true; } nLive++; vLive+=v; }
+    else if(E&&E.c>0&&r0>0){ const f=E.c/r0; v=num(p.v)*f; if(p.px!=null) px=p.px*f; est=true; if(E.pc>0){ d=num(p.v)*(E.c-E.pc)/r0; dp=(E.c-E.pc)/E.pc*100; dHoy+=d; hasD=true; } nEst++; vEst+=v; }
     const pl=v-cost;
     const bono=!!p.bono;
     let sub='';
     if(bono) sub=`VN ${fmtN(p.q,0)} · ${fmtN(px,2)}${p.vto?' · vto '+String(p.vto).slice(0,4):''}`;
     else if(p.q) sub=`${fmtN(p.q, p.q>=100?0:2)} ${p.tk?'×':'cuotas ·'} ${usd(px, pxDec(px))}`;
     else sub=p.s||'';
-    return {...p, key:id+':'+i, det: p.tk||null, cost, v, px, pl, r: cost? pl/cost*100 : p.r, d, dp, live, sub, fl:p.tk?S.flash[p.tk]:''};
+    return {...p, key:id+':'+i, det: p.tk||null, cost, v, px, pl, r: cost? pl/cost*100 : p.r, d, dp, live, est, vRep:num(p.v), sub, fl:p.tk?S.flash[p.tk]:(p.proxy?S.flash[p.proxy]:'')};
   });
   const total=items.reduce((a,x)=>a+x.v,0), cost=items.reduce((a,x)=>a+x.cost,0);
   const order= id==='pershing'? ['Renta fija','Fondos y ETF','Acciones preferidas','Acciones','Efectivo'] : ['Renta fija','Acciones (fondos)','Efectivo'];
@@ -598,16 +602,18 @@ function accReport(id){
   const bonds=items.filter(x=>x.bono && !/default/.test(x.s));
   const cupones=bonds.reduce((a,x)=>a+num(x.q)*num(x.cup)/100*(num(x.fx)||1),0);
   const ai=items.reduce((a,x)=>a+num(x.ai),0);
-  const pr=pct(nLive? vLive/total*100:0,0).replace('+','');
+  const pr=pctAbs(nLive? vLive/total*100:0,0), pe=pctAbs(nEst? vEst/total*100:0,0);
   const stats=[['Lo que se pagó (costo)',usd(cost)],['Resultado por precio',`<span class="${cls(total-cost)}">${usdS(total-cost)} (${pct(cost?(total-cost)/cost*100:0)})</span>`]];
   if(cupones>0) stats.push(['Cupones de bonos por año (aprox.)',usd(cupones)]);
   if(ai>0) stats.push(['Intereses corridos a cobrar',usd(ai)]);
   stats.push(['Activos',String(items.length)]);
-  stats.push(['Se actualiza en vivo', nLive? `${nLive} activos · ${pr}` : 'Nada (precio del reporte)']);
+  if(nLive) stats.push(['En vivo', `${nLive} activos · ${pr}`]);
+  if(nEst) stats.push(['Estimado en vivo', `${nEst} activos · ${pe}`]);
   const hist=(c.historial||[]).map(h=>({t:new Date(h.fecha+'T20:00:00Z').getTime(), v:num(h.valor), n:h.nota||''}));
-  return {id, c, nombre:c.nombre, corto:c.corto, total, cost, dHoy: nLive? dHoy:null, dpHoy: nLive&&total-dHoy? dHoy/(total-dHoy)*100:null,
-    dLbl: marketOpen()?'hoy, parte en vivo':'última rueda, parte en vivo', live:nLive>0,
-    asOf: nLive? `Acciones y ETF en vivo · bonos y fondos al ${fdate(c.fecha)}` : `Precios del reporte del ${fdate(c.fecha)}`,
+  const repV=items.filter(x=>!x.live&&!x.est&&x.fijo!=='efectivo').reduce((a,x)=>a+x.v,0);
+  return {id, c, nombre:c.nombre, corto:c.corto, total, cost, dHoy: hasD? dHoy:null, dpHoy: hasD&&total-dHoy? dHoy/(total-dHoy)*100:null,
+    dLbl: marketOpen()?'hoy (estimado)':'última rueda (estimado)', live:nLive+nEst>0, est:nEst>0, repShare: total? repV/total*100:0,
+    asOf: nLive+nEst? [nLive?`En vivo ${pr}`:'', nEst?`estimado en vivo ${pe}`:'', `resto al reporte del ${fdate(c.fecha)}`].filter(Boolean).join(' · ').replace(/^e/,'E') : `Precios del reporte del ${fdate(c.fecha)}`,
     res:{lbl:'por precio sobre lo pagado', v:total-cost, p: cost?(total-cost)/cost*100:null}, groups, stats, hist, tabs:['pos','info']};
 }
 function accHermanos(){
@@ -664,10 +670,10 @@ function compCard(a){
 }
 function itemRow(it, ci){
   const col=GRP_C[ci%GRP_C.length];
-  const chip= it.dp!=null && it.live ? `<span class="chip ${cls(it.dp)}">${pct(it.dp,2)}</span>` : (it.r!=null&&isFinite(it.r)? `<span class="chip ${cls(it.r)}">${pct(it.r)}</span>`:'');
+  const chip= it.dp!=null && (it.live||it.est) ? `<span class="chip ${cls(it.dp)}">${pct(it.dp,2)}</span>` : (it.r!=null&&isFinite(it.r)? `<span class="chip ${cls(it.r)}">${pct(it.r)}</span>`:'');
   const right=`<div class="r num"><div class="v">${usd(it.v)}</div>${chip}</div>`;
   const tkb=`<div class="tk" style="background:${col}17;color:${col}">${esc(badge(it))}</div>`;
-  const mid=`<div class="mid"><div class="nm">${esc(it.n)}${it.live?'<i class="lvd" title="en vivo"></i>':''}</div><div class="sub num">${esc(it.sub||'')}</div></div>`;
+  const mid=`<div class="mid"><div class="nm">${esc(it.n)}${it.live?'<i class="lvd" title="en vivo"></i>':it.est?'<i class="lvd est" title="estimado en vivo"></i>':''}</div><div class="sub num">${esc(it.sub||'')}</div></div>`;
   const det=[];
   if(it.s) det.push(['Tipo',esc(it.s)]);
   if(it.q!=null&&it.bono) det.push(['Valor nominal',fmtN(it.q,0)]); else if(it.q!=null) det.push(['Cantidad',fmtN(it.q)]);
@@ -679,7 +685,9 @@ function itemRow(it, ci){
   if(it.vto) det.push(['Vencimiento',fdate(it.vto)]);
   if(it.ai) det.push(['Intereses corridos',usd(it.ai,2)]);
   if(it.fx&&Math.abs(it.fx-1)>0.02) det.push(['Moneda','Libras (convertido a US$)']);
-  if(it.live&&it.dp!=null) det.push([marketOpen()?'Hoy':'Última rueda',`<span class="${cls(it.dp)}">${pct(it.dp,2)}</span>`]);
+  if((it.live||it.est)&&it.dp!=null) det.push([(marketOpen()?'Hoy':'Última rueda')+(it.est?' (estimado)':''),`<span class="${cls(it.dp)}">${pct(it.dp,2)}</span>`]);
+  if(it.est){ det.push(['Valor del reporte',usd(it.vRep)]); det.push(['Se estima con',esc(it.proxy+' · '+(PROXY_N[it.proxy]||'ETF'))]); }
+  else if(it.fijo==='reporte') det.push(['Actualización','Valor del último reporte (no tiene un ETF equivalente)']);
   if(it.det) return `<button class="row ${it.fl||''}" data-det="${esc(it.det)}">${tkb}${mid}${right}</button>`;
   const open=S.openRows.has(it.key);
   return `<div class="row prow ${open?'open':''}" data-open="${esc(it.key)}">${tkb}${mid}${right}
@@ -689,7 +697,7 @@ function posTab(a){
   if(!a.groups.length) return '<div class="card empty">Sin posiciones cargadas.</div>';
   return a.groups.map((g,i)=>`<div class="sec-t"><h2><i class="gd" style="background:${GRP_C[i%GRP_C.length]}"></i>${esc(g.nombre)}</h2><span class="num">${usd(g.valor)} · ${pctAbs(a.total?g.valor/a.total*100:0,0)}</span></div>
     <div class="card list plist" style="padding:4px 16px">${g.items.map(it=>itemRow(it,i)).join('')}</div>`).join('')
-    + `<div class="note">${a.id==='hermanos'||a.id==='cripto'?'Tocá un activo para ver su gráfico.':'Tocá un activo para ver todo su detalle; los que tienen ticker abren su gráfico.'} El % es el resultado desde que se compró${a.groups.some(g=>g.items.some(x=>x.live&&x.dp!=null))?' (o la variación del día en los que cotizan en vivo)':''}.</div>`;
+    + `<div class="note">${a.id==='hermanos'||a.id==='cripto'?'Tocá un activo para ver su gráfico.':'Tocá un activo para ver todo su detalle; los que tienen ticker abren su gráfico.'} El % es la variación del día en los que se actualizan en vivo y el resultado desde la compra en el resto.${a.est?' <b style="color:var(--up)">●</b> en vivo · <b style="color:#d97706">●</b> estimado en vivo con un ETF que sigue lo mismo; se corrige al valor exacto con cada reporte.':''}</div>`;
 }
 function infoTab(a){
   const c=a.c||{}; const rows=[];
@@ -754,11 +762,11 @@ function drawAccChart(){
 }
 // precios en vivo de las cuentas con reporte (solo mientras se mira esa cuenta)
 let acAt={}, acBusy=false;
-function acTickers(id){ const c=accMeta(id); return c.posiciones? [...new Set(c.posiciones.filter(p=>p.tk).map(p=>p.tk))] : []; }
+function acTickers(id){ const c=accMeta(id); return c.posiciones? [...new Set(c.posiciones.map(p=>p.tk||p.proxy).filter(Boolean))] : []; }
 async function refreshAcct(force){
   if(!S.d || acBusy) return;
   const ids= S.tab!=='cuentas'||S.det? [] : S.acc==='total'? accList().filter(x=>acTickers(x).length) : [S.acc];
-  const due=ids.filter(id=>acTickers(id).length && (force || Date.now()-(acAt[id]||0) > (marketOpen()?60000:600000)));
+  const due=ids.filter(id=>acTickers(id).length && (force || Date.now()-(acAt[id]||0) > (marketOpen()?90000:600000)));
   if(!due.length) return;
   const own=new Set(((S.d.cartera&&S.d.cartera.posiciones)||[]).map(p=>p.ticker));
   const syms=[...new Set(due.flatMap(acTickers))].filter(x=>!own.has(x));
@@ -1174,7 +1182,7 @@ function startLive(){ if(liveTimer) return; liveCycle(true); liveTimer=setInterv
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) liveCycle(true); }); }
 
 /* ---------- actualización automática de la app ---------- */
-const APP_VERSION='20261125144732';
+const APP_VERSION='20261125145235';
 async function checkVersion(){
   try{ const r=await fetch('version.json?t='+Date.now(),{cache:'no-store'}); if(!r.ok) return; const j=await r.json();
     if(j.v && j.v!==APP_VERSION){ const u=new URL(location.href); if(u.searchParams.get('v')===j.v) return; u.searchParams.set('v', j.v); location.replace(u.toString()); }
