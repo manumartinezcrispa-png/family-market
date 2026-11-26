@@ -1,14 +1,14 @@
 {
- "fecha": "2026-11-24",
- "fuente": "Cierres del 24/11 (reporte StoneX)",
+ "fecha": "2026-11-25",
+ "fuente": "Cierres del 25/11 (GOOG, META, ORCL e IBIT con el cierre del 24/11)",
  "precios": {
   "IBIT": 33.76,
-  "MU": 629.79,
+  "MU": 601.25,
   "GOOG": 276.58,
   "ORCL": 109.5,
   "META": 589.82,
-  "SNDK": 77.95,
-  "AVGO": 301.08,
-  "NVDA": 155.38
+  "SNDK": 73.61,
+  "AVGO": 300.86,
+  "NVDA": 149.3
  }
 }

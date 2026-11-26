@@ -1,131 +1,114 @@
 {
- "actualizado": "2026-11-25T08:40:00-03:00",
- "resumen": "El martes se cortó el rebote de los chips: Nvidia cayó 5,9%, Sandisk 11% y el Nasdaq 1,5%, mientras el Dow subió 0,9%. Bitcoin perdió los US$ 60.000 y hoy sale la inflación PCE, el último dato fuerte antes de la Fed del 9/12.",
+ "actualizado": "2026-11-26T08:30:00-03:00",
+ "resumen": "Wall Street cerró mixto el miércoles con un PCE más alto (núcleo 3,3%) y nuevos aranceles de Trump: Nvidia bajó 3,9% y las memorias siguieron cayendo, mientras Meta subió 3,4%. Hoy Wall Street está cerrado por Acción de Gracias y Bitcoin vuelve a superar los US$ 60.000.",
  "items": [
   {
-   "fecha": "2026-11-24",
+   "fecha": "2026-11-25",
+   "tipo": "mercado",
+   "tickers": [],
+   "titulo": "La inflación PCE llegó a 3,8% y el núcleo, a 3,3%",
+   "texto": "El índice de precios que mira la Fed subió a 3,8% anual en octubre, en línea con lo previsto, pero el núcleo marcó 3,3% contra 3,2% esperado. Con el dato, el mercado da entre 94% y 98% de chances a una suba de tasas el 9/12.",
+   "fuente": "CNBC",
+   "url": "https://www.cnbc.com/2026/11/25/pce-inflation-report-october-2026.html"
+  },
+  {
+   "fecha": "2026-11-25",
+   "tipo": "mercado",
+   "tickers": [],
+   "titulo": "Trump anunció aranceles a 14 países y Wall Street se sacudió",
+   "texto": "Propuso nuevos aranceles bajo la Sección 301 contra 14 socios comerciales para frenar el exceso de capacidad industrial. El Nasdaq llegó a caer más de 3% en la rueda, pero recuperó casi todo: el Dow terminó en positivo y el QQQ cedió 0,65%.",
+   "fuente": "US News",
+   "url": "https://www.usnews.com/news/top-news/articles/2026-11-25/us-proposes-new-tariffs-on-14-trading-partners-to-fight-excess-factory-capacity"
+  },
+  {
+   "fecha": "2026-11-25",
    "tipo": "cartera",
    "tickers": [
     "NVDA"
    ],
-   "titulo": "Nvidia cayó 5,9% y devolvió parte del salto del lunes",
-   "texto": "Cerró en US$ 155,38 después de subir 31% el lunes por la vuelta de Jensen Huang, y en el día llegó a perder cerca de 9%. Pesó la toma de ganancias y que siguen abiertas las investigaciones sobre Huang; en el after cedió otro 2%.",
-   "fuente": "Oninvest",
-   "url": "https://en.oninvest.com/article/nvidia-fell-6-why-did-the-huang-rally-end-so-quickly",
-   "imagen": "https://cdnnow.oninvest.com/uploads/r/1024x1024/og/en/article/nvidia-fell-6-why-did-the-huang-rally-end-so-quickly/e24980aa98a4fdbb.webp"
+   "titulo": "Nvidia bajó 3,9% y S&P amenaza con recortar su nota",
+   "texto": "Cerró en US$ 149,30 y acumula siete semanas de baja. S&P puso su calificación AA en revisión con perspectiva negativa por riesgos de gobierno corporativo tras la salida y la vuelta de Jensen Huang.",
+   "fuente": "Seoul Economic Daily",
+   "url": "https://en.sedaily.com/world/2026/11/26/nvidia-faces-credit-downgrade-as-sp-flags-reliance-on"
   },
   {
-   "fecha": "2026-11-24",
+   "fecha": "2026-11-25",
    "tipo": "cartera",
    "tickers": [
+    "MU",
     "SNDK"
    ],
-   "titulo": "Sandisk cayó 11% y borró el rebote del lunes",
-   "texto": "Cerró en US$ 77,95, sin noticias propias, arrastrada por las memorias: TrendForce ahora ve los precios de NAND entre estables y 5% abajo a comienzos de 2027. Dell mostró un pedido récord de servidores de IA, pero las memorias asiáticas igual cayeron fuerte el miércoles.",
-   "fuente": "FinanceFeeds",
-   "url": "https://financefeeds.com/sandisk-sndk-stock-77-wednesday-after-11-percent-drop-erases-monday-rally-bull-88-bear-70/",
-   "imagen": "https://financefeeds.com/wp-content/uploads/2026/10/sandisk-milpitas-headquarters.jpg"
+   "titulo": "Memorias en baja: Micron cayó 4,5% y Sandisk llegó a perder 14%",
+   "texto": "Micron cerró en US$ 601,25 tras la perspectiva más floja de TrendForce para los precios de memoria, y UBS bajó su precio objetivo a US$ 1.100. Sandisk llegó a caer 14% en la rueda y recortó a US$ 73,61. Micron presenta balance el 17/12.",
+   "fuente": "Gotrade",
+   "url": "https://www.heygotrade.com/en/news/micron-mu-stock-news-november-26-2026/"
   },
   {
-   "fecha": "2026-11-24",
-   "tipo": "cartera",
-   "tickers": [
-    "AVGO"
-   ],
-   "titulo": "Broadcom bajó 3,8% por la duda con los pedidos de Google",
-   "texto": "Cerró en US$ 301,75. Siguen los reportes de que Google recortaría pedidos de chips TPU para 2027 a favor de MediaTek, y Goldman Sachs bajó su precio objetivo de US$ 540 a 460. Presenta balance el 9/12.",
-   "fuente": "TradingKey",
-   "url": "https://www.tradingkey.com/news/market-movers/262320227-market-movers-avgo-20261124",
-   "imagen": "https://resource.tradingkey.com/uploads/20251024/BROADCOM-118830a222044e86830a4a71e2b4452a.jpg"
-  },
-  {
-   "fecha": "2026-11-24",
+   "fecha": "2026-11-25",
    "tipo": "cartera",
    "tickers": [
     "ORCL"
    ],
-   "titulo": "Oracle cedió 3,7% y devolvió un tercio del rebote",
-   "texto": "Cerró en US$ 109,50 con la caída de las acciones ligadas a la IA. Mizuho recortó sus proyecciones de inversión en IA para 2027 y 2028, y el mercado sigue mirando cuánto le cuesta a Oracle ampliar su nube.",
-   "fuente": "FinanceFeeds",
-   "url": "https://financefeeds.com/oracle-orcl-stock-109-wednesday-ai-selloff-undoes-third-of-rebound-bull-119-bear-100/",
-   "imagen": "https://financefeeds.com/wp-content/uploads/2026/09/oracle-orcl-stock-price-prediction-austin-campus-0926.jpg"
+   "titulo": "Oracle tocó un nuevo mínimo de 52 semanas",
+   "texto": "La acción cayó más de 6% y en la rueda llegó a perder cerca de 9%, golpeada por el temor a la deuda que toma para invertir en IA. El costo de asegurar su deuda (CDS) llegó a un récord de unos 356 puntos básicos.",
+   "fuente": "MoneyCheck",
+   "url": "https://moneycheck.com/oracle-orcl-stock-hits-52-week-low-as-credit-default-swaps-reach-record-high"
   },
   {
-   "fecha": "2026-11-24",
+   "fecha": "2026-11-25",
    "tipo": "cartera",
    "tickers": [
     "META"
    ],
-   "titulo": "Meta frenó sus acciones Clase C hasta que termine el juicio",
-   "texto": "Se comprometió ante la Justicia de Delaware a no emitir las acciones sin voto mientras dure el juicio de accionistas, previsto para abril de 2027. Eso demora la venta de acciones por US$ 60.000 millones para financiar chips y centros de datos. La acción bajó 1,3% a US$ 589,82.",
-   "fuente": "Benzinga / TradingView",
-   "url": "https://www.tradingview.com/news/benzinga:ff59bfe74094b:0-meta-stock-dips-premarket-as-class-c-share-pause-delays-60-billion-ai-funding-plan/"
+   "titulo": "Meta subió 3,4% por las charlas con Amazon por Muse",
+   "texto": "Amazon y Meta estarían negociando levantar el bloqueo al agente de compras con IA Muse dentro de Amazon. La acción fue de las pocas tecnológicas que subieron en un día de ventas.",
+   "fuente": "TechCrunch",
+   "url": "https://techcrunch.com/2026/11/25/amazon-and-meta-reportedly-in-talks-to-lift-blockade-on-ai-agent-muse/"
   },
   {
    "fecha": "2026-11-25",
    "tipo": "cartera",
    "tickers": [
+    "GOOG"
+   ],
+   "titulo": "Alphabet llegó a caer 5% por demandas, chips e inflación",
+   "texto": "La acción sufrió por nuevas demandas, por el reporte sobre menores pedidos de chips TPU para 2027 y por el dato de inflación. Abrió con una baja de 5,5% y después recortó parte de la caída.",
+   "fuente": "MoneyCheck",
+   "url": "https://moneycheck.com/alphabet-googl-stock-drops-5-on-lawsuits-chip-report-and-hot-inflation/"
+  },
+  {
+   "fecha": "2026-11-26",
+   "tipo": "cartera",
+   "tickers": [
     "IBIT"
    ],
-   "titulo": "Bitcoin perdió los US$ 60.000 y siguen las salidas de los ETF",
-   "texto": "Cayó hasta US$ 58.600 y hoy a la mañana ronda los US$ 59.000. Los ETF de Bitcoin sumaron el martes su sexto día seguido de salidas (unos US$ 232 millones, US$ 175 millones de IBIT) y el índice de miedo y codicia está en 13.",
-   "fuente": "CryptoTicker",
-   "url": "https://cryptoticker.io/en/bitcoin-price-pce-sixth-etf-outflow-day/",
-   "imagen": "https://d2jq4jjbn1fq59.cloudfront.net/bitcoin_kurs_pce_sechster_etf_abflusstag_1_27550a898f.webp"
+   "titulo": "Bitcoin recupera los US$ 60.000 pese a la salida de los ETF",
+   "texto": "Volvió a superar los US$ 60.000, impulsado por el cierre forzado de apuestas bajistas, y esta mañana ronda los US$ 60.600. Los ETF de Bitcoin siguen con salidas récord en noviembre, cerca de US$ 4.700 millones, con IBIT a la cabeza.",
+   "fuente": "FinanceFeeds",
+   "url": "https://financefeeds.com/bitcoin-rebounds-above-60000-as-short-liquidations-fuel-recovery-despite-heavy-etf-outflows/"
   },
   {
-   "fecha": "2026-11-25",
+   "fecha": "2026-11-26",
    "tipo": "mercado",
    "tickers": [
-    "ETH",
-    "BNB"
+    "ETH"
    ],
-   "titulo": "Ethereum toca US$ 1.650 y entra en sobreventa; BNB en US$ 540",
-   "texto": "Ether sigue cayendo y su RSI diario quedó por debajo de 30, una señal de sobreventa. La empresa BTCS vendió unos US$ 44 millones en ETH, y BNB perdió otro 1% hasta unos US$ 540, cerca de su soporte de US$ 536.",
-   "fuente": "The Cryptonomist",
-   "url": "https://en.cryptonomist.ch/2026/11/25/ethereum-price-s-daily-rsi-hits-but-november-25-2026/",
-   "imagen": "https://cryptonomist.ch/wp-content/uploads/2026/11/Ethereum-crypto-3.webp"
-  },
-  {
-   "fecha": "2026-11-24",
-   "tipo": "mercado",
-   "tickers": [],
-   "titulo": "Wall Street mixto: el Dow subió y el Nasdaq cayó 1,5%",
-   "texto": "El Dow ganó 0,85% (50.019 puntos) con la rotación a acciones más tradicionales, el S&P 500 bajó 0,5% y el índice de semiconductores se hundió 7,9%. Después del cierre Dell mostró ventas que se duplicaron y una cartera récord de pedidos de IA de US$ 132.300 millones.",
-   "fuente": "StockTitan",
-   "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-24-2026",
-   "imagen": "https://www.stocktitan.net/img/articles/stock-market-today-live-november-24-2026.webp"
+   "titulo": "Ethereum rebota 3% y vuelve a la zona de US$ 1.700",
+   "texto": "Ether sube cerca de 3% en las últimas 24 horas y cotiza alrededor de US$ 1.700, después de haber tocado unos US$ 1.610. El rebote acompaña la recuperación de Bitcoin.",
+   "fuente": "FinFly",
+   "url": "https://finfly.news/en/crypto/crypto-prices-2026-11-26"
   },
   {
    "fecha": "2026-11-25",
    "tipo": "mercado",
    "tickers": [],
-   "titulo": "Hoy sale el PCE, el último dato antes de la Fed",
-   "texto": "A las 10:30 (hora argentina) se publican la inflación PCE de octubre, con un núcleo esperado de 3,2% anual (venía de 3,1%), y la segunda estimación del PIB. La tasa está en 3,75%-4,00% y el mercado da casi por segura una suba de 0,25 el 9/12.",
-   "fuente": "Admirals",
-   "url": "https://admiralmarkets.com/analytics/traders-blog/pce-inflation-october-2026-preview",
-   "imagen": "https://dynamic-images.admiralmarkets.com/1280x,webp/content-admin-7f77dca8-fb19-e189-3c4d-8489c9972f99.s3.eu-west-2.amazonaws.com/articles-featured-images/01M7Q5XDAA0F0PBGD6DY4N9YKB.jpg"
-  },
-  {
-   "fecha": "2026-11-24",
-   "tipo": "mercado",
-   "tickers": [],
-   "titulo": "Argentina: el riesgo país saltó a 1.094, máximo desde 2025",
-   "texto": "Llegó a superar los 1.100 puntos en la rueda, con caídas generalizadas de los bonos y de los ADR (YPF -3,8%, Galicia -3%). El Merval quedó casi plano y el dólar oficial marcó un récord de $1.615. En Brasil, el Ibovespa bajó 0,43% y el dólar cedió a R$ 5,91 tras la aprobación del ajuste fiscal en Diputados.",
-   "fuente": "El Esquiú",
-   "url": "https://www.elesquiu.com/economia/2026/11/24/el-riesgo-pais-cerro-en-1094-puntos-basicos-tras-superar-las-1100-unidades-604655.html",
-   "imagen": "https://assets.elesquiu.com/social/604655-691c1e8f90.jpg"
+   "titulo": "Argentina: el Merval cayó 4,9% y el riesgo país tocó 1.131",
+   "texto": "Las acciones argentinas se desplomaron hasta 11% en Wall Street (BBVA Argentina más de 9%), el riesgo país llegó a 1.131 puntos en la rueda y el dólar marcó otro récord. En Brasil fue al revés: el Ibovespa subió 1,58% y recuperó los 166.000 puntos, con el dólar en R$ 5,81.",
+   "fuente": "MDZ",
+   "url": "https://www.mdzol.com/economia/2026/11/25/las-acciones-argentinas-desploman-hasta-11-en-wall-street-y-el-indice-merval-cae-48-1997852.html"
   }
  ],
  "agenda": [
-  {
-   "fecha": "2026-11-25",
-   "evento": "Inflación PCE de octubre, PIB del 3T y Beige Book en EE.UU."
-  },
-  {
-   "fecha": "2026-11-25",
-   "evento": "Vence el plazo del Tesoro a Nvidia (NVDA) por ventas de chips a China"
-  },
   {
    "fecha": "2026-11-26",
    "evento": "Acción de Gracias: Wall Street cerrado"
@@ -155,22 +138,26 @@
    "evento": "Balance de Oracle (ORCL), fecha estimada a confirmar"
   },
   {
+   "fecha": "2026-12-17",
+   "evento": "Balance de Micron (MU)"
+  },
+  {
    "fecha": "2026-12-23",
    "evento": "Inflación PCE de noviembre en EE.UU."
   }
  ],
  "ideas": [
   {
-   "titulo": "Chips: del rebote a la duda en un día",
-   "texto": "El índice de semiconductores cayó 7,9% el martes tras el salto del lunes. Mizuho recortó su proyección de inversión en IA a US$ 1,4 billones en 2027 y 1,8 billones en 2028, y TrendForce ve precios de NAND estables o en baja. Del otro lado, Dell reportó pedidos de IA récord."
+   "titulo": "Fed: la suba del 9/12 ya está casi descontada",
+   "texto": "Con el PCE en 3,8% y el núcleo en 3,3%, el mercado da entre 94% y 98% de chances a una suba de 0,25. Antes de la reunión llega el empleo (4/12) y el día después, el CPI (10/12)."
   },
   {
-   "titulo": "PCE de hoy y suba de tasas",
-   "texto": "Con la tasa en 3,75%-4,00%, el mercado descuenta una suba de 0,25 el 9/12. Un núcleo del PCE por encima de 3,2% anual reforzaría la idea de más subas; el 4/12 llega el empleo y el 10/12, un día después de la Fed, el CPI."
+   "titulo": "La deuda de la IA, en el centro",
+   "texto": "S&P puso en revisión negativa la nota AA de Nvidia y los CDS de Oracle tocaron un récord de unos 356 puntos básicos. El costo de financiar la inversión en IA se volvió un tema que mueve a las acciones del sector."
   },
   {
-   "titulo": "Meta: el juicio de abril marca los tiempos",
-   "texto": "La emisión de acciones Clase C (un reparto previsto para enero de 2027) y la venta de US$ 60.000 millones para financiar IA quedan en pausa hasta el juicio en Delaware, fijado para el 19/4/2027."
+   "titulo": "Memorias: Micron reporta el 17/12",
+   "texto": "Micron perdió cerca de la mitad de su valor desde junio y UBS bajó su objetivo a US$ 1.100, mientras TrendForce ve precios de memoria más flojos para comienzos de 2027. El balance y la guía del 17/12 son el próximo dato clave para el sector, Sandisk incluida."
   }
  ]
 }
