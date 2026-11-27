@@ -1,7 +1,78 @@
 {
- "actualizado": "2026-11-26T08:30:00-03:00",
- "resumen": "Wall Street cerró mixto el miércoles con un PCE más alto (núcleo 3,3%) y nuevos aranceles de Trump: Nvidia bajó 3,9% y las memorias siguieron cayendo, mientras Meta subió 3,4%. Hoy Wall Street está cerrado por Acción de Gracias y Bitcoin vuelve a superar los US$ 60.000.",
+ "actualizado": "2026-11-27T08:30:00-03:00",
+ "resumen": "Tras Acción de Gracias, los futuros de Wall Street suben fuerte antes de una rueda corta y Nvidia gana más de 4% en la previa. Bitcoin se sostiene arriba de US$ 61.000 el día que vencen opciones, y el jueves rebotaron fuerte el Merval y el Ibovespa.",
  "items": [
+  {
+   "fecha": "2026-11-27",
+   "tipo": "mercado",
+   "tickers": [],
+   "titulo": "Wall Street vuelve del feriado con futuros en fuerte alza",
+   "texto": "Después de Acción de Gracias, los futuros del Dow suben unos 650 puntos y los del S&P 500 superan los 7.300 antes de una rueda corta por Black Friday. Los inversores vuelven a comprar las tecnológicas de IA que más habían caído en las últimas semanas.",
+   "fuente": "Invezz",
+   "url": "https://invezz.com/ie/news/2026/11/27/dow-futures-surge-650-points-5-things-to-know-before-wall-street-opens/"
+  },
+  {
+   "fecha": "2026-11-27",
+   "tipo": "cartera",
+   "tickers": [
+    "NVDA"
+   ],
+   "titulo": "Nvidia sube más de 4% antes de la apertura",
+   "texto": "La acción encabeza el rebote de las empresas de IA en la previa, después de cerrar el miércoles en US$ 149,30 tras siete semanas de baja. La rueda de hoy termina temprano, a las 13 de Nueva York.",
+   "fuente": "Forbes",
+   "url": "https://www.forbes.com/sites/siladityaray/2026/11/27/stock-futures-surge-as-battered-ai-shares-rebound-ahead-of-shorterned-friday-trading/"
+  },
+  {
+   "fecha": "2026-11-27",
+   "tipo": "cartera",
+   "tickers": [
+    "IBIT"
+   ],
+   "titulo": "Bitcoin pasa los US$ 61.000 el día que vencen opciones por US$ 6.800 M",
+   "texto": "Bitcoin cotiza cerca de US$ 61.500, arriba de 1,5% en 24 horas, mientras vencen hoy opciones por unos US$ 6.800 millones. Los ETF de Bitcoin cierran noviembre con salidas récord de más de US$ 5.000 millones, con IBIT a la cabeza.",
+   "fuente": "crypto.news",
+   "url": "https://crypto.news/bitcoin-price-rebounds-68b-options-expiry-november-27/"
+  },
+  {
+   "fecha": "2026-11-27",
+   "tipo": "mercado",
+   "tickers": [
+    "ETH"
+   ],
+   "titulo": "Ethereum se afirma cerca de US$ 1.725",
+   "texto": "Ether sube cerca de 2% en las últimas 24 horas y se mueve entre US$ 1.666 y US$ 1.750. Acompaña la recuperación de Bitcoin, aunque sigue lejos de los niveles de hace unos meses.",
+   "fuente": "FinFly",
+   "url": "https://finfly.news/en/crypto/crypto-prices-2026-11-27"
+  },
+  {
+   "fecha": "2026-11-26",
+   "tipo": "mercado",
+   "tickers": [],
+   "titulo": "Merval: tercera suba seguida y el riesgo país bajó a 1.067",
+   "texto": "Sin Wall Street por el feriado, el Merval subió 3,3% e hilvanó su tercer avance en fila, con YPF ganando más de 3%. El riesgo país retrocedió a unos 1.067 puntos, todavía arriba de los 1.000.",
+   "fuente": "DolarHoy",
+   "url": "https://dolarhoy.com/mercado/rebote-sin-wall-street-el-merval-suma-tres-subas-al-hilo-y-ypf-gana-mas-de-3-2026112614380"
+  },
+  {
+   "fecha": "2026-11-26",
+   "tipo": "mercado",
+   "tickers": [],
+   "titulo": "Brasil: el Ibovespa voló 6% y el dólar bajó a R$ 5,74",
+   "texto": "La Bolsa de San Pablo subió 6,07%, su mayor alza desde la primera vuelta electoral, y recuperó los 176.000 puntos. El mercado celebró que Luiz Carlos Trabuco suena para el Ministerio de Hacienda.",
+   "fuente": "Agência Brasil",
+   "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-11/bolsa-sobe-6-e-tem-maior-alta-desde-o-1o-turno-dolar-cai-r-574"
+  },
+  {
+   "fecha": "2026-11-25",
+   "tipo": "cartera",
+   "tickers": [
+    "ORCL"
+   ],
+   "titulo": "Oracle cayó 5,1% a US$ 103,88, nuevo mínimo de 52 semanas",
+   "texto": "La acción siguió golpeada por el temor a la deuda que toma para invertir en IA. El costo de asegurar su deuda (CDS) tocó un récord. Su próximo balance se espera para mediados de diciembre.",
+   "fuente": "FinanceFeeds",
+   "url": "https://financefeeds.com/oracle-orcl-stock-103-thanksgiving-new-52-week-low-record-debt-insurance-cost-bull-113-bear-99/"
+  },
   {
    "fecha": "2026-11-25",
    "tipo": "mercado",
@@ -10,26 +81,6 @@
    "texto": "El índice de precios que mira la Fed subió a 3,8% anual en octubre, en línea con lo previsto, pero el núcleo marcó 3,3% contra 3,2% esperado. Con el dato, el mercado da entre 94% y 98% de chances a una suba de tasas el 9/12.",
    "fuente": "CNBC",
    "url": "https://www.cnbc.com/2026/11/25/pce-inflation-report-october-2026.html"
-  },
-  {
-   "fecha": "2026-11-25",
-   "tipo": "mercado",
-   "tickers": [],
-   "titulo": "Trump anunció aranceles a 14 países y Wall Street se sacudió",
-   "texto": "Propuso nuevos aranceles bajo la Sección 301 contra 14 socios comerciales para frenar el exceso de capacidad industrial. El Nasdaq llegó a caer más de 3% en la rueda, pero recuperó casi todo: el Dow terminó en positivo y el QQQ cedió 0,65%.",
-   "fuente": "US News",
-   "url": "https://www.usnews.com/news/top-news/articles/2026-11-25/us-proposes-new-tariffs-on-14-trading-partners-to-fight-excess-factory-capacity"
-  },
-  {
-   "fecha": "2026-11-25",
-   "tipo": "cartera",
-   "tickers": [
-    "NVDA"
-   ],
-   "titulo": "Nvidia bajó 3,9% y S&P amenaza con recortar su nota",
-   "texto": "Cerró en US$ 149,30 y acumula siete semanas de baja. S&P puso su calificación AA en revisión con perspectiva negativa por riesgos de gobierno corporativo tras la salida y la vuelta de Jensen Huang.",
-   "fuente": "Seoul Economic Daily",
-   "url": "https://en.sedaily.com/world/2026/11/26/nvidia-faces-credit-downgrade-as-sp-flags-reliance-on"
   },
   {
    "fecha": "2026-11-25",
@@ -47,72 +98,15 @@
    "fecha": "2026-11-25",
    "tipo": "cartera",
    "tickers": [
-    "ORCL"
-   ],
-   "titulo": "Oracle tocó un nuevo mínimo de 52 semanas",
-   "texto": "La acción cayó más de 6% y en la rueda llegó a perder cerca de 9%, golpeada por el temor a la deuda que toma para invertir en IA. El costo de asegurar su deuda (CDS) llegó a un récord de unos 356 puntos básicos.",
-   "fuente": "MoneyCheck",
-   "url": "https://moneycheck.com/oracle-orcl-stock-hits-52-week-low-as-credit-default-swaps-reach-record-high"
-  },
-  {
-   "fecha": "2026-11-25",
-   "tipo": "cartera",
-   "tickers": [
     "META"
    ],
    "titulo": "Meta subió 3,4% por las charlas con Amazon por Muse",
    "texto": "Amazon y Meta estarían negociando levantar el bloqueo al agente de compras con IA Muse dentro de Amazon. La acción fue de las pocas tecnológicas que subieron en un día de ventas.",
    "fuente": "TechCrunch",
    "url": "https://techcrunch.com/2026/11/25/amazon-and-meta-reportedly-in-talks-to-lift-blockade-on-ai-agent-muse/"
-  },
-  {
-   "fecha": "2026-11-25",
-   "tipo": "cartera",
-   "tickers": [
-    "GOOG"
-   ],
-   "titulo": "Alphabet llegó a caer 5% por demandas, chips e inflación",
-   "texto": "La acción sufrió por nuevas demandas, por el reporte sobre menores pedidos de chips TPU para 2027 y por el dato de inflación. Abrió con una baja de 5,5% y después recortó parte de la caída.",
-   "fuente": "MoneyCheck",
-   "url": "https://moneycheck.com/alphabet-googl-stock-drops-5-on-lawsuits-chip-report-and-hot-inflation/"
-  },
-  {
-   "fecha": "2026-11-26",
-   "tipo": "cartera",
-   "tickers": [
-    "IBIT"
-   ],
-   "titulo": "Bitcoin recupera los US$ 60.000 pese a la salida de los ETF",
-   "texto": "Volvió a superar los US$ 60.000, impulsado por el cierre forzado de apuestas bajistas, y esta mañana ronda los US$ 60.600. Los ETF de Bitcoin siguen con salidas récord en noviembre, cerca de US$ 4.700 millones, con IBIT a la cabeza.",
-   "fuente": "FinanceFeeds",
-   "url": "https://financefeeds.com/bitcoin-rebounds-above-60000-as-short-liquidations-fuel-recovery-despite-heavy-etf-outflows/"
-  },
-  {
-   "fecha": "2026-11-26",
-   "tipo": "mercado",
-   "tickers": [
-    "ETH"
-   ],
-   "titulo": "Ethereum rebota 3% y vuelve a la zona de US$ 1.700",
-   "texto": "Ether sube cerca de 3% en las últimas 24 horas y cotiza alrededor de US$ 1.700, después de haber tocado unos US$ 1.610. El rebote acompaña la recuperación de Bitcoin.",
-   "fuente": "FinFly",
-   "url": "https://finfly.news/en/crypto/crypto-prices-2026-11-26"
-  },
-  {
-   "fecha": "2026-11-25",
-   "tipo": "mercado",
-   "tickers": [],
-   "titulo": "Argentina: el Merval cayó 4,9% y el riesgo país tocó 1.131",
-   "texto": "Las acciones argentinas se desplomaron hasta 11% en Wall Street (BBVA Argentina más de 9%), el riesgo país llegó a 1.131 puntos en la rueda y el dólar marcó otro récord. En Brasil fue al revés: el Ibovespa subió 1,58% y recuperó los 166.000 puntos, con el dólar en R$ 5,81.",
-   "fuente": "MDZ",
-   "url": "https://www.mdzol.com/economia/2026/11/25/las-acciones-argentinas-desploman-hasta-11-en-wall-street-y-el-indice-merval-cae-48-1997852.html"
   }
  ],
  "agenda": [
-  {
-   "fecha": "2026-11-26",
-   "evento": "Acción de Gracias: Wall Street cerrado"
-  },
   {
    "fecha": "2026-11-27",
    "evento": "Black Friday: Wall Street cierra temprano; vencen opciones de Bitcoin"
@@ -144,20 +138,28 @@
   {
    "fecha": "2026-12-23",
    "evento": "Inflación PCE de noviembre en EE.UU."
+  },
+  {
+   "fecha": "2026-12-24",
+   "evento": "Nochebuena: Wall Street cierra temprano"
+  },
+  {
+   "fecha": "2026-12-25",
+   "evento": "Navidad: Wall Street cerrado"
   }
  ],
  "ideas": [
   {
    "titulo": "Fed: la suba del 9/12 ya está casi descontada",
-   "texto": "Con el PCE en 3,8% y el núcleo en 3,3%, el mercado da entre 94% y 98% de chances a una suba de 0,25. Antes de la reunión llega el empleo (4/12) y el día después, el CPI (10/12)."
+   "texto": "Después del PCE (3,8% general y 3,3% el núcleo), los mercados de apuestas y futuros dan entre 94% y 98% de chances a una suba de 0,25. Antes llega el empleo (4/12) y el día después, el CPI (10/12)."
   },
   {
-   "titulo": "La deuda de la IA, en el centro",
-   "texto": "S&P puso en revisión negativa la nota AA de Nvidia y los CDS de Oracle tocaron un récord de unos 356 puntos básicos. El costo de financiar la inversión en IA se volvió un tema que mueve a las acciones del sector."
+   "titulo": "¿Rebote o algo más en la IA?",
+   "texto": "Nvidia acumula siete semanas de baja y hoy sube más de 4% en la previa. Los balances de Broadcom (9/12), Oracle (~14/12) y Micron (17/12) van a mostrar si la demanda de IA sostiene las valuaciones."
   },
   {
-   "titulo": "Memorias: Micron reporta el 17/12",
-   "texto": "Micron perdió cerca de la mitad de su valor desde junio y UBS bajó su objetivo a US$ 1.100, mientras TrendForce ve precios de memoria más flojos para comienzos de 2027. El balance y la guía del 17/12 son el próximo dato clave para el sector, Sandisk incluida."
+   "titulo": "Bitcoin: noviembre récord de salidas de ETF",
+   "texto": "Los ETF de Bitcoin perdieron más de US$ 5.000 millones en el mes, el peor registro desde su lanzamiento, aunque el precio rebotó de menos de US$ 60.000 a unos US$ 61.500. Hay que ver si los flujos se dan vuelta en diciembre."
   }
  ]
 }
